@@ -6,16 +6,26 @@
 #define PI 3.141592
 
 class vector_2d {
+
 private:
   double m_x{};
   double m_y{};
 
 public:
   vector_2d(double x = 0., double y = 0.) : m_x{x}, m_y{y} {}
+
   double xcomp() const { return m_x; }
+
   double ycomp() const { return m_y; }
+
   double norm() const { return sqrt(m_x * m_x + m_y * m_y); }
+
+  // Prodotto scalare fra due vettori
+
   double dot_prod(vector_2d const &v) { return m_x * v.m_x + m_y * v.m_y; }
+
+  // Angolo fra due vettori
+
   double angle(vector_2d const &v) {
     if ((m_x == 0. && m_y == 0.) || (v.m_x == 0. && v.m_y == 0.)) {
       return 0.;
@@ -33,20 +43,26 @@ public:
     double res = acos(arg);
     return res;
   }
+
+  // Prodotto componente per componente fra due vettori
+
   vector_2d prod(vector_2d const &v) {
     vector_2d res;
     res.m_x = this->m_x * v.m_x;
     res.m_y = this->m_y * v.m_y;
     return res;
   }
+
   vector_2d operator+(vector_2d const &v) {
     vector_2d res(this->m_x + v.m_x, this->m_y + v.m_y);
     return res;
   }
+
   vector_2d operator-(vector_2d const &v) {
     vector_2d res(this->m_x - v.m_x, this->m_y - v.m_y);
     return res;
   }
+
   vector_2d operator*(double k) {
     vector_2d res(this->m_x * k, this->m_y * k);
     return res;
@@ -68,7 +84,7 @@ struct boid {
   vector_2d vel;
 };
 
-struct predator{
+struct predator {
   vector_2d pos;
   vector_2d vel;
 };
@@ -79,12 +95,13 @@ struct stats {
   double s{};
   double a{};
   double c{};
-  double l_b{}; // Bordo sinistro
-  double r_b{}; // Bordo destro
-  double u_b{}; // Bordo superiore
-  double b_b{}; // Bordo inferiore
-  double theta{};
-  double d_pred{};
+  double l_b{};    // Bordo sinistro
+  double r_b{};    // Bordo destro
+  double u_b{};    // Bordo superiore
+  double b_b{};    // Bordo inferiore
+  double theta{};  // Angolo cieco
+  double d_pred{}; // Distanza da cui si attiva l'effetto del predatore
+  double v_max{};  // Velocità massima dei boid
 };
 
 #endif

@@ -10,46 +10,63 @@
 
 boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
                  stats s, predator p) {
+
+  // Definizione degli oggetti utili, si crea una copia del boid da evolvere
+  // così da mantenerne uno con i vecchi parametri utile per far evolvere i boid
+  // successivi
+
   boid b_f = b_i;
-  // Preparo le 3 velocità da aggiungere settate a 0
   vector_2d v_sep;
   vector_2d v_all;
   vector_2d v_coe;
-  double n = flock.size();
+  int n = flock.size();
 
   // L'if serve per verificare che ci sia almeno un altro boid che influenza
   // b_i, altrimenti in v_all e v_coe si dovrebbe dividere per 0. In questo modo
-  // se il boid b_i non è influenzato da nessuno rimane uguale
+  // se il boid b_i non è influenzato da nessuno la sua velocità rimane
+  // invariata
 
-  if (n != 1.) {
+  if (n != 1) {
     v_sep = sep(flock, b_f, s.s, s.d_s);
     v_all = all(flock, b_f, s.a);
     v_coe = coe(b_f, calc_c_m_b_i(flock, b_f), s.c);
   }
+
+  // Aggiorno posizione e velocità del boid
+
   b_f.pos += b_f.vel * delta_t;
   b_f.vel += v_sep + v_all + v_coe;
 
-  if ((b_i.pos - p.pos).norm() < s.d_pred) {
-    b_f.vel += (p.pos - b_i.pos) * (-s.s);
+  // Se i boid superano la velocità massima, le componenti delle loro velocità
+  // vengono riscalate per tornare al di sotto del limite
+
+  if (b_f.vel.norm() > s.v_max) {
+    b_f.vel.setx(b_f.vel.xcomp() * 0.8);
+    b_f.vel.sety(b_f.vel.ycomp() * 0.8);
+  }
+
+  // Se i boid sono troppo vicini al predatore si attiva la regola di
+  // separazione fra di essi
+
+  if ((b_f.pos - p.pos).norm() < s.d_pred) {
+    b_f.vel += (p.pos - b_f.pos) * (-s.s);
   }
 
   // Effetto pac-man con parametri l_b, r_b, u_b, b_b di stats
 
-  if (b_f.pos.xcomp() < s.l_b) {
-    b_f.pos.setx(s.r_b - abs(s.l_b - b_f.pos.xcomp()));
-  };
-  if (b_f.pos.xcomp() > s.r_b) {
-    b_f.pos.setx(s.l_b + abs(b_f.pos.xcomp() - s.r_b));
-  };
-  if (b_f.pos.ycomp() > s.u_b) {
-    b_f.pos.sety(s.b_b + abs(b_f.pos.ycomp() - s.u_b));
-  };
-  if (b_f.pos.ycomp() < s.b_b) {
-    b_f.pos.sety(s.u_b - abs(s.b_b - b_f.pos.ycomp()));
-  };
+  b_f.pos = pacman(b_f.pos, s);
 
   return b_f;
-};
+}
+
+// Funzione evolve predator che fa evolvere il predatore secondo la sua velocità
+// e applica l'effetto pac-man
+
+predator evolve_predator(predator p, double delta_t, stats s) {
+  predator res{{p.pos + p.vel * delta_t}, {p.vel}};
+  res.pos = pacman(res.pos, s);
+  return res;
+}
 
 // La funzione evolve_flock prende in input un vettore flock con tutti i boids
 // del piano, con un loop evolve ogni singolo boid tenendo conto solo del suo
@@ -68,6 +85,6 @@ void evolve_flock(std::vector<boid> &flock, double delta_t, stats s,
   };
   flock = f_state;
   return;
-};
+}
 
 #endif

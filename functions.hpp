@@ -81,6 +81,24 @@ vector_2d coe(boid b_i, vector_2d c_m, double c) {
   return v_coe;
 }
 
+// Effetto pac-man
+
+vector_2d pacman(vector_2d pos, stats s) {
+  if (pos.xcomp() < s.l_b) {
+    pos.setx(s.r_b - abs(s.l_b - pos.xcomp()));
+  };
+  if (pos.xcomp() > s.r_b) {
+    pos.setx(s.l_b + abs(pos.xcomp() - s.r_b));
+  };
+  if (pos.ycomp() > s.u_b) {
+    pos.sety(s.b_b + abs(pos.ycomp() - s.u_b));
+  };
+  if (pos.ycomp() < s.b_b) {
+    pos.sety(s.u_b - abs(s.b_b - pos.ycomp()));
+  };
+  return pos;
+}
+
 // Angolo cieco
 
 bool vision(boid b1, boid b2, double theta) {
@@ -92,6 +110,7 @@ bool vision(boid b1, boid b2, double theta) {
     return false;
   }
 }
+
 
 // La funzione influence prende in input un vettore flock con tutti i boid del
 // piano e restituisce un vettore range con solo i boids nel range di influenza

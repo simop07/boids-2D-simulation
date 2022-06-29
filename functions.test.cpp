@@ -16,9 +16,10 @@ TEST_CASE("v_all test") {}
 TEST_CASE("pos test") {}
 
 TEST_CASE("evolve test") {
-  /*std::vector<boid> flock;
+  std::vector<boid> flock;
   stats s{2.5, 3.5, 0.1, 0.2, 0.3, 0., 10., 10., 0., PI/3};
   double delta_t = 0.2;
+  predator p{{0.,0.},{0.,0.}};
   boid b1{{1., 3.}, {3., 1.}};
   boid b2{{6., 2.}, {0., 0.}};
   boid b3{{6., 4.}, {1., 2.}};
@@ -32,5 +33,9 @@ TEST_CASE("evolve test") {
   flock.push_back(b4);
   flock.push_back(b5);
   flock.push_back(b6);
-  flock.push_back(b7);*/
+  flock.push_back(b7);
+
+  evolve_flock(flock, delta_t, s, p);
+
+  CHECK(b1.vel.norm()== 3.);
 }
