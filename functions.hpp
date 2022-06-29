@@ -26,25 +26,25 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
 
 // Velocità media
 
-vector_2d mean_velocity(std::vector<boid> const &flock) {
+double mean_velocity(std::vector<boid> const &flock) {
   double n = flock.size();
   vector_2d m_vel{0., 0.};
   for (boid b_i : flock) {
     m_vel += b_i.vel;
   }
-  return m_vel * (1. / n);
+  return (m_vel * (1. / n)).norm();
 }
 
 // Deviazione standard velocità
 
-vector_2d std_dev_v(std::vector<boid> const &flock) {
-  vector_2d mean_v = mean_velocity(flock);
-  vector_2d sum;
+double std_dev_v(std::vector<boid> const &flock) {
+  double sum;
   double n = flock.size();
   for (boid b_j : flock) {
-    sum += (b_j.vel - mean_v).prod(b_j.vel - mean_v);
+    sum += (b_j.vel.norm() - mean_velocity(flock)) *
+           (b_j.vel.norm() - mean_velocity(flock));
   }
-  vector_2d res(sqrt(sum.xcomp() / n - 1.), sqrt(sum.ycomp() / n - 1.));
+  double res = sqrt(sum / (n - 1.));
   return res;
 }
 
@@ -110,7 +110,6 @@ bool vision(boid b1, boid b2, double theta) {
     return false;
   }
 }
-
 
 // La funzione influence prende in input un vettore flock con tutti i boid del
 // piano e restituisce un vettore range con solo i boids nel range di influenza

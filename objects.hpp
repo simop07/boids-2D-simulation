@@ -44,15 +44,6 @@ public:
     return res;
   }
 
-  // Prodotto componente per componente fra due vettori
-
-  vector_2d prod(vector_2d const &v) {
-    vector_2d res;
-    res.m_x = this->m_x * v.m_x;
-    res.m_y = this->m_y * v.m_y;
-    return res;
-  }
-
   vector_2d operator+(vector_2d const &v) {
     vector_2d res(this->m_x + v.m_x, this->m_y + v.m_y);
     return res;

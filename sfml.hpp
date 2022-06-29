@@ -55,8 +55,7 @@ void run_simulation(std::vector<boid> flock, std::vector<boid> flock2,
           p.vel.sety(0.);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-          std::cout << mean_velocity(flock).norm() << " "
-                    << std_dev_v(flock).norm() << '\n';
+          std::cout << mean_velocity(flock) << " " << std_dev_v(flock) << '\n';
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
           p.vel = p.vel * 0.5;
