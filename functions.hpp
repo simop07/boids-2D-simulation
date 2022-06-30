@@ -28,23 +28,23 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
 
 double mean_velocity(std::vector<boid> const &flock) {
   double n = flock.size();
-  vector_2d m_vel{0., 0.};
+  double sum_v;
   for (boid b_i : flock) {
-    m_vel += b_i.vel;
+    sum_v += b_i.vel.norm();
   }
-  return (m_vel * (1. / n)).norm();
+  return (sum_v * (1. / n));
 }
 
 // Deviazione standard velocità
 
-double std_dev_v(std::vector<boid> const &flock) {
-  double sum;
+double std_dev_velocity(std::vector<boid> const &flock) {
+  double sum2;
+  double mean_v = mean_velocity(flock);
   double n = flock.size();
-  for (boid b_j : flock) {
-    sum += (b_j.vel.norm() - mean_velocity(flock)) *
-           (b_j.vel.norm() - mean_velocity(flock));
+  for (boid b_i : flock) {
+    sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
   }
-  double res = sqrt(sum / (n - 1.));
+  double res = sqrt(sum2 / (n - 1.));
   return res;
 }
 

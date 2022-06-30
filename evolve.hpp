@@ -32,6 +32,13 @@ boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
     v_coe = coe(b_f, calc_c_m_b_i(flock, b_f), s.c);
   }
 
+  if (b_f.vel.norm() == 0.) {
+    vector_2d c_m = calc_c_m_b_i(flock, b_f);
+    vector_2d pos_diff = c_m - b_f.pos;
+    vector_2d vel_versor = pos_diff * (1. / pos_diff.norm());
+    b_f.vel = vel_versor;
+  }
+
   // Aggiorno posizione e velocità del boid
 
   b_f.pos += b_f.vel * delta_t;
