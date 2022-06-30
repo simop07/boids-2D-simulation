@@ -5,6 +5,15 @@
 #include <iostream>
 #include <string>
 
+// La classe button contiene un oggetto sf::RectangleShape, ovvero lo sfondo del
+// pulsante, un sf::Text, ovvero il testo del pulsante, una posizione, una
+// dimensione e un font. I vari metodi consentono di personalizzare le
+// caratteristiche del pulsante come colore dello sfondo e del testo. Il metodo
+// createButton assegna i valori per costruire l'oggetto. I metodi getBox() e
+// getText() sono necessari per chiamare window.draw() in modo da visualizzare
+// il pulsante. Il metodo hovering permette di controllare se il puntatore del
+// mouse si trova all'interno dell'area del pulsante
+
 class button {
 private:
   sf::Vector2f m_pos;
@@ -45,14 +54,14 @@ public:
     m_rect.setPosition(m_pos);
     m_rect.setSize(m_size);
     m_text.setOrigin(
-        m_text.getGlobalBounds().left + m_text.getGlobalBounds().width / 2.f,
-        m_text.getGlobalBounds().top + m_text.getGlobalBounds().height / 2.f);
+        m_text.getGlobalBounds().left + m_text.getGlobalBounds().width,
+        m_text.getGlobalBounds().top + m_text.getGlobalBounds().height);
     m_text.setPosition(m_pos);
     m_text.setFont(m_font);
     return;
   }
 
-  sf::RectangleShape getButton() { return m_rect; }
+  sf::RectangleShape getBox() { return m_rect; }
 
   sf::Text getText() { return m_text; }
 
@@ -67,6 +76,14 @@ public:
     }
   }
 };
+
+// La classe data contiene i valori dei dati d'interesse, un oggetto sf::Text un
+// font e una posizione. Tramite le funzioni membro è possibile modificare le
+// proprietà di m_text e i dati d'interesse in modo da aggiornarli. La funzione
+// membro createData() consente di assegnare i valori di input del costruttore
+// per costruire in maniera appropriata il testo oltre a costruire la stringa di
+// testo da visualizzare. Il metodo getData() restituisce m_text in modo da
+// poter chiamare window.draw() per poter visualizzare il testo
 
 class data {
 private:
@@ -104,16 +121,15 @@ public:
   void createData() {
     m_text.setPosition(m_pos);
     m_text.setFont(m_font);
-    std::string first{"                            Data \n Distance:  "};
+    std::string first{"Data         Mean              Std. Dev. \nDistance:  "};
     std::string Mean_d{std::to_string(m_mean_d)};
-    std::string p_m{" +/- "};
+    std::string p_m{"  +/-  "};
     std::string std_devD{std::to_string(m_std_dev_d)};
-    std::string second{" \n Velocity:  "};
+    std::string second{" \nVelocity:   "};
     std::string Mean_v{std::to_string(m_mean_v)};
     std::string std_devV{std::to_string(m_std_dev_v)};
     std::string tot =
         first + Mean_d + p_m + std_devD + second + Mean_v + p_m + std_devV;
-
     m_text.setString(tot);
     return;
   }
