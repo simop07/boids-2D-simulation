@@ -3,6 +3,7 @@
 
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
+#include <random>
 
 void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
@@ -31,6 +32,12 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     throw std::runtime_error{"Cannot load font from file"};
   }
 
+  // Generazione boid casuali
+
+  std::default_random_engine generator;
+  std::normal_distribution<double> pos_d(50., 40.);
+  std::normal_distribution<double> vel_d(0., 10.);
+
   // Definizioni per costruzione dell'oggetto data result
 
   sf::Vector2f dataPos(display_width * 0.75, display_height * 0.04);
@@ -43,13 +50,13 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
 
   result.setSize(18);
-  result.setColor(sf::Color::White);
+  result.setColor(sf::Color::Black);
   result.createData();
 
   // Definizioni per costruzione dell'oggetto button b1
 
   sf::Vector2f buttonPos(result.getData().getGlobalBounds().left +
-                             result.getData().getGlobalBounds().width / 1.5f,
+                             result.getData().getGlobalBounds().width / 1.4f,
                          result.getData().getGlobalBounds().top +
                              result.getData().getGlobalBounds().height *
                                  (1.2f));
@@ -60,19 +67,70 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   button b1(buttonPos, buttonSize, rect, text, font);
 
-  b1.setButtonColor(sf::Color::Blue);
+  b1.setButtonColor(sf::Color(5, 23, 185, 255));
   b1.setTextColor(sf::Color::White);
   b1.setTextContent(str);
   b1.setTextSize(18);
+  b1.setButtonOutline(sf::Color(217, 9, 9, 255), 2.f);
   b1.createButton();
+
+  // Definizioni per costruzione dell'oggetto button b2
+
+  sf::Vector2f buttonPos2(0.02 * display_width, 0.02 * display_height);
+  sf::RectangleShape rect2;
+  sf::Text text2;
+  std::string str2{"Add boid"};
+
+  button b2(buttonPos2, buttonSize, rect2, text2, font);
+
+  b2.setButtonColor(sf::Color::Yellow);
+  b2.setTextColor(sf::Color::Black);
+  b2.setTextContent(str2);
+  b2.setTextSize(18);
+  b2.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
+  b2.createButton();
+
+  // Definizioni per costruzione dell'oggetto b3
+
+  sf::Vector2f buttonPos3(buttonPos2.x,
+                          buttonPos2.y + b2.getBox().getGlobalBounds().height);
+  sf::RectangleShape rect3;
+  sf::Text text3;
+  std::string str3{"  Remove \n      boid"};
+
+  button b3(buttonPos3, buttonSize, rect3, text3, font);
+
+  b3.setButtonColor(sf::Color::Yellow);
+  b3.setTextColor(sf::Color::Black);
+  b3.setTextContent(str3);
+  b3.setTextSize(16);
+  b3.createButton();
+  b3.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
+
+  // Definizioni per costruzione dell'oggetto b4
+
+  sf::Vector2f buttonPos4(
+      buttonPos2.x, buttonPos2.y + b2.getBox().getGlobalBounds().height + 50.f);
+  sf::RectangleShape rect4;
+  sf::Text text4;
+  std::string str4{"    Pause\n evolution"};
+
+  button b4(buttonPos4, buttonSize, rect4, text4, font);
+
+  b4.setButtonColor(sf::Color::Yellow);
+  b4.setTextColor(sf::Color::Black);
+  b4.setTextContent(str4);
+  b4.setTextSize(16);
+  b4.createButton();
+  b4.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
 
   // Costruzione dei poligoni per rappresentare boids e predatore
 
   sf::CircleShape boids{5.0f, 3};
-  boids.setFillColor(sf::Color::White);
+  boids.setFillColor(sf::Color(234, 72, 18, 255));
 
   sf::CircleShape predator{7.0, 4};
-  predator.setFillColor(sf::Color::Red);
+  predator.setFillColor(sf::Color::Black);
 
   // Game loop
 
@@ -127,20 +185,36 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         }
         break;
 
-        // Quando il mouse viene mosso, se la sua posizione è all'interno del
-        // pulsante, gli viene cambiato colore
+        // Quando il mouse viene mosso, se la sua posizione è all'interno dei
+        // pulsanti, gli vengono cambiati i colori
 
       case sf::Event::MouseMoved:
         if (b1.hovering(sf::Mouse::getPosition(window))) {
-          b1.setButtonColor(sf::Color::Red);
+          b1.setButtonColor(sf::Color(217, 9, 9, 255));
         }
         if (!b1.hovering(sf::Mouse::getPosition(window))) {
-          b1.setButtonColor(sf::Color::Blue);
+          b1.setButtonColor(sf::Color(5, 23, 185, 255));
+        }
+        if (b2.hovering(sf::Mouse::getPosition(window))) {
+          b2.setButtonColor(sf::Color(8, 123, 3, 255));
+        }
+        if (!b2.hovering(sf::Mouse::getPosition(window))) {
+          b2.setButtonColor(sf::Color::Yellow);
+        }
+        if (b3.hovering(sf::Mouse::getPosition(window))) {
+          b3.setButtonColor(sf::Color(8, 123, 3, 255));
+        }
+        if (!b3.hovering(sf::Mouse::getPosition(window))) {
+          b3.setButtonColor(sf::Color::Yellow);
         }
         break;
 
-        // Se viene premuto il pulsante del mouse mentre è all'interno del
-        // pulsante vengono aggiornati i dati di result
+        // Se viene premuto il pulsante del mouse mentre è all'interno di
+        // b1 vengono aggiornati i dati di result, nell'ordine distanza
+        // media, dev. standard della distanza, velocità media, dev standard
+        // velocità, all'interno di b2 viene aggiunto un boid al flock con
+        // velocità e posizione casuali, all'interno di b3 viene rimosso
+        // l'ultimo boid del vettore flock
 
       case sf::Event::MouseButtonPressed:
         if (b1.hovering(sf::Mouse::getPosition(window))) {
@@ -148,19 +222,43 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
                             std_dev_velocity(flock));
           result.createData();
         }
+        if (b2.hovering(sf::Mouse::getPosition(window))) {
+          boid b_n{{pos_d(generator), pos_d(generator)},
+                   {vel_d(generator), vel_d(generator)}};
+          flock.push_back(b_n);
+        }
+        if (b3.hovering(sf::Mouse::getPosition(window))) {
+          if (flock.size() != 1) {
+            flock.erase(flock.end() - 1);
+          }
+          if (flock.size() == 1) {
+            std::cout << "Cannot remove more boids" << '\n';
+          }
+        }
+        if (b4.hovering(sf::Mouse::getPosition(window))) {
+          b4.buttonPressed();
+          if (b4.buttonState()) {
+            b4.setButtonColor(sf::Color(8, 123, 3, 255));
+          }
+          if (!b4.buttonState()) {
+            b4.setButtonColor(sf::Color::Yellow);
+          }
+        }
         break;
       };
     }
 
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color(202, 227, 244, 255));
 
-    // Ogni frame flock e il predatore vengono aggiornati 1000/60 volte di 0.01
+    // Ogni frame flock e il predatore vengono aggiornati 1000/60 volte di 0.001
     // secondi, con 60 fps si ha che ogni secondo essi vengono aggiornati 1000
-    // volte ovvero 10 secondi
+    // volte ovvero 1 secondo
 
-    for (int i = 0; i != 1000 / 60; ++i) {
-      evolve_flock(flock, 0.01, s, p);
-      p = evolve_predator(p, 0.01, s);
+    if (!b4.buttonState()) {
+      for (int i = 0; i != 1000 / 60; ++i) {
+        evolve_flock(flock, 0.001, s, p);
+        p = evolve_predator(p, 0.001, s);
+      }
     }
 
     // Viene assegnato un oggetto sf::CircleShape a ogni boid b_i del flock la
@@ -184,6 +282,12 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     window.draw(predator);
     window.draw(b1.getBox());
     window.draw(b1.getText());
+    window.draw(b2.getBox());
+    window.draw(b2.getText());
+    window.draw(b3.getBox());
+    window.draw(b3.getText());
+    window.draw(b4.getBox());
+    window.draw(b4.getText());
     window.draw(result.getData());
 
     // La finestra con tutti gli oggetti disegnati viene renderizzata

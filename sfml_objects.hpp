@@ -21,6 +21,7 @@ private:
   sf::RectangleShape m_rect;
   sf::Text m_text;
   sf::Font m_font;
+  bool isOn{false};
 
 public:
   button(sf::Vector2f pos, sf::Vector2f size, sf::RectangleShape rect,
@@ -29,6 +30,12 @@ public:
 
   void setButtonColor(sf::Color color) {
     m_rect.setFillColor(color);
+    return;
+  }
+
+  void setButtonOutline(sf::Color color, float thickness) {
+    m_rect.setOutlineColor(color);
+    m_rect.setOutlineThickness(thickness);
     return;
   }
 
@@ -54,8 +61,8 @@ public:
     m_rect.setPosition(m_pos);
     m_rect.setSize(m_size);
     m_text.setOrigin(
-        m_text.getGlobalBounds().left + m_text.getGlobalBounds().width,
-        m_text.getGlobalBounds().top + m_text.getGlobalBounds().height);
+        m_text.getGlobalBounds().left + m_text.getGlobalBounds().width / 2.f,
+        m_text.getGlobalBounds().top + m_text.getGlobalBounds().height / 2.f);
     m_text.setPosition(m_pos);
     m_text.setFont(m_font);
     return;
@@ -74,6 +81,17 @@ public:
     } else {
       return false;
     }
+  }
+
+  bool buttonState() { return isOn; }
+
+  bool buttonPressed() {
+    if (isOn == true) {
+      isOn = false;
+    } else {
+      isOn = true;
+    }
+    return isOn;
   }
 };
 
@@ -105,6 +123,7 @@ public:
     m_text.setCharacterSize(size);
     return;
   }
+
   void setColor(sf::Color color) {
     m_text.setFillColor(color);
     return;
