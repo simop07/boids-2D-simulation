@@ -189,22 +189,28 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         // pulsanti, gli vengono cambiati i colori
 
       case sf::Event::MouseMoved:
-        if (b1.hovering(sf::Mouse::getPosition(window))) {
+        if (b1.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b1.setButtonColor(sf::Color(217, 9, 9, 255));
         }
-        if (!b1.hovering(sf::Mouse::getPosition(window))) {
+        if (!b1.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b1.setButtonColor(sf::Color(5, 23, 185, 255));
         }
-        if (b2.hovering(sf::Mouse::getPosition(window))) {
+        if (b2.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b2.setButtonColor(sf::Color(8, 123, 3, 255));
         }
-        if (!b2.hovering(sf::Mouse::getPosition(window))) {
+        if (!b2.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b2.setButtonColor(sf::Color::Yellow);
         }
-        if (b3.hovering(sf::Mouse::getPosition(window))) {
+        if (b3.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b3.setButtonColor(sf::Color(8, 123, 3, 255));
         }
-        if (!b3.hovering(sf::Mouse::getPosition(window))) {
+        if (!b3.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b3.setButtonColor(sf::Color::Yellow);
         }
         break;
@@ -217,17 +223,20 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         // l'ultimo boid del vettore flock
 
       case sf::Event::MouseButtonPressed:
-        if (b1.hovering(sf::Mouse::getPosition(window))) {
-          result.setNewData(0., 0., mean_velocity(flock),
-                            std_dev_velocity(flock));
+        if (b1.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+          result.setNewData(mean_distance(flock), std_dev_distance(flock),
+                            mean_velocity(flock), std_dev_velocity(flock));
           result.createData();
         }
-        if (b2.hovering(sf::Mouse::getPosition(window))) {
+        if (b2.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           boid b_n{{pos_d(generator), pos_d(generator)},
                    {vel_d(generator), vel_d(generator)}};
           flock.push_back(b_n);
         }
-        if (b3.hovering(sf::Mouse::getPosition(window))) {
+        if (b3.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           if (flock.size() != 1) {
             flock.erase(flock.end() - 1);
           }
@@ -235,7 +244,8 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
             std::cout << "Cannot remove more boids" << '\n';
           }
         }
-        if (b4.hovering(sf::Mouse::getPosition(window))) {
+        if (b4.hovering(
+                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b4.buttonPressed();
           if (b4.buttonState()) {
             b4.setButtonColor(sf::Color(8, 123, 3, 255));
@@ -252,7 +262,8 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
     // Ogni frame flock e il predatore vengono aggiornati 1000/60 volte di 0.001
     // secondi, con 60 fps si ha che ogni secondo essi vengono aggiornati 1000
-    // volte ovvero 1 secondo
+    // volte ovvero 1 secondo, solo se il pulsante Pause evolution (b4) non è
+    // attivo
 
     if (!b4.buttonState()) {
       for (int i = 0; i != 1000 / 60; ++i) {

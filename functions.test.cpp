@@ -74,6 +74,20 @@ TEST_CASE("cdm test") {
   CHECK(calc_c_m_b_i(flock, b4).ycomp() == doctest::Approx(3.));
 }
 
+TEST_CASE("mean distance and st dev") {
+  std::vector<boid> flock;
+  boid b1{{1., 1.}, {0., 0.}};
+  boid b2{{2., 3.}, {0., 0.}};
+  boid b3{{4., 2.}, {0., 0.}};
+
+  flock.push_back(b1);
+  flock.push_back(b2);
+  flock.push_back(b3);
+
+  CHECK(mean_distance(flock) ==
+        doctest::Approx((sqrt(5.) + sqrt(10.) + sqrt(5.)) / 3.));
+}
+
 TEST_CASE("mean velocity and st dev") {
   std::vector<boid> flock;
   boid b1{{1., 3.}, {-4., 0.}};

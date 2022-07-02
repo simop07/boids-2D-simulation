@@ -24,27 +24,68 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
   return c_m;
 }
 
+// Distanza media
+
+double mean_distance(std::vector<boid> const &flock) {
+  double n = flock.size();
+  double sum_tot = 0.;
+  double sum_par = 0.;
+  for (boid b_i : flock) {
+    for (boid b_j : flock) {
+      sum_par += distance(b_i, b_j);
+    }
+    sum_tot += sum_par;
+    sum_par = 0.;
+  }
+  double res = sum_tot / (n * (n - 1.));
+  sum_tot = 0.;
+  sum_par = 0.;
+  return res;
+}
+
+// Deviazione standard distanza
+
+double std_dev_distance(std::vector<boid> const &flock) {
+  double n = flock.size();
+  double sum2 = 0.;
+  double mean_d = mean_distance(flock);
+  for (boid b_i : flock) {
+    double d_i = 0.;
+    for (boid b_j : flock) {
+      d_i += distance(b_i, b_j);
+    }
+    sum2 += ((d_i / (n - 1.)) - mean_d) * ((d_i / (n - 1.)) - mean_d);
+    d_i = 0.;
+  }
+  double res = sqrt(sum2 / (n - 1.));
+  sum2 = 0.;
+  return res;
+}
+
 // Velocità media
 
 double mean_velocity(std::vector<boid> const &flock) {
   double n = flock.size();
-  double sum_v;
+  double sum_v = 0.;
   for (boid b_i : flock) {
     sum_v += b_i.vel.norm();
   }
-  return (sum_v * (1. / n));
+  double res = (sum_v * (1. / n));
+  sum_v = 0.;
+  return res;
 }
 
 // Deviazione standard velocità
 
 double std_dev_velocity(std::vector<boid> const &flock) {
-  double sum2;
-  double mean_v = mean_velocity(flock);
   double n = flock.size();
+  double sum2 = 0.;
+  double mean_v = mean_velocity(flock);
   for (boid b_i : flock) {
     sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
   }
   double res = sqrt(sum2 / (n - 1.));
+  sum2 = 0.;
   return res;
 }
 
@@ -112,8 +153,8 @@ bool vision(boid b1, boid b2, double theta) {
 }
 
 // La funzione influence prende in input un vettore flock con tutti i boid del
-// piano e restituisce un vettore range con solo i boids nel range di influenza
-// di un certo boid b_i del piano
+// piano e restituisce un vettore range con solo i boids nel range di
+// influenza di un certo boid b_i del piano
 
 std::vector<boid> influence(std::vector<boid> const &flock, boid b_i, double d,
                             double theta) {

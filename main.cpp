@@ -11,7 +11,7 @@ int main() {
   std::normal_distribution<double> pos_d(50., 40.);
   std::normal_distribution<double> vel_d(0., 10.);
 
-  predator p{{20., 30.}, {5., 0.}};
+  predator p{{20., 30.}, {0., 0.}};
 
   for (int i = 0; i < 30; ++i) {
     boid b_i{{pos_d(generator), pos_d(generator)},

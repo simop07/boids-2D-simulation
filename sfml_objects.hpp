@@ -7,12 +7,13 @@
 
 // La classe button contiene un oggetto sf::RectangleShape, ovvero lo sfondo del
 // pulsante, un sf::Text, ovvero il testo del pulsante, una posizione, una
-// dimensione e un font. I vari metodi consentono di personalizzare le
+// dimensione, un font e un bool isOn per controllare lo stato del pulsante
+// (acceso o spento). I vari metodi consentono di personalizzare le
 // caratteristiche del pulsante come colore dello sfondo e del testo. Il metodo
 // createButton assegna i valori per costruire l'oggetto. I metodi getBox() e
 // getText() sono necessari per chiamare window.draw() in modo da visualizzare
 // il pulsante. Il metodo hovering permette di controllare se il puntatore del
-// mouse si trova all'interno dell'area del pulsante
+// mouse si trova all'interno dell'area del pulsante.
 
 class button {
 private:
@@ -72,11 +73,10 @@ public:
 
   sf::Text getText() { return m_text; }
 
-  bool hovering(sf::Vector2i mousePos) {
-    if (mousePos.x > m_rect.getPosition().x &&
-        mousePos.x < (m_rect.getPosition().x + m_rect.getSize().x) &&
-        mousePos.y > m_rect.getPosition().y &&
-        mousePos.y < (m_rect.getPosition().y + m_rect.getSize().y)) {
+  bool hovering(sf::Vector2f mousePos) {
+    sf::Vector2f mousePosF{static_cast<float>(mousePos.x),
+                           static_cast<float>(mousePos.y)};
+    if (m_rect.getGlobalBounds().contains(mousePosF)) {
       return true;
     } else {
       return false;
@@ -153,7 +153,13 @@ public:
     return;
   }
 
+double getA(){
+  return m_mean_d;
+}
+
   sf::Text getData() { return m_text; }
 };
+
+class textBox {};
 
 #endif
