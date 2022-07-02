@@ -94,4 +94,15 @@ void evolve_flock(std::vector<boid> &flock, double delta_t, stats s,
   return;
 }
 
+void eat_boid(std::vector<boid> &flock, predator p, double d_pred) {
+  auto b_i = flock.begin();
+  auto b_l = std::prev(flock.end());
+  for (; b_i != b_l; ++b_i) {
+    boid b_it = *b_i;
+    if ((b_it.pos - p.pos).norm() < d_pred / 2. && flock.size() != 1) {
+      flock.erase(b_i);
+    }
+  }
+  return;
+}
 #endif

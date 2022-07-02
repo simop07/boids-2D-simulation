@@ -99,7 +99,7 @@ vector_2d sep(std::vector<boid> const &flock, boid b_i, double s, double d_s) {
       sum_v += (b_j.pos - b_i.pos);
     }
   }
-  return v_sep = sum_v * (-s);
+  return v_sep = sum_v * (s * (-1.));
 }
 
 // Velocità di allineamento

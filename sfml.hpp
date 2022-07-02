@@ -5,6 +5,8 @@
 #include "sfml_objects.hpp"
 #include <random>
 
+// atan2(vx,vy)
+
 void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Parametri per la costruzione della finestra
@@ -40,7 +42,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Definizioni per costruzione dell'oggetto data result
 
-  sf::Vector2f dataPos(display_width * 0.75, display_height * 0.04);
+  sf::Vector2f dataPos(display_width * 0.74, display_height * 0.02);
   sf::Text Tdata;
   double mean_d = 0.;
   double mean_v = 0.;
@@ -124,9 +126,22 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   b4.createButton();
   b4.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
 
+  // Contatore di boid
+
+  sf::Text counter;
+  std::string str5{"N. Boids:\n"};
+  std::string n_boids{std::to_string(flock.size())};
+  std::string tot = str5 + n_boids;
+  counter.setPosition(buttonPos2.x + b2.getBox().getGlobalBounds().width + 20.f,
+                      buttonPos2.y);
+  counter.setFont(font);
+  counter.setFillColor(sf::Color::Black);
+  counter.setCharacterSize(18);
+  counter.setString(tot);
+
   // Costruzione dei poligoni per rappresentare boids e predatore
 
-  sf::CircleShape boids{5.0f, 3};
+  sf::CircleShape boids{3.0f, 6};
   boids.setFillColor(sf::Color(234, 72, 18, 255));
 
   sf::CircleShape predator{7.0, 4};
@@ -269,8 +284,14 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
       for (int i = 0; i != 1000 / 60; ++i) {
         evolve_flock(flock, 0.001, s, p);
         p = evolve_predator(p, 0.001, s);
+        eat_boid(flock, p, s.d_pred);
       }
     }
+
+    // Aggiornamento del counter dei boids
+
+    std::string n_actual_boids{std::to_string(flock.size())};
+    counter.setString(str5 + n_actual_boids);
 
     // Viene assegnato un oggetto sf::CircleShape a ogni boid b_i del flock la
     // cui posizione è settata come quella dei boid stessi ma riscalata in base
@@ -300,6 +321,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     window.draw(b4.getBox());
     window.draw(b4.getText());
     window.draw(result.getData());
+    window.draw(counter);
 
     // La finestra con tutti gli oggetti disegnati viene renderizzata
 
