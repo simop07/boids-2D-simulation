@@ -32,6 +32,9 @@ boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
     v_coe = coe(b_f, calc_c_m_b_i(flock, b_f), s.c);
   }
 
+  // Se un boid ha velocità zero gli viene aggiunta una velocità verso il centro
+  // di massa dello stormo
+
   if (b_f.vel.norm() == 0.) {
     vector_2d c_m = calc_c_m_b_i(flock, b_f);
     vector_2d pos_diff = c_m - b_f.pos;
