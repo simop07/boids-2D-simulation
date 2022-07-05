@@ -15,7 +15,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Flock evolution");
 
-  window.setFramerateLimit(60);
+  window.setVerticalSyncEnabled(true);
 
   auto const min_x{s.l_b};
   auto const max_x{s.r_b};
@@ -254,11 +254,9 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     // attivo
 
     if (!b4.buttonState()) {
-      for (int i = 0; i != 1000 / 60; ++i) {
-        evolve_flock(flock, 0.001, s, p);
-        p = evolve_predator(p, 0.001, s);
-        eat_boid(flock, p, s.d_pred);
-      }
+      evolve_flock(flock, 1. / 30., s, p);
+      p = evolve_predator(p, 1. / 30., s);
+      eat_boid(flock, p, s.d_pred);
     }
 
     // Aggiornamento del counter dei boids

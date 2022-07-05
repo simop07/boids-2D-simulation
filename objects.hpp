@@ -20,14 +20,6 @@ public:
 
   double norm() const;
 
-  // Prodotto scalare fra due vettori
-
-  double dot_prod(vector_2d const &v);
-
-  // Angolo fra due vettori
-
-  double angle(vector_2d const &v);
-
   vector_2d operator+(vector_2d const &v);
 
   vector_2d operator-(vector_2d const &v);
@@ -61,7 +53,6 @@ struct stats {
   double r_b{};    // Bordo destro
   double u_b{};    // Bordo superiore
   double b_b{};    // Bordo inferiore
-  double theta{};  // Angolo cieco
   double d_pred{}; // Distanza da cui si attiva l'effetto del predatore
   double v_max{};  // Velocità massima dei boid
 };

@@ -143,21 +143,10 @@ vector_2d pacman(vector_2d pos, stats s) {
   return pos;
 }
 
-bool vision(boid b1, boid b2, double theta) {
-  vector_2d distance = b2.pos - b1.pos;
-  double alpha = b1.vel.angle(distance);
-  if (alpha < (PI - theta / 2)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-std::vector<boid> influence(std::vector<boid> const &flock, boid b_i, double d,
-                            double theta) {
+std::vector<boid> influence(std::vector<boid> const &flock, boid b_i, double d) {
   std::vector<boid> range;
   for (boid b_j : flock) {
-    if (distance(b_i, b_j) < d && vision(b_i, b_j, theta)) {
+    if (distance(b_i, b_j) < d) {
       range.push_back(b_j);
     }
   };
