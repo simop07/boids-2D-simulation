@@ -8,8 +8,11 @@ double distance(boid b1, boid b2) {
 vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
   vector_2d c_m;
   double n = flock.size();
-  assert(n != 1.); // Controlla che nel flock ci siano almeno 2 boid (il caso
-                   // n = 1. viene gestito in evolve_boid)
+  // Controlla che nel flock ci siano almeno 2 boid (il caso
+  // n = 1. viene gestito in evolve_boid)
+  if (n <= 1.) {
+    throw std::runtime_error{"Flock must contain at least 2 boid"};
+  }
   for (boid b_j : flock) {
     c_m += (b_j.pos * (1. / (n - 1.)));
   }
@@ -30,22 +33,17 @@ double mean_distance(std::vector<boid> const &flock) {
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
-  try {
-    for (boid b_i : flock) {
-      for (boid b_j : flock) {
-        sum_par += distance(b_i, b_j);
-      }
-      sum_tot += sum_par;
-      sum_par = 0.;
+  for (boid b_i : flock) {
+    for (boid b_j : flock) {
+      sum_par += distance(b_i, b_j);
     }
-    double res = sum_tot / (n * (n - 1.));
-    sum_tot = 0.;
+    sum_tot += sum_par;
     sum_par = 0.;
-    return res;
-  } catch (std::runtime_error const &e) {
-    std::cerr << e.what() << '\n';
-    return 0.;
   }
+  double res = sum_tot / (n * (n - 1.));
+  sum_tot = 0.;
+  sum_par = 0.;
+  return res;
 }
 
 double std_dev_distance(std::vector<boid> const &flock) {
@@ -55,22 +53,17 @@ double std_dev_distance(std::vector<boid> const &flock) {
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
-  try {
-    for (boid b_i : flock) {
-      double d_i = 0.;
-      for (boid b_j : flock) {
-        d_i += distance(b_i, b_j);
-      }
-      sum2 += ((d_i / (n - 1.)) - mean_d) * ((d_i / (n - 1.)) - mean_d);
-      d_i = 0.;
+  for (boid b_i : flock) {
+    double d_i = 0.;
+    for (boid b_j : flock) {
+      d_i += distance(b_i, b_j);
     }
-    double res = sqrt(sum2 / (n - 1.));
-    sum2 = 0.;
-    return res;
-  } catch (std::runtime_error const &e) {
-    std::cerr << e.what() << '\n';
-    return 0.;
+    sum2 += ((d_i / (n - 1.)) - mean_d) * ((d_i / (n - 1.)) - mean_d);
+    d_i = 0.;
   }
+  double res = sqrt(sum2 / (n - 1.));
+  sum2 = 0.;
+  return res;
 }
 
 double mean_velocity(std::vector<boid> const &flock) {
@@ -79,17 +72,12 @@ double mean_velocity(std::vector<boid> const &flock) {
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
-  try {
-    for (boid b_i : flock) {
-      sum_v += b_i.vel.norm();
-    }
-    double res = (sum_v * (1. / n));
-    sum_v = 0.;
-    return res;
-  } catch (std::runtime_error const &e) {
-    std::cerr << e.what() << '\n';
-    return 0.;
+  for (boid b_i : flock) {
+    sum_v += b_i.vel.norm();
   }
+  double res = (sum_v * (1. / n));
+  sum_v = 0.;
+  return res;
 }
 
 double std_dev_velocity(std::vector<boid> const &flock) {
@@ -99,17 +87,12 @@ double std_dev_velocity(std::vector<boid> const &flock) {
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
-  try {
-    for (boid b_i : flock) {
-      sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
-    }
-    double res = sqrt(sum2 / (n - 1.));
-    sum2 = 0.;
-    return res;
-  } catch (std::runtime_error const &e) {
-    std::cerr << e.what() << '\n';
-    return 0.;
+  for (boid b_i : flock) {
+    sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
   }
+  double res = sqrt(sum2 / (n - 1.));
+  sum2 = 0.;
+  return res;
 }
 
 vector_2d sep(std::vector<boid> const &flock, boid b_i, double s, double d_s) {
@@ -127,8 +110,11 @@ vector_2d all(std::vector<boid> const &flock, boid b_i, double a) {
   vector_2d v_all;
   vector_2d sum_v;
   double n = flock.size();
-  assert(n != 1.); // Controlla che nel flock ci siano almeno 2 boid (il caso
-                   // n=1. viene gestito in evolve_boid)
+  // Controlla che nel flock ci siano almeno 2 boid (il caso
+  // n = 1. viene gestito in evolve_boid)
+  if (n <= 1.) {
+    throw std::runtime_error{"Flock must contain at least 2 boid"};
+  }
   for (boid b_j : flock) {
     sum_v += b_j.vel;
   }
