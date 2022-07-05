@@ -166,3 +166,25 @@ TEST_CASE("evolve test") {
   CHECK(flock[3].vel.xcomp() == doctest::Approx(-4.));
   CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
 }
+
+TEST_CASE("Muoridiocane") {
+  std::vector<boid> flock;
+  stats s{1.5, 3.5, 0.2, 0., 10., 0., 10., 10., 0., 0., 0., 1000.};
+  double delta_t = 0.2;
+  predator p{{0., 0.}, {0., 0.}};
+  boid b1{{1., 1.}, {0., 0.}};
+  boid b2{{1.1, 1.}, {0., 0.}};
+
+  flock.push_back(b1);
+  flock.push_back(b2);
+  vector_2d vcoe = coe(b1, calc_c_m_b_i(flock, b1), s.c);
+  vector_2d vsep = sep(flock, b1, s.s, s.d_s);
+  vector_2d vf = b1.vel + vsep + vcoe;
+
+  evolve_flock(flock, delta_t, s, p);
+
+  CHECK(flock[0].vel.norm()== 0.98);
+  CHECK(vcoe.norm() == 1);
+  CHECK(vsep.xcomp() == -0.02);
+  CHECK(vf.norm() == 0.98);
+}

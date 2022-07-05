@@ -5,8 +5,6 @@
 #include "sfml_objects.hpp"
 #include <random>
 
-// atan2(vx,vy)
-
 void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Parametri per la costruzione della finestra
@@ -42,7 +40,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Definizioni per costruzione dell'oggetto data result
 
-  sf::Vector2f dataPos(display_width * 0.74, display_height * 0.02);
+  sf::Vector2f dataPos(display_width * 0.75, display_height * 0.02);
   sf::Text Tdata;
   double mean_d = 0.;
   double mean_v = 0.;
@@ -55,26 +53,9 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   result.setColor(sf::Color::Black);
   result.createData();
 
-  // Definizioni per costruzione dell'oggetto button b1
+  // Grandezza dei pulsanti
 
-  sf::Vector2f buttonPos(result.getData().getGlobalBounds().left +
-                             result.getData().getGlobalBounds().width / 1.4f,
-                         result.getData().getGlobalBounds().top +
-                             result.getData().getGlobalBounds().height *
-                                 (1.2f));
   sf::Vector2f buttonSize(80, 40);
-  sf::RectangleShape rect;
-  sf::Text text;
-  std::string str{"Get data"};
-
-  button b1(buttonPos, buttonSize, rect, text, font);
-
-  b1.setButtonColor(sf::Color(5, 23, 185, 255));
-  b1.setTextColor(sf::Color::White);
-  b1.setTextContent(str);
-  b1.setTextSize(18);
-  b1.setButtonOutline(sf::Color(217, 9, 9, 255), 2.f);
-  b1.createButton();
 
   // Definizioni per costruzione dell'oggetto button b2
 
@@ -147,6 +128,11 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::CircleShape predator{7.0, 4};
   predator.setFillColor(sf::Color::Black);
 
+  // Parametro utile per tenere conto dei frame passati da quando parte il game
+  // loop
+
+  int i = 0.;
+
   // Game loop
 
   while (window.isOpen()) {
@@ -204,14 +190,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         // pulsanti, gli vengono cambiati i colori
 
       case sf::Event::MouseMoved:
-        if (b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b1.setButtonColor(sf::Color(217, 9, 9, 255));
-        }
-        if (!b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b1.setButtonColor(sf::Color(5, 23, 185, 255));
-        }
+
         if (b2.hovering(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           b2.setButtonColor(sf::Color(8, 123, 3, 255));
@@ -238,12 +217,6 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         // l'ultimo boid del vettore flock
 
       case sf::Event::MouseButtonPressed:
-        if (b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          result.setNewData(mean_distance(flock), std_dev_distance(flock),
-                            mean_velocity(flock), std_dev_velocity(flock));
-          result.createData();
-        }
         if (b2.hovering(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
           boid b_n{{pos_d(generator), pos_d(generator)},
@@ -252,10 +225,10 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         }
         if (b3.hovering(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          if (flock.size() != 1) {
+          if (flock.size() > 2) {
             flock.erase(flock.end() - 1);
           }
-          if (flock.size() == 1) {
+          if (flock.size() <= 2) {
             std::cout << "Cannot remove more boids" << '\n';
           }
         }
@@ -293,6 +266,15 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     std::string n_actual_boids{std::to_string(flock.size())};
     counter.setString(str5 + n_actual_boids);
 
+    // Aggiornamento dati
+
+    ++i;
+    if (i % 60 == 0) {
+      result.setNewData(mean_distance(flock), std_dev_distance(flock),
+                        mean_velocity(flock), std_dev_velocity(flock));
+      result.createData();
+    }
+
     // Viene assegnato un oggetto sf::CircleShape a ogni boid b_i del flock la
     // cui posizione è settata come quella dei boid stessi ma riscalata in base
     // alle dimensioni dello schermo. Viene poi disegnato l'oggetto
@@ -312,8 +294,6 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     // d'interesse
 
     window.draw(predator);
-    window.draw(b1.getBox());
-    window.draw(b1.getText());
     window.draw(b2.getBox());
     window.draw(b2.getText());
     window.draw(b3.getBox());
