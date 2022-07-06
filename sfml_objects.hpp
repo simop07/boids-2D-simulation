@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-// The button class is used to create clickable buttons in sfml, it has the
+// The button class is used to create interactive buttons in sfml, it has the
 // necessary objects to create a rectangle and a text as its private members as
 // well as a bool to check wether the button is pressed or not. The numerous
 // methods allow a simple management of the visualitazion of the button itself

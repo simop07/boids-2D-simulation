@@ -32,8 +32,8 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Gaussian generator of the boids
   std::default_random_engine generator;
-  std::normal_distribution<double> pos_d(50., 40.);
-  std::normal_distribution<double> vel_d(0., 10.);
+  std::normal_distribution<double> pos_d(s.u_b / 2., s.u_b * 2.);
+  std::normal_distribution<double> vel_d(0., s.v_max);
 
   // Defining objects needed for the object data "result"
   sf::Vector2f dataPos(display_width * 0.75, display_height * 0.02);
