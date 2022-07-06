@@ -8,8 +8,8 @@ double distance(boid b1, boid b2) {
 vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
   vector_2d c_m;
   double n = flock.size();
-  // Controlla che nel flock ci siano almeno 2 boid (il caso
-  // n = 1. viene gestito in evolve_boid)
+  // This exception checks if there is less than one boid in flock (the case
+  // n=1. is managed in evolve)
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
@@ -20,12 +20,9 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
   return c_m;
 }
 
-// Le eccezioni nelle funzioni che restituiscono i dati richiesti servono per
-// controllare che nel flock ci siano almeno 2 boid altrimenti non avrebbe senso
-// calcolare velocità e distanze medie (a meno che non se ne inseriscano meno di
-// due in input, il pulsante remove boid smette di funzionare una volta rimasti
-// solo due boids)
-
+// The exceptions in the data functions are there to make sure that there are at
+// least two boids in the flock since it wouldn't make sense to calculate them
+// with only one boid present
 double mean_distance(std::vector<boid> const &flock) {
   double n = flock.size();
   double sum_tot = 0.;
@@ -110,8 +107,8 @@ vector_2d all(std::vector<boid> const &flock, boid b_i, double a) {
   vector_2d v_all;
   vector_2d sum_v;
   double n = flock.size();
-  // Controlla che nel flock ci siano almeno 2 boid (il caso
-  // n = 1. viene gestito in evolve_boid)
+// This exception checks if there is less than one boid in flock (the case
+  // n=1. is managed in evolve)
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   }
@@ -143,7 +140,8 @@ vector_2d pacman(vector_2d pos, stats s) {
   return pos;
 }
 
-std::vector<boid> influence(std::vector<boid> const &flock, boid b_i, double d) {
+std::vector<boid> influence(std::vector<boid> const &flock, boid b_i,
+                            double d) {
   std::vector<boid> range;
   for (boid b_j : flock) {
     if (distance(b_i, b_j) < d) {

@@ -5,16 +5,13 @@
 #include <iostream>
 #include <string>
 
-// La classe button contiene un oggetto sf::RectangleShape, ovvero lo sfondo del
-// pulsante, un sf::Text, ovvero il testo del pulsante, una posizione, una
-// dimensione, un font e un bool isOn per controllare lo stato del pulsante
-// (acceso o spento). I vari metodi consentono di personalizzare le
-// caratteristiche del pulsante come colore dello sfondo e del testo. Il metodo
-// createButton assegna i valori per costruire l'oggetto. I metodi getBox() e
-// getText() sono necessari per chiamare window.draw() in modo da visualizzare
-// il pulsante. Il metodo hovering permette di controllare se il puntatore del
-// mouse si trova all'interno dell'area del pulsante.
-
+// The button class is used to create clickable buttons in sfml, it has the
+// necessary objects to create a rectangle and a text as its private members as
+// well as a bool to check wether the button is pressed or not. The numerous
+// methods allow a simple management of the visualitazion of the button itself
+// and to get back the necessary information to draw it. The method
+// createButton() is used to assign every parametre to the right sfml object in
+// order to create a drawable object
 class button {
 private:
   sf::Vector2f m_pos;
@@ -52,14 +49,9 @@ public:
   bool buttonPressed();
 };
 
-// La classe data contiene i valori dei dati d'interesse, un oggetto sf::Text un
-// font e una posizione. Tramite le funzioni membro è possibile modificare le
-// proprietà di m_text e i dati d'interesse in modo da aggiornarli. La funzione
-// membro createData() consente di assegnare i valori di input del costruttore
-// per costruire in maniera appropriata il testo oltre a costruire la stringa di
-// testo da visualizzare. Il metodo getData() restituisce m_text in modo da
-// poter chiamare window.draw() per poter visualizzare il testo
-
+// The data class is very similar to the button class having the necessary sfml
+// objects as private members and methods that allow to create a drawable sfml
+// object and to assign new values to the output data required
 class data {
 private:
   double m_mean_d;

@@ -1,6 +1,6 @@
 #include "sfml_objects.hpp"
 
-// Classe button
+// Class button
 
 void button::setButtonColor(sf::Color color) {
     m_rect.setFillColor(color);
@@ -67,7 +67,7 @@ void button::setButtonColor(sf::Color color) {
     return isOn;
   }
 
-  //Classe data
+  //Class data
 
   void data::setSize(int size) {
     m_text.setCharacterSize(size);
