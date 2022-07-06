@@ -118,9 +118,9 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::CircleShape predator{7.0, 4};
   predator.setFillColor(sf::Color::Black);
 
-  // Parameter used to keep track of how many frames have passed since the start
-  // of the game loop
-  int i = 0.;
+  // Starting the clock needed to evolve the simulation and update data
+  sf::Clock clock;
+  sf::Clock clock2;
 
   // Game loop
   while (window.isOpen()) {
@@ -228,12 +228,17 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     // The window with the objects of the previous frame is cleared
     window.clear(sf::Color(202, 227, 244, 255));
 
-    // Every frame the flock and predator are evolved by 1/30 second, being the
-    // simulation at 60 fps the ratio between real time and simulation time is
-    // 1:2
-    if (b3.buttonState()) {
-      evolve_flock(flock, 1. / 30., s, p);
-      p = evolve_predator(p, 1. / 30., s);
+    // The clock is restarded registering how much time has passed during a
+    // frame, then converted to a double usable in the evolve functions
+    sf::Time el_time = clock.restart();
+    double d_el_time = static_cast<double>(el_time.asSeconds());
+
+    // Every frame the flock and predator are evolved by the time elapsed during
+    // a frame (if 60 fps then 1/60 seconds) times 5, that means every second of
+    // real time has passed, the simulation has evolved by 5 seconds
+    if (!b3.buttonState()) {
+      evolve_flock(flock, d_el_time * 5., s, p);
+      p = evolve_predator(p, d_el_time * 5., s);
       eat_boid(flock, p, s.d_pred);
     }
 
@@ -241,12 +246,17 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     std::string n_actual_boids{std::to_string(flock.size())};
     counter.setString(str4 + n_actual_boids);
 
-    // Data gets updated every 60 frames
-    ++i;
-    if (i % 60 == 0) {
+    // Data gets updated every 2 seconds, this time the clock is not restarded
+    // otherwise it would always get a time shorter than 2 seconds(since a frame
+    // last less than 2 seconds)
+    sf::Time el_time2 = clock2.getElapsedTime();
+    int i_el_time2 = static_cast<int>(el_time2.asSeconds());
+
+    if (i_el_time2 % 3 == 2) {
       result.setNewData(mean_distance(flock), std_dev_distance(flock),
                         mean_velocity(flock), std_dev_velocity(flock));
       result.createData();
+      clock2.restart();
     }
 
     // Every boid inside flock gets assigned a boids sf::CircleShape that are

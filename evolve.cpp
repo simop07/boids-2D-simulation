@@ -68,12 +68,25 @@ void eat_boid(std::vector<boid> &flock, predator p, double d_pred) {
   auto b_i = flock.begin();
   auto b_l = flock.end();
   int n = flock.size();
-  for (; b_i != b_l; ++b_i) {
+  // This cycle check if a boid should be eliminated, in the case of a positive
+  // answer, the iterator to the it element must be replaced by the current one
+  // (returned by the method erase) and the iterator to the last element must be
+  // reduced by one. By not doing that there would be pointers to element of the
+  // vector that doesn't exist anymore resulting in a segmentation fault error
+  while (b_i != b_l) {
     boid b_it = *b_i;
-    if ((b_it.pos - p.pos).norm() < d_pred / 1.5 && n >= 3) {
-      flock.erase(b_i);
+    if ((b_it.pos - p.pos).norm() < d_pred / 1.2 && n >= 3) {
+      b_i = flock.erase(b_i);
+      b_l = std::prev(b_l);
+      n = flock.size();
+    } else {
+      ++b_i;
     }
-    if ((b_it.pos - p.pos).norm() < d_pred / 1.5 && n < 3) {
+  }
+  // This part checks if the predator gets close to a boid when the flock has a
+  // size smaller than 3
+  for (boid b_i : flock) {
+    if ((b_i.pos - p.pos).norm() < d_pred / 1.2 && n < 3) {
       std::cout << "Predator isn't hungry anymore..." << '\n';
     }
   }
