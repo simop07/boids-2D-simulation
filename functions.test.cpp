@@ -104,25 +104,113 @@ TEST_CASE("mean velocity and st dev") {
   CHECK(std_dev_velocity(flock) == doctest::Approx(2.4981488895));
 }
 
-TEST_CASE("vision") {
-  boid b1{{3., 3.}, {-1., -1.}};
-  boid b2{{3., 1.}, {0., 1.}};
-  boid b3{{6., 3.}, {0., 2.}};
-  boid b4{{6., 5.}, {-3., -3.}};
-  boid b5{{8., 5.}, {2., -1.}};
-  boid b6{{11., 2.}, {-1., 1.}};
-  boid b7{{7., 1.}, {0., 0.}};
-  boid b8{{11., 2.}, {-3., 4.}};
+// TEST_CASE("vision") {
+//   boid b1{{3., 3.}, {-1., -1.}};
+//   boid b2{{3., 1.}, {0., 1.}};
+//   boid b3{{6., 3.}, {0., 2.}};
+//   boid b4{{6., 5.}, {-3., -3.}};
+//   boid b5{{8., 5.}, {2., -1.}};
+//   boid b6{{11., 2.}, {-1., 1.}};
+//   boid b7{{7., 1.}, {0., 0.}};
+//   boid b8{{11., 2.}, {-3., 4.}};
 
-  CHECK(vision(b1, b2, PI / 2.) == true);
-  CHECK(vision(b1, b3, PI / 2.) == false);
-  CHECK(vision(b1, b4, PI / 2.) == false);
-  CHECK(vision(b3, b4, 0) == true);
-  CHECK(vision(b4, b2, PI) == true);
-  CHECK(vision(b4, b5, PI) == false);
-  CHECK(vision(b6, b5, PI * 2.) == false);
-  CHECK(vision(b6, b8, PI / 3 == false));
-  CHECK(vision(b7, b3, PI / 3.) == true);
+//   CHECK(vision(b1, b2, PI / 2.) == true);
+//   CHECK(vision(b1, b3, PI / 2.) == false);
+//   CHECK(vision(b1, b4, PI / 2.) == false);
+//   CHECK(vision(b3, b4, 0) == true);
+//   CHECK(vision(b4, b2, PI) == true);
+//   CHECK(vision(b4, b5, PI) == false);
+//   CHECK(vision(b6, b5, PI * 2.) == false);
+//   CHECK(vision(b6, b8, PI / 3 == false));
+//   CHECK(vision(b7, b3, PI / 3.) == true);
+// }
+
+TEST_CASE("v sep") {
+  std::vector<boid> flock;
+  boid b1{{2., 1.}, {3., 2.}};
+  boid b2{{2., 3.}, {4., 3.}};
+  boid b3{{3., 4.}, {0., 3.}};
+  boid b4{{2.5, 3}, {1., 2.}};
+
+  SUBCASE("4 boids") {
+    flock.push_back(b1);
+    flock.push_back(b2);   
+    flock.push_back(b3);
+    flock.push_back(b4);
+
+    CHECK(sep(flock, b1, 1., 4.).xcomp() == doctest::Approx(-1.5));
+    CHECK(sep(flock, b1, 1., 4.).ycomp() == doctest::Approx(-7.));
+    CHECK(sep(flock, b2, 1., 4.).xcomp() == doctest::Approx(-1.5));
+    CHECK(sep(flock, b2, 1., 4.).ycomp() == doctest::Approx(1.));
+  }
+
+  SUBCASE("same components") { // compoenenti  uguali tra due boids
+   flock.push_back(b1);
+   flock.push_back(b2);
+   
+   CHECK(sep(flock, b2, 1., 3.).xcomp() == doctest::Approx(0.));
+   CHECK(sep(flock, b2, 1., 3.).ycomp() == doctest::Approx(2.));
+  }
+}
+
+TEST_CASE("v all") {
+  std::vector<boid> flock;
+  boid b1{{2., 2.}, {1., 1.}};
+  boid b2{{4., 3.}, {4., 1.}};
+  boid b3{{7., 6.}, {2., 3.}};
+  boid b4{{1., 1.}, {-1., -2.}};
+
+  SUBCASE("4 boids") {
+    flock.push_back(b1);
+    flock.push_back(b2);   
+    flock.push_back(b3);
+    flock.push_back(b4);
+
+    CHECK(all(flock, b1, 3).xcomp() == doctest::Approx(2.0)); // non passa ma e' giusto
+    CHECK(all(flock, b1, 3).ycomp() == doctest::Approx(-1.));
+    CHECK(all(flock, b2, 3).xcomp() == doctest::Approx(-10.));
+    CHECK(all(flock, b2, 3).ycomp() == doctest::Approx(-1.));
+  }
+
+  SUBCASE("Not enough boids") {
+    flock.push_back(b1);
+
+    CHECK_THROWS(all(flock, b1, 3));
+  }
+
+  SUBCASE("No boids") {
+
+    CHECK_THROWS(all(flock, b1, 3));
+  }
+}
+
+TEST_CASE("v coe") {
+  std::vector<boid> flock;
+  boid b1{{2., 2.}, {1., 1.}};
+  boid b2{{4., 3.}, {4., 1.}};
+  boid b3{{7., 6.}, {2., 3.}};
+  boid b4{{1., 1.}, {-1., -2.}};
+
+  SUBCASE("4 boids") {
+    flock.push_back(b1);
+    flock.push_back(b2);   
+    flock.push_back(b3);
+    flock.push_back(b4);
+
+    CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).xcomp() == doctest::Approx(0.6)); // e' giusto ma non passa
+    CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).ycomp() == doctest::Approx(0.4));
+    CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).xcomp() == doctest::Approx(-0.2)); // e' giusto ma non passa
+    CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).ycomp() == doctest::Approx(0.));
+  }
+
+  SUBCASE(" Not enough boids"){
+    flock.push_back(b1);
+    CHECK_THROWS(coe(b1, calc_c_m_b_i(flock, b1), 0.3));
+  }
+
+  SUBCASE(" No Boids") {
+    CHECK_THROWS(coe(b1, calc_c_m_b_i(flock, b1), 0.3));
+  }
 }
 
 TEST_CASE("influence") {

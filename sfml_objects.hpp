@@ -56,16 +56,16 @@ public:
   }
 
   void createButton() {
-    m_rect.setOrigin(
+    m_rect.setOrigin( // set the local origin of the object (top left corner of the object) ma cambiato al centro del rettangolo 
         m_rect.getGlobalBounds().left + m_rect.getGlobalBounds().width / 2.f,
         m_rect.getGlobalBounds().top + m_rect.getGlobalBounds().height / 2.f);
-    m_rect.setPosition(m_pos);
+    m_rect.setPosition(m_pos); 
     m_rect.setSize(m_size);
-    m_text.setOrigin(
+    m_text.setOrigin(// stessa cosa, centro dell'origin nel centro del rettangolo
         m_text.getGlobalBounds().left + m_text.getGlobalBounds().width / 2.f,
         m_text.getGlobalBounds().top + m_text.getGlobalBounds().height / 2.f);
     m_text.setPosition(m_pos);
-    m_text.setFont(m_font);
+    m_text.setFont(m_font); // va subito inizializzato
     return;
   }
 
@@ -140,7 +140,7 @@ public:
   void createData() {
     m_text.setPosition(m_pos);
     m_text.setFont(m_font);
-    std::string first{"Data         Mean              Std. Dev. \nDistance:  "};
+    std::string first{"Data         Mean        Std. Dev. \nDistance:  "};
     std::string Mean_d{std::to_string(m_mean_d)};
     std::string p_m{"  +/-  "};
     std::string std_devD{std::to_string(m_std_dev_d)};
