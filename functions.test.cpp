@@ -67,6 +67,7 @@ TEST_CASE("two points cdm") {
   CHECK(calc_c_m_b_i(flock, b2).xcomp() == doctest::Approx(0.));
   CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(0.));
 }
+
 TEST_CASE("cdm test") {
   std::vector<boid> flock;
   boid b1{{1., 3.}, {0., 0.}};
@@ -310,12 +311,14 @@ TEST_CASE("evolve test") {
   boid b2{{3., 2.}, {0., 1.}};
   boid b3{{2., 5.}, {1., -1.}};
   boid b4{{8., 8.}, {-4., -4.}};
+  boid b5{{8.,0.},{0.,0.}};
 
   flock.push_back(b1);
   flock.push_back(b2);
   flock.push_back(b3);
   flock.push_back(b4);
-
+  flock.push_back(b5);
+  
   evolve_flock(flock, delta_t, s, p);
 
   CHECK(flock[0].pos.xcomp() == doctest::Approx(1.8));
@@ -334,6 +337,10 @@ TEST_CASE("evolve test") {
   CHECK(flock[2].vel.ycomp() == doctest::Approx(-1.8));
   CHECK(flock[3].vel.xcomp() == doctest::Approx(-4.));
   CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
+  /*CHECK(flock[4].pos.xcomp() == doctest::Approx(8.));
+  CHECK(flock[4].pos.ycomp() == doctest::Approx(0.));
+  CHECK(flock[4].vel.xcomp() == doctest::Approx(0.531));
+  CHECK(flock[4].vel.ycomp() == doctest::Approx(0.847));*/
 
   evolve_flock(flock, delta_t, s, p);
 
@@ -353,4 +360,49 @@ TEST_CASE("evolve test") {
   CHECK(flock[2].vel.ycomp() == doctest::Approx(-2.04));
   CHECK(flock[3].vel.xcomp() == doctest::Approx(-4.));
   CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
-  }
+
+}
+
+TEST_CASE("evolve predator") {
+  stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 0., 1000.};
+  predator p1{{3.,4.},{-2.,5.}};
+  predator p2{{-3.,17.},{0.,0.}};
+  predator p3{{13.,0.},{3.,2.}};
+  double delta_t = 0.2;
+
+  predator v1 = evolve_predator(p1, delta_t, s);
+  predator v2 = evolve_predator(p2, delta_t, s);
+  predator v3 = evolve_predator(p3, delta_t, s);
+
+  CHECK(v1.pos.xcomp() == doctest::Approx(2.6));
+  CHECK(v1.pos.ycomp() == doctest::Approx(5.));
+  CHECK(v2.pos.xcomp() == doctest::Approx(7.));
+  CHECK(v2.pos.ycomp() == doctest::Approx(7.));
+  CHECK(v3.pos.xcomp() == doctest::Approx(3.6)); //Questo non vaaaaa
+  CHECK(v3.pos.ycomp() == doctest::Approx(0.4));
+}
+
+TEST_CASE("eat boids") {
+  std::vector<boid> flock;
+  predator p{{3.,5.},{2.,2.}};
+  boid b1{{2.5,5.4},{-3.,4.}};
+  boid b2{{3.,5.},{1.,-2}};
+  boid b3{{6., 9.},{0.,2.}};
+  boid b4{{5., 6.},{2., 3.}};
+  boid b5{{3.,7.},{1., -3.}};
+  double d_pred = 4.;
+
+  flock.push_back(b1);
+  flock.push_back(b2);
+  flock.push_back(b3);
+  flock.push_back(b4);
+  flock.push_back(b5);
+
+  eat_boid(flock, p, d_pred);
+  eat_boid(flock, p, d_pred);
+  eat_boid(flock, p, d_pred); //si applica la funzione per ogni boid che potrebbe essere mangiato.
+
+  int n = flock.size();
+
+  CHECK( n == 3); //due boids vengono mangiati, quindi la dimensione del flock è 2.
+}
