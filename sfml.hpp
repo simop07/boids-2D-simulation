@@ -36,7 +36,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   std::normal_distribution<double> vel_d(0., s.v_max);
 
   // Defining objects needed for the object data "result"
-  sf::Vector2f dataPos(display_width * 0.75, display_height * 0.02);
+  sf::Vector2f dataPos(display_width * 0.74, display_height * 0.02);
   sf::Text Tdata;
   double mean_d = 0.;
   double mean_v = 0.;
@@ -111,6 +111,13 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   counter.setCharacterSize(18);
   counter.setString(tot);
 
+  // Stats display
+  sf::Text stats;
+  stats.setFont(font);
+  stats.setPosition(0.02 * display_width, 0.83 * display_height);
+  stats.setCharacterSize(18);
+  stats.setFillColor(sf::Color::Black);
+
   // Poligons representing the boids and the predator
   sf::CircleShape boids{3.0f, 6};
   boids.setFillColor(sf::Color(234, 72, 18, 255));
@@ -121,6 +128,9 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   // Starting the clock needed to evolve the simulation and update data
   sf::Clock clock;
   sf::Clock clock2;
+
+  // Parameter used to change stats
+  int changing_stats;
 
   // Game loop
   while (window.isOpen()) {
@@ -140,23 +150,23 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         // If a keyboard button is pressed, after verifying which button it was
         // the relative rules are applied
       case sf::Event::KeyPressed:
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        if (event.key.code == sf::Keyboard::Down) {
           p.vel.sety(p.vel.norm());
           p.vel.setx(0.);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        if (event.key.code == sf::Keyboard::Left) {
           p.vel.setx(p.vel.norm() * (-1.));
           p.vel.sety(0.);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        if (event.key.code == sf::Keyboard::Up) {
           p.vel.sety(p.vel.norm() * (-1));
           p.vel.setx(0.);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (event.key.code == sf::Keyboard::Right) {
           p.vel.setx(p.vel.norm());
           p.vel.sety(0.);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        if (event.key.code == sf::Keyboard::Space) {
           if (p.vel.norm() == 0.) {
             p.vel.setx(5.);
           } else {
@@ -164,11 +174,57 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
             p.vel.sety(0.);
           }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+        if (event.key.code == sf::Keyboard::LShift) {
           p.vel = p.vel * 0.5;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+        if (event.key.code == sf::Keyboard::LControl) {
           p.vel = p.vel * 2.;
+        }
+        if (event.key.code == sf::Keyboard::H) {
+          std::cout
+              << '\n'
+              << "PREDATOR:\n\n'SpaceBar' to start/stop the "
+                 "predator\n'Lshift' to slow down the predator\n'LCtrl' "
+                 "to increase the speed of the predator\n'Up/Down/Left/Right' "
+                 "to change the predator's "
+                 "direction\n\nBUTTONS:\n\npress 'Add/Remove boid' to generate "
+                 "or "
+                 "remove a boid from the simulation\npress 'Pause evolution' "
+                 "to pause the simulation\n\nSTATS:\n\npress 's/a/c' to "
+                 "select the stats you want to change, then press "
+                 "'Enter/Backspace' to increse/reduce it by 0.05"
+              << '\n';
+        }
+        if (event.key.code == sf::Keyboard::S) {
+          changing_stats = 1;
+        }
+        if (event.key.code == sf::Keyboard::A) {
+          changing_stats = 2;
+        }
+        if (event.key.code == sf::Keyboard::C) {
+          changing_stats = 3;
+        }
+        if (event.key.code == sf::Keyboard::Enter) {
+          if (changing_stats == 1) {
+            s.s += 0.05;
+          }
+          if (changing_stats == 2) {
+            s.a += 0.05;
+          }
+          if (changing_stats == 3) {
+            s.c += 0.05;
+          }
+        }
+        if (event.key.code == sf::Keyboard::Backspace) {
+          if (changing_stats == 1 && s.s > 0.05) {
+            s.s -= 0.05;
+          }
+          if (changing_stats == 2 && s.a > 0.05) {
+            s.a -= 0.05;
+          }
+          if (changing_stats == 3 && s.c > 0.05) {
+            s.c -= 0.05;
+          }
         }
         break;
 
@@ -246,9 +302,40 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     std::string n_actual_boids{std::to_string(flock.size())};
     counter.setString(str4 + n_actual_boids);
 
-    // Data gets updated every 2 seconds, this time the clock is not restarded
-    // otherwise it would always get a time shorter than 2 seconds(since a frame
-    // last less than 2 seconds)
+    // Stats are updated
+    std::string a;
+    std::string c;
+    std::string e;
+    switch (changing_stats) {
+    case 1:
+      a = {"Stats:\n->s = "};
+      c = {"\na = "};
+      e = {"\nc = "};
+      break;
+    case 2:
+      a = {"Stats:\ns = "};
+      c = {"\n->a = "};
+      e = {"\nc = "};
+      break;
+    case 3:
+      a = {"Stats:\ns = "};
+      c = {"\na = "};
+      e = {"\n->c = "};
+      break;
+    default:
+      a = {"Stats:\ns = "};
+      c = {"\na = "};
+      e = {"\nc = "};
+      break;
+    }
+    std::string b = std::to_string(s.s);
+    std::string d = std::to_string(s.a);
+    std::string f = std::to_string(s.c);
+    stats.setString(a + b + c + d + e + f);
+
+    // Data gets updated every 2 seconds, this time the clock is not
+    // restarded otherwise it would always get a time shorter than 2
+    // seconds(since a frame last less than 2 seconds)
     sf::Time el_time2 = clock2.getElapsedTime();
     int i_el_time2 = static_cast<int>(el_time2.asSeconds());
 
@@ -279,6 +366,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     window.draw(b3.getText());
     window.draw(result.getData());
     window.draw(counter);
+    window.draw(stats);
 
     // The window with every object is displayed
     window.display();
