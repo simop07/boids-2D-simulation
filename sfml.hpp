@@ -130,7 +130,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Clock clock2;
 
   // Parameter used to change stats
-  int changing_stats;
+  int changing_stats = 0;
 
   // Game loop
   while (window.isOpen()) {
