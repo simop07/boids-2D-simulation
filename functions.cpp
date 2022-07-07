@@ -107,7 +107,7 @@ vector_2d all(std::vector<boid> const &flock, boid b_i, double a) {
   vector_2d v_all;
   vector_2d sum_v;
   double n = flock.size();
-// This exception checks if there is less than one boid in flock (the case
+  // This exception checks if there is less than one boid in flock (the case
   // n=1. is managed in evolve)
   if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};

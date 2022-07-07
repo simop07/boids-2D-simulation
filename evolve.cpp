@@ -2,7 +2,6 @@
 
 boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
                  stats s, predator p) {
-
   // Definizione degli oggetti utili
 
   vector_2d v_sep;

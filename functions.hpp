@@ -1,12 +1,12 @@
 #ifndef functions_hpp
 #define functions_hpp
 
-#include "objects.hpp"
-
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+
+#include "objects.hpp"
 
 // Distance between two boids
 double distance(boid b1, boid b2);

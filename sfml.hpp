@@ -1,12 +1,12 @@
 #ifndef sfml_hpp
 #define sfml_hpp
 
-#include "evolve.hpp"
-#include "sfml_objects.hpp"
 #include <random>
 
-void run_simulation(std::vector<boid> flock, predator p, stats s) {
+#include "evolve.hpp"
+#include "sfml_objects.hpp"
 
+void run_simulation(std::vector<boid> flock, predator p, stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;
@@ -134,150 +134,150 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
   // Game loop
   while (window.isOpen()) {
-
     sf::Event event;
 
     while (window.pollEvent(event)) {
       switch (event.type) {
+        default:
+          break;
 
-      default:
-        break;
+        case sf::Event::Closed:
+          window.close();
+          break;
 
-      case sf::Event::Closed:
-        window.close();
-        break;
-
-        // If a keyboard button is pressed, after verifying which button it was
-        // the relative rules are applied
-      case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::Down) {
-          p.vel.sety(p.vel.norm());
-          p.vel.setx(0.);
-        }
-        if (event.key.code == sf::Keyboard::Left) {
-          p.vel.setx(p.vel.norm() * (-1.));
-          p.vel.sety(0.);
-        }
-        if (event.key.code == sf::Keyboard::Up) {
-          p.vel.sety(p.vel.norm() * (-1));
-          p.vel.setx(0.);
-        }
-        if (event.key.code == sf::Keyboard::Right) {
-          p.vel.setx(p.vel.norm());
-          p.vel.sety(0.);
-        }
-        if (event.key.code == sf::Keyboard::Space) {
-          if (p.vel.norm() == 0.) {
-            p.vel.setx(5.);
-          } else {
+          // If a keyboard button is pressed, after verifying which button it
+          // was the relative rules are applied
+        case sf::Event::KeyPressed:
+          if (event.key.code == sf::Keyboard::Down) {
+            p.vel.sety(p.vel.norm());
             p.vel.setx(0.);
+          }
+          if (event.key.code == sf::Keyboard::Left) {
+            p.vel.setx(p.vel.norm() * (-1.));
             p.vel.sety(0.);
           }
-        }
-        if (event.key.code == sf::Keyboard::LShift) {
-          p.vel = p.vel * 0.5;
-        }
-        if (event.key.code == sf::Keyboard::LControl) {
-          p.vel = p.vel * 2.;
-        }
-        if (event.key.code == sf::Keyboard::H) {
-          std::cout
-              << '\n'
-              << "PREDATOR:\n\n'SpaceBar' to start/stop the "
-                 "predator\n'Lshift' to slow down the predator\n'LCtrl' "
-                 "to increase the speed of the predator\n'Up/Down/Left/Right' "
-                 "to change the predator's "
-                 "direction\n\nBUTTONS:\n\npress 'Add/Remove boid' to generate "
-                 "or "
-                 "remove a boid from the simulation\npress 'Pause evolution' "
-                 "to pause the simulation\n\nSTATS:\n\npress 's/a/c' to "
-                 "select the stats you want to change, then press "
-                 "'Enter/Backspace' to increse/reduce it by 0.05"
-              << '\n';
-        }
-        if (event.key.code == sf::Keyboard::S) {
-          changing_stats = 1;
-        }
-        if (event.key.code == sf::Keyboard::A) {
-          changing_stats = 2;
-        }
-        if (event.key.code == sf::Keyboard::C) {
-          changing_stats = 3;
-        }
-        if (event.key.code == sf::Keyboard::Enter) {
-          if (changing_stats == 1) {
-            s.s += 0.05;
+          if (event.key.code == sf::Keyboard::Up) {
+            p.vel.sety(p.vel.norm() * (-1));
+            p.vel.setx(0.);
           }
-          if (changing_stats == 2) {
-            s.a += 0.05;
+          if (event.key.code == sf::Keyboard::Right) {
+            p.vel.setx(p.vel.norm());
+            p.vel.sety(0.);
           }
-          if (changing_stats == 3) {
-            s.c += 0.05;
+          if (event.key.code == sf::Keyboard::Space) {
+            if (p.vel.norm() == 0.) {
+              p.vel.setx(5.);
+            } else {
+              p.vel.setx(0.);
+              p.vel.sety(0.);
+            }
           }
-        }
-        if (event.key.code == sf::Keyboard::Backspace) {
-          if (changing_stats == 1 && s.s > 0.05) {
-            s.s -= 0.05;
+          if (event.key.code == sf::Keyboard::LShift) {
+            p.vel = p.vel * 0.5;
           }
-          if (changing_stats == 2 && s.a > 0.05) {
-            s.a -= 0.05;
+          if (event.key.code == sf::Keyboard::LControl) {
+            p.vel = p.vel * 2.;
           }
-          if (changing_stats == 3 && s.c > 0.05) {
-            s.c -= 0.05;
+          if (event.key.code == sf::Keyboard::H) {
+            std::cout
+                << '\n'
+                << "PREDATOR:\n\n'SpaceBar' to start/stop the "
+                   "predator\n'Lshift' to slow down the predator\n'LCtrl' "
+                   "to increase the speed of the "
+                   "predator\n'Up/Down/Left/Right' "
+                   "to change the predator's "
+                   "direction\n\nBUTTONS:\n\npress 'Add/Remove boid' to "
+                   "generate "
+                   "or "
+                   "remove a boid from the simulation\npress 'Pause evolution' "
+                   "to pause the simulation\n\nSTATS:\n\npress 's/a/c' to "
+                   "select the stats you want to change, then press "
+                   "'Enter/Backspace' to increse/reduce it by 0.05"
+                << '\n';
           }
-        }
-        break;
+          if (event.key.code == sf::Keyboard::S) {
+            changing_stats = 1;
+          }
+          if (event.key.code == sf::Keyboard::A) {
+            changing_stats = 2;
+          }
+          if (event.key.code == sf::Keyboard::C) {
+            changing_stats = 3;
+          }
+          if (event.key.code == sf::Keyboard::Enter) {
+            if (changing_stats == 1) {
+              s.s += 0.05;
+            }
+            if (changing_stats == 2) {
+              s.a += 0.05;
+            }
+            if (changing_stats == 3) {
+              s.c += 0.05;
+            }
+          }
+          if (event.key.code == sf::Keyboard::Backspace) {
+            if (changing_stats == 1 && s.s > 0.05) {
+              s.s -= 0.05;
+            }
+            if (changing_stats == 2 && s.a > 0.05) {
+              s.a -= 0.05;
+            }
+            if (changing_stats == 3 && s.c > 0.05) {
+              s.c -= 0.05;
+            }
+          }
+          break;
 
-        // If the mouse pointer is moved, its position relative to the window
-        // gets updated and relative rules are applied
-      case sf::Event::MouseMoved:
-        if (b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b1.setButtonColor(sf::Color(8, 123, 3, 255));
-        }
-        if (!b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b1.setButtonColor(sf::Color::Yellow);
-        }
-        if (b2.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b2.setButtonColor(sf::Color(8, 123, 3, 255));
-        }
-        if (!b2.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b2.setButtonColor(sf::Color::Yellow);
-        }
-        break;
+          // If the mouse pointer is moved, its position relative to the window
+          // gets updated and relative rules are applied
+        case sf::Event::MouseMoved:
+          if (b1.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            b1.setButtonColor(sf::Color(8, 123, 3, 255));
+          }
+          if (!b1.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            b1.setButtonColor(sf::Color::Yellow);
+          }
+          if (b2.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            b2.setButtonColor(sf::Color(8, 123, 3, 255));
+          }
+          if (!b2.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            b2.setButtonColor(sf::Color::Yellow);
+          }
+          break;
 
-        // If the mouse button is pressed while hovering a button the relative
-        // rules are applied
-      case sf::Event::MouseButtonPressed:
-        if (b1.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          boid b_n{{pos_d(generator), pos_d(generator)},
-                   {vel_d(generator), vel_d(generator)}};
-          flock.push_back(b_n);
-        }
-        if (b2.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          if (flock.size() > 2) {
-            flock.erase(flock.end() - 1);
+          // If the mouse button is pressed while hovering a button the relative
+          // rules are applied
+        case sf::Event::MouseButtonPressed:
+          if (b1.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            boid b_n{{pos_d(generator), pos_d(generator)},
+                     {vel_d(generator), vel_d(generator)}};
+            flock.push_back(b_n);
           }
-          if (flock.size() <= 2) {
-            std::cout << "Cannot remove more boids" << '\n';
+          if (b2.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            if (flock.size() > 2) {
+              flock.erase(flock.end() - 1);
+            }
+            if (flock.size() <= 2) {
+              std::cout << "Cannot remove more boids" << '\n';
+            }
           }
-        }
-        if (b3.hovering(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-          b3.buttonPressed();
-          if (b3.buttonState()) {
-            b3.setButtonColor(sf::Color(8, 123, 3, 255));
+          if (b3.hovering(
+                  window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            b3.buttonPressed();
+            if (b3.buttonState()) {
+              b3.setButtonColor(sf::Color(8, 123, 3, 255));
+            }
+            if (!b3.buttonState()) {
+              b3.setButtonColor(sf::Color::Yellow);
+            }
           }
-          if (!b3.buttonState()) {
-            b3.setButtonColor(sf::Color::Yellow);
-          }
-        }
-        break;
+          break;
       };
     }
 
@@ -307,26 +307,26 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     std::string c;
     std::string e;
     switch (changing_stats) {
-    case 1:
-      a = {"Stats:\n->s = "};
-      c = {"\na = "};
-      e = {"\nc = "};
-      break;
-    case 2:
-      a = {"Stats:\ns = "};
-      c = {"\n->a = "};
-      e = {"\nc = "};
-      break;
-    case 3:
-      a = {"Stats:\ns = "};
-      c = {"\na = "};
-      e = {"\n->c = "};
-      break;
-    default:
-      a = {"Stats:\ns = "};
-      c = {"\na = "};
-      e = {"\nc = "};
-      break;
+      case 1:
+        a = {"Stats:\n->s = "};
+        c = {"\na = "};
+        e = {"\nc = "};
+        break;
+      case 2:
+        a = {"Stats:\ns = "};
+        c = {"\n->a = "};
+        e = {"\nc = "};
+        break;
+      case 3:
+        a = {"Stats:\ns = "};
+        c = {"\na = "};
+        e = {"\n->c = "};
+        break;
+      default:
+        a = {"Stats:\ns = "};
+        c = {"\na = "};
+        e = {"\nc = "};
+        break;
     }
     std::string b = std::to_string(s.s);
     std::string d = std::to_string(s.a);

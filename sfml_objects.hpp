@@ -13,7 +13,7 @@
 // createButton() is used to assign every parametre to the right sfml object in
 // order to create a drawable object
 class button {
-private:
+ private:
   sf::Vector2f m_pos;
   sf::Vector2f m_size;
   sf::RectangleShape m_rect;
@@ -21,7 +21,7 @@ private:
   sf::Font m_font;
   bool isOn{false};
 
-public:
+ public:
   button(sf::Vector2f pos, sf::Vector2f size, sf::RectangleShape rect,
          sf::Text text, sf::Font font)
       : m_pos{pos}, m_size{size}, m_rect{rect}, m_text{text}, m_font{font} {}
@@ -53,7 +53,7 @@ public:
 // objects as private members and methods that allow to create a drawable sfml
 // object and to assign new values to the output data required
 class data {
-private:
+ private:
   double m_mean_d;
   double m_mean_v;
   double m_std_dev_d;
@@ -62,11 +62,16 @@ private:
   sf::Font m_font;
   sf::Text m_text;
 
-public:
+ public:
   data(double mean_d, double mean_v, double std_dev_d, double std_dev_v,
        sf::Vector2f pos, sf::Font font, sf::Text text)
-      : m_mean_d{mean_d}, m_mean_v{mean_v}, m_std_dev_d{std_dev_d},
-        m_std_dev_v{std_dev_v}, m_pos{pos}, m_font{font}, m_text{text} {}
+      : m_mean_d{mean_d},
+        m_mean_v{mean_v},
+        m_std_dev_d{std_dev_d},
+        m_std_dev_v{std_dev_v},
+        m_pos{pos},
+        m_font{font},
+        m_text{text} {}
 
   void setSize(int size);
 

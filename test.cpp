@@ -10,7 +10,7 @@ TEST_CASE("norm") {
   vector_2d v4{0., -7.};
 
   CHECK(v1.norm() == doctest::Approx(sqrt(20.)));
-  CHECK(v2.norm() == doctest::Approx(0.)); // La norma del vettore nullo è 0.
+  CHECK(v2.norm() == doctest::Approx(0.));  // La norma del vettore nullo è 0.
   CHECK(v3.norm() == doctest::Approx(1.));
   CHECK(v4.norm() == doctest::Approx(7.));
 }
@@ -75,8 +75,8 @@ TEST_CASE("mean distance and st dev") {
         doctest::Approx((sqrt(5.) + sqrt(10.) + sqrt(5.)) / 3.));
   CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
 
-  flock.push_back(b4); // calcoliamo media e deviazione standard nel caso di due
-                       // punti uguali
+  flock.push_back(b4);  // calcoliamo media e deviazione standard nel caso di
+                        // due punti uguali
 
   CHECK(mean_distance(flock) ==
         doctest::Approx((6. * sqrt(5.) + 4. * sqrt(10.)) / 12.));
@@ -128,7 +128,7 @@ TEST_CASE("v sep") {
     CHECK(sep(flock, b2, 1., 4.).ycomp() == doctest::Approx(1.));
   }
 
-  SUBCASE("same components") { // compoenenti  uguali tra due boids
+  SUBCASE("same components") {  // compoenenti  uguali tra due boids
     flock.push_back(b1);
     flock.push_back(b2);
 
@@ -206,8 +206,8 @@ TEST_CASE("pacman") {
   boid b6{{-3., 11.}, {0., 0.}};
   boid b7{{6., 7.}, {0., 0.}};
   boid b8{{0., 10.},
-          {0., 0.}}; // In questo caso e in quello successivo i boids si trovano
-                     // sui bordi, ma la lorio posizione non varia.
+          {0., 0.}};  // In questo caso e in quello successivo i boids si
+                      // trovano sui bordi, ma la lorio posizione non varia.
   boid b9{{10., 0.}, {0., 0.}};
 
   vector_2d v1 = pacman(b1.pos, s);
@@ -349,11 +349,11 @@ TEST_CASE("eat boids") {
 
   eat_boid(flock, p, d_pred);
   eat_boid(flock, p, d_pred);
-  eat_boid(flock, p, d_pred); // si applica la funzione per ogni boid che
-                              // potrebbe essere mangiato.
+  eat_boid(flock, p, d_pred);  // si applica la funzione per ogni boid che
+                               // potrebbe essere mangiato.
 
   int n = flock.size();
 
   CHECK(n ==
-        3); // due boids vengono mangiati, quindi la dimensione del flock è 2.
+        3);  // due boids vengono mangiati, quindi la dimensione del flock è 2.
 }
