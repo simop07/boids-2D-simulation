@@ -126,6 +126,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   predator.setFillColor(sf::Color::Black);
 
   // Starting the clock needed to evolve the simulation and update data
+  sf::Clock generalClock;
   sf::Clock clock;
   sf::Clock clock2;
 
@@ -186,7 +187,9 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
                    "to increase the speed of the "
                    "predator\n'Up/Down/Left/Right' "
                    "to change the predator's "
-                   "direction\n\nBUTTONS:\n\npress 'Add/Remove boid' to "
+                   "direction\n(the predator can only eat after its color "
+                   "turns "
+                   "blue)\n\nBUTTONS:\n\npress 'Add/Remove boid' to "
                    "generate "
                    "or "
                    "remove a boid from the simulation\npress 'Pause evolution' "
@@ -295,7 +298,10 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     if (!b3.buttonState()) {
       evolve_flock(flock, d_el_time * 5., s, p);
       p = evolve_predator(p, d_el_time * 5., s);
-      eat_boid(flock, p, s.d_pred);
+      if (static_cast<int>(generalClock.getElapsedTime().asSeconds()) > 2) {
+        eat_boid(flock, p, s.d_pred);
+        predator.setFillColor(sf::Color::Blue);
+      }
     }
 
     // Boids counter is updated
