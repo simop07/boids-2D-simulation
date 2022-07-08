@@ -63,7 +63,7 @@ void evolve_flock(std::vector<boid> &flock, double delta_t, stats s,
   return;
 }
 
-void eat_boid(std::vector<boid> &flock, predator p, double d_pred) {
+void eat_boid(std::vector<boid> &flock, predator p, double d_eat) {
   auto b_i = flock.begin();
   auto b_l = flock.end();
   int n = flock.size();
@@ -74,7 +74,7 @@ void eat_boid(std::vector<boid> &flock, predator p, double d_pred) {
   // vector that doesn't exist anymore resulting in a segmentation fault error
   while (b_i != b_l) {
     boid b_it = *b_i;
-    if ((b_it.pos - p.pos).norm() < d_pred / 1.5 && n >= 3) {
+    if ((b_it.pos - p.pos).norm() < d_eat && n >= 3) {
       b_i = flock.erase(b_i);
       b_l = std::prev(b_l);
       n = flock.size();
@@ -85,7 +85,7 @@ void eat_boid(std::vector<boid> &flock, predator p, double d_pred) {
   // This part checks if the predator gets close to a boid when the flock has a
   // size smaller than 3
   for (boid b_i : flock) {
-    if ((b_i.pos - p.pos).norm() < d_pred / 1.2 && n < 3) {
+    if ((b_i.pos - p.pos).norm() < d_eat && n < 3) {
       std::cout << "Predator isn't hungry anymore..." << '\n';
     }
   }

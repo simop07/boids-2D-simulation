@@ -294,12 +294,14 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
     // Every frame the flock and predator are evolved by the time elapsed during
     // a frame (if 60 fps then 1/60 seconds) times 5, that means every second of
-    // real time has passed, the simulation has evolved by 5 seconds
+    // real time has passed, the simulation has evolved by 5 seconds. The
+    // relation between the parameters s and d_eat (d_eat = s * (1.5/0.7) are
+    // the result of a series of tests done during developement
     if (!b3.buttonState()) {
       evolve_flock(flock, d_el_time * 5., s, p);
       p = evolve_predator(p, d_el_time * 5., s);
       if (static_cast<int>(generalClock.getElapsedTime().asSeconds()) > 2) {
-        eat_boid(flock, p, s.d_pred);
+        eat_boid(flock, p, (s.s * (1.5 / 0.7)));
         predator.setFillColor(sf::Color::Blue);
       }
     }
