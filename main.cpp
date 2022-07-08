@@ -17,7 +17,7 @@ int main() {
         "The chosen value must be a number greater than 2!"};
   }
   std::cout << "Insert parameters s, a and c respectevly, the suggested values "
-               "are s = 0.9, a = 0.02, c = 0.01\n(can be changed during the "
+               "are s = 0.7, a = 0.02, c = 0.01\n(can be changed during the "
                "simulation): "
             << '\n';
   std::cin >> s >> a >> c;
