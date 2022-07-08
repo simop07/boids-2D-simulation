@@ -348,12 +348,9 @@ TEST_CASE("eat boids") {
   flock.push_back(b5);
 
   eat_boid(flock, p, d_pred);
-  eat_boid(flock, p, d_pred);
-  eat_boid(flock, p, d_pred);  // si applica la funzione per ogni boid che
-                               // potrebbe essere mangiato.
 
   int n = flock.size();
 
   CHECK(n ==
-        3);  // due boids vengono mangiati, quindi la dimensione del flock è 2.
+        2);  // tre boids vengono mangiati, quindi la dimensione del flock è 2.
 }
