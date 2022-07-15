@@ -3,8 +3,6 @@
 
 #include <cmath>
 
-#define PI 3.141592
-
 // The class vector_2d defines a two dimensional vector useful to take care of
 // the position and velocity of the boids, the methods included allow to get the
 // private members of the class and apply basic math operation between vectors
