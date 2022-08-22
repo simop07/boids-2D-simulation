@@ -31,51 +31,61 @@ TEST_CASE("Testing vector_2d") {
   }
 }
 
-TEST_CASE("distance test") {
+TEST_CASE("Testing distance") {
   boid b1{{3., 5.}, {0., 0.}};
   boid b2{{2., 3.}, {0., 0.}};
   boid b3{{0., 0.}, {0., 0.}};
+  boid b4{{-4., -2.}, {0., 0.}};
 
   CHECK(distance(b1, b2) == doctest::Approx(sqrt(5.)));
   CHECK(distance(b1, b1) == doctest::Approx(0.));
   CHECK(distance(b1, b3) == doctest::Approx(sqrt(34.)));
+  CHECK(distance(b1, b4) == doctest::Approx(7 * sqrt(2.)));
 }
-TEST_CASE("two points cdm") {
+TEST_CASE("Testing cdm") {
   std::vector<boid> flock;
-  boid b1{{0., 0.}, {0., 0.}};
-  boid b2{{5., 4.}, {5., 5.}};
 
-  flock.push_back(b1);
-  flock.push_back(b2);
+  SUBCASE("Two points cdm") {
+    boid b1{{-2., 1.}, {0., 0.}};
+    boid b2{{0., 0.}, {5., 5.}};
+    flock.push_back(b1);
+    flock.push_back(b2);
 
-  CHECK(calc_c_m_b_i(flock, b1).xcomp() == doctest::Approx(5.));
-  CHECK(calc_c_m_b_i(flock, b1).ycomp() == doctest::Approx(4.));
-  CHECK(calc_c_m_b_i(flock, b2).xcomp() == doctest::Approx(0.));
-  CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(0.));
+    CHECK(calc_c_m_b_i(flock, b1).xcomp() == doctest::Approx(0.));
+    CHECK(calc_c_m_b_i(flock, b1).ycomp() == doctest::Approx(0.));
+    CHECK(calc_c_m_b_i(flock, b2).xcomp() == doctest::Approx(-2.));
+    CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(1.));
+  }
+
+  SUBCASE("Six points cdm") {
+    boid b1{{1., 3.}, {0., 0.}};
+    boid b2{{4., 5.}, {0., 0.}};
+    boid b3{{0., 1.}, {0., 0.}};
+    boid b4{{3., 0.}, {0., 0.}};
+    boid b5{{-4., 2.}, {0., 0.}};
+    boid b6{{5., -3.}, {0., 0.}};
+
+    flock.push_back(b1);
+    flock.push_back(b2);
+    flock.push_back(b3);
+    flock.push_back(b4);
+    flock.push_back(b5);
+    flock.push_back(b6);
+
+    CHECK(calc_c_m_b_i(flock, b1).xcomp() == doctest::Approx(1.6));
+    CHECK(calc_c_m_b_i(flock, b1).ycomp() == doctest::Approx(1.));
+    CHECK(calc_c_m_b_i(flock, b2).xcomp() == doctest::Approx(1.));
+    CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(0.6));
+    CHECK(calc_c_m_b_i(flock, b3).xcomp() == doctest::Approx(1.8));
+    CHECK(calc_c_m_b_i(flock, b3).ycomp() == doctest::Approx(1.4));
+    CHECK(calc_c_m_b_i(flock, b4).xcomp() == doctest::Approx(1.2));
+    CHECK(calc_c_m_b_i(flock, b4).ycomp() == doctest::Approx(1.6));
+    CHECK(calc_c_m_b_i(flock, b5).xcomp() == doctest::Approx(2.6));
+    CHECK(calc_c_m_b_i(flock, b5).ycomp() == doctest::Approx(1.2));
+    CHECK(calc_c_m_b_i(flock, b6).xcomp() == doctest::Approx(0.8));
+    CHECK(calc_c_m_b_i(flock, b6).ycomp() == doctest::Approx(2.2));
+  }
 }
-
-TEST_CASE("cdm test") {
-  std::vector<boid> flock;
-  boid b1{{1., 3.}, {0., 0.}};
-  boid b2{{4., 5.}, {0., 0.}};
-  boid b3{{0., 1.}, {0., 0.}};
-  boid b4{{3., 0.}, {0., 0.}};
-
-  flock.push_back(b1);
-  flock.push_back(b2);
-  flock.push_back(b3);
-  flock.push_back(b4);
-
-  CHECK(calc_c_m_b_i(flock, b1).xcomp() == doctest::Approx(7. / 3.));
-  CHECK(calc_c_m_b_i(flock, b1).ycomp() == doctest::Approx(2.));
-  CHECK(calc_c_m_b_i(flock, b2).xcomp() == doctest::Approx(4. / 3.));
-  CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(4. / 3.));
-  CHECK(calc_c_m_b_i(flock, b3).xcomp() == doctest::Approx(8. / 3.));
-  CHECK(calc_c_m_b_i(flock, b3).ycomp() == doctest::Approx(8. / 3.));
-  CHECK(calc_c_m_b_i(flock, b4).xcomp() == doctest::Approx(5. / 3.));
-  CHECK(calc_c_m_b_i(flock, b4).ycomp() == doctest::Approx(3.));
-}
-
 TEST_CASE("mean distance and st dev") {
   std::vector<boid> flock;
   boid b1{{1., 1.}, {0., 0.}};
