@@ -9,10 +9,10 @@
 #include "objects.hpp"
 
 // Distance between two boids
-double distance(boid b1, boid b2);
+double distance(boid const& b1, boid const& b2);
 
 // Center of mass relative to a boid b_i
-vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i);
+vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid const&b_i);
 
 double mean_distance(std::vector<boid> const &flock);
 

@@ -46,13 +46,13 @@ bool operator!=(vector_2d const& l, vector_2d const& r);
 // Boid and predator struct are basically the same but are defined separatly
 // allowing an easier management of the two
 struct boid {
-  vector_2d pos;
-  vector_2d vel;
+  vector_2d pos{};
+  vector_2d vel{};
 };
 
 struct predator {
-  vector_2d pos;
-  vector_2d vel;
+  vector_2d pos{};
+  vector_2d vel{};
 };
 
 // Stats is a struct that allow to define functions taking less input, e.g. if a

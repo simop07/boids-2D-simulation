@@ -1,23 +1,29 @@
 #include "functions.hpp"
 
-double distance(boid b1, boid b2) {
-  vector_2d pos_diff = b1.pos - (b2.pos);
+#include <numeric>
+
+double distance(boid const &b1, boid const &b2) {
+  vector_2d pos_diff = b1.pos - b2.pos;
   return pos_diff.norm();
 };
 
-vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid b_i) {
-  vector_2d c_m;
+vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid const &b_i) {
   double n = flock.size();
-  // This exception checks if there is less than one boid in flock (the case
+
+  // This assert checks if there is less than one boid in flock (the case
   // n=1. is managed in evolve)
-  if (n <= 1.) {
+
+  /* assert(flock.size() > 1); */
+
+  /* if (n <= 1) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
-  for (boid b_j : flock) {
-    c_m += (b_j.pos * (1. / (n - 1.)));
-  }
-  c_m = c_m - (b_i.pos * (1. / (n - 1.)));
-  return c_m;
+  } */
+  auto c_m = std::accumulate(flock.begin(), flock.end(), vector_2d{},
+                             [&](vector_2d c_m, boid const &b_j) {
+                               c_m += (b_j.pos * (1. / (n - 1.)));
+                               return c_m;
+                             });
+  return c_m - (b_i.pos * (1. / (n - 1.)));
 }
 
 // The exceptions in the data functions are there to make sure that there are at
