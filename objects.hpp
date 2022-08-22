@@ -21,7 +21,7 @@ class vector_2d {
 
   vector_2d& operator+=(vector_2d const& v);
 
-  vector_2d& operator*=(vector_2d const& v);
+  vector_2d& operator*=(double k);
 
   void setx(double x);
 
@@ -37,6 +37,11 @@ vector_2d operator+(vector_2d const& l, vector_2d const& r);
 vector_2d operator-(vector_2d const& l, vector_2d const& r);
 
 vector_2d operator*(vector_2d const& l, vector_2d const& r);
+
+// Comparison of vectors is used for some tests
+bool operator==(vector_2d const& l, vector_2d const& r);
+
+bool operator!=(vector_2d const& l, vector_2d const& r);
 
 // Boid and predator struct are basically the same but are defined separatly
 // allowing an easier management of the two
