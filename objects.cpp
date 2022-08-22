@@ -18,9 +18,9 @@ vector_2d& vector_2d::operator*=(vector_2d const& v) {
   return *this;
 }
 
-void vector_2d::setx(double x) { this->m_x = x; }
+void vector_2d::setx(double x) { m_x = x; }
 
-void vector_2d::sety(double y) { this->m_y = y; }
+void vector_2d::sety(double y) { m_y = y; }
 
 vector_2d operator-(vector_2d const& v) {
   return {-v.xcomp(), -v.ycomp()};
