@@ -38,7 +38,7 @@ vector_2d operator-(vector_2d const& l, vector_2d const& r);
 
 vector_2d operator*(vector_2d const& l, double k);
 
-// Comparison of vectors is used for some tests
+// Implemented comparison of vectors in order to use it for some tests
 bool operator==(vector_2d const& l, vector_2d const& r);
 
 bool operator!=(vector_2d const& l, vector_2d const& r);
