@@ -12,9 +12,11 @@ TEST_CASE("Testing vector_2d") {
   SUBCASE("Testing operations") {
     CHECK(v1.xcomp() == (2.));
     CHECK(v2.ycomp() == (0.));
+    CHECK(v1 != v2);
     CHECK(vector_2d{v3 + v4} == vector_2d{1., -7.});
     CHECK(vector_2d{v1 - v3} == vector_2d{1., -4.});
-    CHECK(vector_2d{v1 * 5.} == vector_2d{10., -25.});
+    CHECK(vector_2d{v1 * 5.} == vector_2d{10., -20.});
+    CHECK(vector_2d{v1 * 0.} == v2);
     v2.setx(5.);
     v2.sety(-5.);
     CHECK(v2.xcomp() == (5.));
