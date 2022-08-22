@@ -3,16 +3,30 @@
 #include "doctest.h"
 #include "evolve.hpp"
 
-TEST_CASE("norm") {
+TEST_CASE("Testing vector_2d") {
   vector_2d v1{2., -4.};
   vector_2d v2{0., 0.};
   vector_2d v3{1., 0.};
   vector_2d v4{0., -7.};
 
-  CHECK(v1.norm() == doctest::Approx(sqrt(20.)));
-  CHECK(v2.norm() == doctest::Approx(0.));  // La norma del vettore nullo è 0.
-  CHECK(v3.norm() == doctest::Approx(1.));
-  CHECK(v4.norm() == doctest::Approx(7.));
+  SUBCASE("Testing operations") {
+    CHECK(v1.xcomp() == (2.));
+    CHECK(v2.ycomp() == (0.));
+    CHECK(vector_2d{v3 + v4} == vector_2d{1., -7.});
+    CHECK(vector_2d{v1 - v3} == vector_2d{1., -4.});
+    CHECK(vector_2d{v1 * 5.} == vector_2d{10., -25.});
+    v2.setx(5.);
+    v2.sety(-5.);
+    CHECK(v2.xcomp() == (5.));
+    CHECK(v2.ycomp() == (-5.));
+  }
+
+  SUBCASE("Testing norm") {
+    CHECK(v1.norm() == doctest::Approx(sqrt(20.)));
+    CHECK(v2.norm() == doctest::Approx(0.));  // La norma del vettore nullo è 0.
+    CHECK(v3.norm() == doctest::Approx(1.));
+    CHECK(v4.norm() == doctest::Approx(7.));
+  }
 }
 
 TEST_CASE("distance test") {
