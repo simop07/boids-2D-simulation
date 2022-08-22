@@ -86,6 +86,7 @@ TEST_CASE("Testing cdm") {
     CHECK(calc_c_m_b_i(flock, b6).ycomp() == doctest::Approx(2.2));
   }
 }
+
 TEST_CASE("mean distance and st dev") {
   std::vector<boid> flock;
   boid b1{{1., 1.}, {0., 0.}};

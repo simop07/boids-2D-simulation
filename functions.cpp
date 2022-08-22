@@ -15,15 +15,15 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid const &b_i) {
 
   /* assert(flock.size() > 1); */
 
-  /* if (n <= 1) {
+  /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-  auto c_m = std::accumulate(flock.begin(), flock.end(), vector_2d{},
-                             [&](vector_2d c_m, boid const &b_j) {
-                               c_m += (b_j.pos * (1. / (n - 1.)));
-                               return c_m;
-                             });
-  return c_m - (b_i.pos * (1. / (n - 1.)));
+  auto c_m_j = std::accumulate(flock.begin(), flock.end(), vector_2d{},
+                               [&](vector_2d c_m, boid const &b_j) {
+                                 c_m += (b_j.pos * (1. / (n - 1.)));
+                                 return c_m;
+                               });
+  return c_m_j - (b_i.pos * (1. / (n - 1.)));
 }
 
 // The exceptions in the data functions are there to make sure that there are at
@@ -31,17 +31,22 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid const &b_i) {
 // with only one boid present
 double mean_distance(std::vector<boid> const &flock) {
   double n = flock.size();
-  double sum_tot = 0.;
-  double sum_par = 0.;
-  if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
-  for (boid b_i : flock) {
-    for (boid b_j : flock) {
+  double sum_tot{};
+  double sum_par{};
+  /* if (n <= 1.) {
+   throw std::runtime_error{"Flock must contain at least 2 boid"};
+ } */
+  for (boid const &b_i : flock) {
+    sum_par = std::accumulate(flock.begin(), flock.end(), 0.,
+                              [&](double sum_p, boid const &b_j) {
+                                sum_p += distance(b_i, b_j);
+                                return sum_p;
+                              });
+
+    /* for (boid const& b_j : flock) {
       sum_par += distance(b_i, b_j);
-    }
+    } */
     sum_tot += sum_par;
-    sum_par = 0.;
   }
   double res = sum_tot / (n * (n - 1.));
   sum_tot = 0.;
