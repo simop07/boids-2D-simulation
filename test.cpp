@@ -25,7 +25,7 @@ TEST_CASE("Testing vector_2d") {
 
   SUBCASE("Testing norm") {
     CHECK(v1.norm() == doctest::Approx(sqrt(20.)));
-    CHECK(v2.norm() == doctest::Approx(0.));  // La norma del vettore nullo è 0.
+    CHECK(v2.norm() == doctest::Approx(0.));  // Norm of zero-vector is zero
     CHECK(v3.norm() == doctest::Approx(1.));
     CHECK(v4.norm() == doctest::Approx(7.));
   }
@@ -87,7 +87,7 @@ TEST_CASE("Testing cdm") {
   }
 }
 
-TEST_CASE("mean distance and st dev") {
+TEST_CASE("Testing mean distance and std_dev") {
   std::vector<boid> flock;
   boid b1{{1., 1.}, {0., 0.}};
   boid b2{{2., 3.}, {0., 0.}};
@@ -98,16 +98,19 @@ TEST_CASE("mean distance and st dev") {
   flock.push_back(b2);
   flock.push_back(b3);
 
-  CHECK(mean_distance(flock) ==
-        doctest::Approx((sqrt(5.) + sqrt(10.) + sqrt(5.)) / 3.));
-  CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
+  SUBCASE("Three boids") {
+    CHECK(mean_distance(flock) ==
+          doctest::Approx((sqrt(5.) + sqrt(10.) + sqrt(5.)) / 3.));
+    CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
+  }
 
-  flock.push_back(b4);  // calcoliamo media e deviazione standard nel caso di
-                        // due punti uguali
+  SUBCASE("Adding one equal boid") {
+    flock.push_back(b4);
 
-  CHECK(mean_distance(flock) ==
-        doctest::Approx((6. * sqrt(5.) + 4. * sqrt(10.)) / 12.));
-  CHECK(std_dev_distance(flock) == doctest::Approx(0.49873));
+    CHECK(mean_distance(flock) ==
+          doctest::Approx((6. * sqrt(5.) + 4. * sqrt(10.)) / 12.));
+    CHECK(std_dev_distance(flock) == doctest::Approx(0.49873));
+  }
 }
 
 TEST_CASE("mean velocity and st dev") {

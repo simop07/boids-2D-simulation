@@ -3,7 +3,7 @@
 #include <numeric>
 
 double distance(boid const &b1, boid const &b2) {
-  vector_2d pos_diff = b1.pos - b2.pos;
+  vector_2d pos_diff{b1.pos - b2.pos};
   return pos_diff.norm();
 };
 
@@ -42,13 +42,10 @@ double mean_distance(std::vector<boid> const &flock) {
                                 sum_p += distance(b_i, b_j);
                                 return sum_p;
                               });
-
-    /* for (boid const& b_j : flock) {
-      sum_par += distance(b_i, b_j);
-    } */
     sum_tot += sum_par;
   }
   double res = sum_tot / (n * (n - 1.));
+  /* Vedi se devi togliere degli zeri */
   sum_tot = 0.;
   sum_par = 0.;
   return res;
