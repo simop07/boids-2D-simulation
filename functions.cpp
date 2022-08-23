@@ -63,7 +63,6 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-
   for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
     auto nx = std::next(pr);
     auto sum_d_i2{0};
@@ -82,13 +81,16 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 double mean_velocity(std::vector<Boid> const &flock) {
   double n = flock.size();
   double sum_v = 0.;
-  if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
-  for (Boid b_i : flock) {
-    sum_v += b_i.vel.norm();
-  }
-  double res = (sum_v * (1. / n));
+  /*  if (n <= 1.) {
+     throw std::runtime_error{"Flock must contain at least 2 boid"};
+   } */
+  sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
+                          [&](double sum_v, Boid const &b_j) {
+                            sum_v += (b_j.vel.norm());
+                            return sum_v;
+                          });
+
+  double res = sum_v * (1. / n);
   sum_v = 0.;
   return res;
 }
@@ -97,9 +99,9 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
   double n = flock.size();
   double sum2 = 0.;
   double mean_v = mean_velocity(flock);
-  if (n <= 1.) {
+  /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
+  } */
   for (Boid b_i : flock) {
     sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
   }

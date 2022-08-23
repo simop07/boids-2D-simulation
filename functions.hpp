@@ -14,12 +14,16 @@ double distance(Boid const& b1, Boid const& b2);
 // Center of mass relative to a boid b_i
 Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const&b_i);
 
+// Mean distance of boids
 double mean_distance(std::vector<Boid> const &flock);
 
+// Std_deviation of distances
 double std_dev_distance(std::vector<Boid> const &flock);
 
+// Mean of magnitudes of velocity vectors
 double mean_velocity(std::vector<Boid> const &flock);
 
+// Std_deviation of magnitudes of velocity vectors
 double std_dev_velocity(std::vector<Boid> const &flock);
 
 // Rule of separation

@@ -94,7 +94,6 @@ TEST_CASE("Testing mean distance and std_dev") {
     Boid b1{{1., 1.}, {0., 0.}};
     Boid b2{{2., 3.}, {0., 0.}};
     Boid b3{{4., 2.}, {0., 0.}};
-    Boid b4{{1., 1.}, {1., 1.}};
 
     flock.push_back(b1);
     flock.push_back(b2);
@@ -103,12 +102,14 @@ TEST_CASE("Testing mean distance and std_dev") {
           doctest::Approx((sqrt(10.) + 2 * sqrt(5.)) / 3.));
     CHECK(std_dev_distance(flock) == doctest::Approx(1.8772).epsilon(0.0001));
 
-    // Adding one equal boid
-    flock.push_back(b4);
+    SUBCASE("Adding one equal boid") {
+      Boid b4{{1., 1.}, {1., 1.}};
+      flock.push_back(b4);
 
-    CHECK(mean_distance(flock) ==
-          doctest::Approx((3. * sqrt(5.) + 2. * sqrt(10.)) / 6.));
-    CHECK(std_dev_distance(flock) == doctest::Approx(1.5106).epsilon(0.0001));
+      CHECK(mean_distance(flock) ==
+            doctest::Approx((3. * sqrt(5.) + 2. * sqrt(10.)) / 6.));
+      CHECK(std_dev_distance(flock) == doctest::Approx(1.5106).epsilon(0.0001));
+    }
   }
 
   SUBCASE("Five boids") {
@@ -125,11 +126,11 @@ TEST_CASE("Testing mean distance and std_dev") {
     flock.push_back(b5);
 
     CHECK(mean_distance(flock) == doctest::Approx(3.6965).epsilon(0.0001));
-    CHECK(std_dev_distance(flock) == doctest::Approx(1.97).epsilon(0.03));
+    CHECK(std_dev_distance(flock) == doctest::Approx(1.97).epsilon(0.01));
   }
 }
 
-TEST_CASE("mean velocity and st dev") {
+TEST_CASE("Testing mean velocity and std_dev") {
   std::vector<Boid> flock;
   Boid b1{{1., 3.}, {-4., 0.}};
   Boid b2{{4., 5.}, {0., 0.}};
@@ -142,17 +143,15 @@ TEST_CASE("mean velocity and st dev") {
   flock.push_back(b4);
 
   CHECK(mean_velocity(flock) == doctest::Approx((10. + sqrt(13.)) / 4.));
-  CHECK(std_dev_velocity(flock) == doctest::Approx(2.4981488895));
+  CHECK(std_dev_velocity(flock) == doctest::Approx(2.4981).epsilon(0.0001));
 
-  Boid b5{{9., 2.},
-          {
-              2.,
-              -3,
-          }};
+  SUBCASE("Adding one boid") {
+    Boid b5{{9., 2.}, {2., -3.}};
+    flock.push_back(b5);
 
-  flock.push_back(b5);
-  CHECK(mean_velocity(flock) == doctest::Approx((10. + 2. * sqrt(13.)) / 5.));
-  CHECK(std_dev_velocity(flock) == doctest::Approx(2.1654));
+    CHECK(mean_velocity(flock) == doctest::Approx((10. + 2. * sqrt(13.)) / 5.));
+    CHECK(std_dev_velocity(flock) == doctest::Approx(2.1654));
+  }
 }
 
 TEST_CASE("v sep") {
