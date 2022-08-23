@@ -108,7 +108,7 @@ TEST_CASE("Testing mean distance and std_dev") {
     flock.push_back(b4);
 
     CHECK(mean_distance(flock) ==
-          doctest::Approx((6. * sqrt(5.) + 4. * sqrt(10.)) / 12.));
+          doctest::Approx((3. * sqrt(5.) + 2. * sqrt(10.)) / 6.));
     CHECK(std_dev_distance(flock) == doctest::Approx(1.056));
   }
 }

@@ -20,10 +20,10 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   } */
   auto c_m_j = std::accumulate(flock.begin(), flock.end(), Vector_2d{},
                                [&](Vector_2d c_m, Boid const &b_j) {
-                                 c_m += (b_j.pos * (1. / (n - 1.)));
+                                 c_m += (b_j.pos * (1 / (n - 1)));
                                  return c_m;
                                });
-  return c_m_j - (b_i.pos * (1. / (n - 1.)));
+  return c_m_j - (b_i.pos * (1 / (n - 1)));
 }
 
 // The exceptions in the data functions are there to make sure that there are at
@@ -45,12 +45,8 @@ double mean_distance(std::vector<Boid> const &flock) {
     for (; nx != flock.end(); ++nx) {
       sum_tot += distance(*pr, *nx);
     }
-    /*     sum_par = std::accumulate(nx, flock.end(), 0.,
-                                  [&](double sum_p, boid const& b_i) {
-                                    sum_p += distance(*it, *nx);
-                                    return sum_p;
-                                  }); */
   }
+
   // Number of distances is given adding size of vector to number of diagonals
   // in a polygon
   double res = sum_tot / (((n * (n - 3)) / 2) + n);
