@@ -89,27 +89,43 @@ TEST_CASE("Testing c_m relative to b_i") {
 
 TEST_CASE("Testing mean distance and std_dev") {
   std::vector<Boid> flock;
-  Boid b1{{1., 1.}, {0., 0.}};
-  Boid b2{{2., 3.}, {0., 0.}};
-  Boid b3{{4., 2.}, {0., 0.}};
-  Boid b4{{1., 1.}, {1., 1.}};
-
-  flock.push_back(b1);
-  flock.push_back(b2);
-  flock.push_back(b3);
 
   SUBCASE("Three boids") {
+    Boid b1{{1., 1.}, {0., 0.}};
+    Boid b2{{2., 3.}, {0., 0.}};
+    Boid b3{{4., 2.}, {0., 0.}};
+    Boid b4{{1., 1.}, {1., 1.}};
+
+    flock.push_back(b1);
+    flock.push_back(b2);
+    flock.push_back(b3);
     CHECK(mean_distance(flock) ==
           doctest::Approx((sqrt(10.) + 2 * sqrt(5.)) / 3.));
-    CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
-  }
+    CHECK(std_dev_distance(flock) == doctest::Approx(1.8772).epsilon(0.0001));
 
-  SUBCASE("Adding one equal Boid") {
+    // Adding one equal boid
     flock.push_back(b4);
 
     CHECK(mean_distance(flock) ==
           doctest::Approx((3. * sqrt(5.) + 2. * sqrt(10.)) / 6.));
-    CHECK(std_dev_distance(flock) == doctest::Approx(1.056));
+    CHECK(std_dev_distance(flock) == doctest::Approx(1.5106).epsilon(0.0001));
+  }
+
+  SUBCASE("Five boids") {
+    Boid b1{{-1., 2.}, {0., 0.}};
+    Boid b2{{4., 0.}, {0., 0.}};
+    Boid b3{{5., 4.}, {0., 0.}};
+    Boid b4{{1., 2.}, {1., 1.}};
+    Boid b5{{2., 1.}, {1., 1.}};
+
+    flock.push_back(b1);
+    flock.push_back(b2);
+    flock.push_back(b3);
+    flock.push_back(b4);
+    flock.push_back(b5);
+
+    CHECK(mean_distance(flock) == doctest::Approx(3.6965).epsilon(0.0001));
+    CHECK(std_dev_distance(flock) == doctest::Approx(1.97).epsilon(0.03));
   }
 }
 

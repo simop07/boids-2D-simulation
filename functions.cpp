@@ -23,7 +23,7 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
                                  c_m += (b_j.pos * (1 / (n - 1)));
                                  return c_m;
                                });
-  return c_m_j - (b_i.pos * (1 / (n - 1)));
+  return c_m_j - (b_i.pos * (1. / (n - 1.)));
 }
 
 // The exceptions in the data functions are there to make sure that there are at
@@ -38,18 +38,17 @@ double mean_distance(std::vector<Boid> const &flock) {
    throw std::runtime_error{"Flock must contain at least 2 boid"};
  } */
 
-  auto pr = flock.begin();
-
-  for (; pr != flock.end(); ++pr) {
+  for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
     auto nx = std::next(pr);
     for (; nx != flock.end(); ++nx) {
       sum_tot += distance(*pr, *nx);
     }
   }
 
-  // Number of distances is given adding size of vector to number of diagonals
-  // in a polygon
-  double res = sum_tot / (((n * (n - 3)) / 2) + n);
+  // Number of distances equals the combinations of n boid, taken at groups of
+  // two
+  double c_n_2{(n * (n - 1.) / 2.)};
+  double res = sum_tot / c_n_2;
   /* Vedi se devi togliere degli zeri */
   sum_tot = 0.;
   /*   sum_par = 0.;
@@ -59,23 +58,24 @@ double mean_distance(std::vector<Boid> const &flock) {
 
 double std_dev_distance(std::vector<Boid> const &flock) {
   double n = flock.size();
-  double sum2{0.};
+  double sum_tot{0.};
   double mean_d = mean_distance(flock);
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-  for (Boid const &b_i : flock) {
-    double d_i = 0.;
 
-    for (Boid const &b_j : flock) {
-      d_i = distance(b_i, b_j);
-
-      sum2 += ((d_i)-mean_d) * ((d_i)-mean_d);
+  for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
+    auto nx = std::next(pr);
+    auto sum_d_i2{0};
+    for (; nx != flock.end(); ++nx) {
+      sum_d_i2 += ((distance(*pr, *nx)) * (distance(*pr, *nx)));
     }
-    d_i = 0.;
+    sum_tot += sum_d_i2;
+    sum_d_i2 = 0;
   }
-  double res = sqrt(sum2 / ((n - 1.) * (n - 2)));
-  sum2 = 0.;
+  double c_n_2{(n * (n - 1.) / 2.)};
+  double res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
+  sum_tot = 0.;
   return res;
 }
 
