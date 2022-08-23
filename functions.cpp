@@ -23,6 +23,7 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
                                  c_m += (b_j.pos * (1 / (n - 1)));
                                  return c_m;
                                });
+
   return c_m_j - (b_i.pos * (1. / (n - 1.)));
 }
 
@@ -58,20 +59,22 @@ double mean_distance(std::vector<Boid> const &flock) {
 
 double std_dev_distance(std::vector<Boid> const &flock) {
   double n = flock.size();
-  double sum_tot{0.};
+  double sum_tot{};
   double mean_d = mean_distance(flock);
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
+
   for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
     auto nx = std::next(pr);
-    auto sum_d_i2{0};
+    double sum_d_i2{};
     for (; nx != flock.end(); ++nx) {
       sum_d_i2 += ((distance(*pr, *nx)) * (distance(*pr, *nx)));
     }
     sum_tot += sum_d_i2;
     sum_d_i2 = 0;
   }
+
   double c_n_2{(n * (n - 1.) / 2.)};
   double res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
   sum_tot = 0.;
@@ -80,12 +83,13 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 
 double mean_velocity(std::vector<Boid> const &flock) {
   double n = flock.size();
-  double sum_v = 0.;
+  double sum_v{};
   /*  if (n <= 1.) {
      throw std::runtime_error{"Flock must contain at least 2 boid"};
    } */
+
   sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
-                          [&](double sum_v, Boid const &b_j) {
+                          [](double sum_v, Boid const &b_j) {
                             sum_v += (b_j.vel.norm());
                             return sum_v;
                           });
@@ -97,16 +101,22 @@ double mean_velocity(std::vector<Boid> const &flock) {
 
 double std_dev_velocity(std::vector<Boid> const &flock) {
   double n = flock.size();
-  double sum2 = 0.;
+  double sum_v_i2{};
+  double sum_tot{};
   double mean_v = mean_velocity(flock);
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-  for (Boid b_i : flock) {
-    sum2 += (b_i.vel.norm() - mean_v) * (b_i.vel.norm() - mean_v);
-  }
-  double res = sqrt(sum2 / (n - 1.));
-  sum2 = 0.;
+
+  sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
+                             [](double sum_v, Boid const &b_j) {
+                               sum_v += (b_j.vel.norm() * b_j.vel.norm());
+                               return sum_v;
+                             });
+
+  sum_tot += sum_v_i2;
+  double res = sqrt((sum_v_i2 / (n - 1.)) - mean_v * mean_v);
+  sum_v_i2 = 0.;
   return res;
 }
 

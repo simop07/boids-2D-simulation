@@ -143,14 +143,14 @@ TEST_CASE("Testing mean velocity and std_dev") {
   flock.push_back(b4);
 
   CHECK(mean_velocity(flock) == doctest::Approx((10. + sqrt(13.)) / 4.));
-  CHECK(std_dev_velocity(flock) == doctest::Approx(2.4981).epsilon(0.0001));
+  CHECK(std_dev_velocity(flock) == doctest::Approx(3.1776).epsilon(0.0001));
 
   SUBCASE("Adding one boid") {
     Boid b5{{9., 2.}, {2., -3.}};
     flock.push_back(b5);
 
     CHECK(mean_velocity(flock) == doctest::Approx((10. + 2. * sqrt(13.)) / 5.));
-    CHECK(std_dev_velocity(flock) == doctest::Approx(2.1654));
+    CHECK(std_dev_velocity(flock) == doctest::Approx(2.7660).epsilon(0.0001));
   }
 }
 
