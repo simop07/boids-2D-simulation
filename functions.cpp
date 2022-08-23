@@ -1,5 +1,6 @@
 #include "functions.hpp"
 
+#include <algorithm>
 #include <numeric>
 
 double distance(Boid const &b1, Boid const &b2) {
@@ -123,12 +124,15 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
 Vector_2d sep(std::vector<Boid> const &flock, Boid b_i, double s, double d_s) {
   Vector_2d v_sep;
   Vector_2d sum_v;
-  for (Boid b_j : flock) {
+
+  std::for_each(flock.begin(), flock.end(), [&](Boid const &b_j) {
     if (distance(b_i, b_j) < d_s) {
       sum_v += (b_j.pos - b_i.pos);
+      return sum_v;
     }
-  }
-  return v_sep = sum_v * (s * (-1.));
+  });
+
+  return v_sep = -sum_v * s;
 }
 
 Vector_2d all(std::vector<Boid> const &flock, Boid b_i, double a) {
