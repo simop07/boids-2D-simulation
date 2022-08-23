@@ -6,7 +6,7 @@
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
 
-void run_simulation(std::vector<boid> flock, predator p, stats s) {
+void run_simulation(std::vector<Boid> flock, Predator p, stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;
@@ -257,7 +257,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         case sf::Event::MouseButtonPressed:
           if (b1.hovering(
                   window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            boid b_n{{pos_d(generator), pos_d(generator)},
+            Boid b_n{{pos_d(generator), pos_d(generator)},
                      {vel_d(generator), vel_d(generator)}};
             flock.push_back(b_n);
           }

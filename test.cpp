@@ -4,19 +4,19 @@
 #include "evolve.hpp"
 
 TEST_CASE("Testing vector_2d") {
-  vector_2d v1{2., -4.};
-  vector_2d v2{0., 0.};
-  vector_2d v3{1., 0.};
-  vector_2d v4{0., -7.};
+  Vector_2d v1{2., -4.};
+  Vector_2d v2{0., 0.};
+  Vector_2d v3{1., 0.};
+  Vector_2d v4{0., -7.};
 
   SUBCASE("Testing operations") {
     CHECK(v1.xcomp() == (2.));
     CHECK(v2.ycomp() == (0.));
     CHECK(v1 != v2);
-    CHECK(vector_2d{v3 + v4} == vector_2d{1., -7.});
-    CHECK(vector_2d{v1 - v3} == vector_2d{1., -4.});
-    CHECK(vector_2d{v1 * 5.} == vector_2d{10., -20.});
-    CHECK(vector_2d{v1 * 0.} == v2);
+    CHECK(Vector_2d{v3 + v4} == Vector_2d{1., -7.});
+    CHECK(Vector_2d{v1 - v3} == Vector_2d{1., -4.});
+    CHECK(Vector_2d{v1 * 5.} == Vector_2d{10., -20.});
+    CHECK(Vector_2d{v1 * 0.} == v2);
     v2.setx(5.);
     v2.sety(-5.);
     CHECK(v2.xcomp() == (5.));
@@ -32,10 +32,10 @@ TEST_CASE("Testing vector_2d") {
 }
 
 TEST_CASE("Testing distance") {
-  boid b1{{3., 5.}, {0., 0.}};
-  boid b2{{2., 3.}, {0., 0.}};
-  boid b3{{0., 0.}, {0., 0.}};
-  boid b4{{-4., -2.}, {0., 0.}};
+  Boid b1{{3., 5.}, {0., 0.}};
+  Boid b2{{2., 3.}, {0., 0.}};
+  Boid b3{{0., 0.}, {0., 0.}};
+  Boid b4{{-4., -2.}, {0., 0.}};
 
   CHECK(distance(b1, b2) == doctest::Approx(sqrt(5.)));
   CHECK(distance(b1, b1) == doctest::Approx(0.));
@@ -43,11 +43,11 @@ TEST_CASE("Testing distance") {
   CHECK(distance(b1, b4) == doctest::Approx(7 * sqrt(2.)));
 }
 TEST_CASE("Testing c_m relative to b_i") {
-  std::vector<boid> flock;
+  std::vector<Boid> flock;
 
   SUBCASE("Two points c_m") {
-    boid b1{{-2., 1.}, {0., 0.}};
-    boid b2{{0., 0.}, {5., 5.}};
+    Boid b1{{-2., 1.}, {0., 0.}};
+    Boid b2{{0., 0.}, {5., 5.}};
     flock.push_back(b1);
     flock.push_back(b2);
 
@@ -58,12 +58,12 @@ TEST_CASE("Testing c_m relative to b_i") {
   }
 
   SUBCASE("Six points c_m") {
-    boid b1{{1., 3.}, {0., 0.}};
-    boid b2{{4., 5.}, {0., 0.}};
-    boid b3{{0., 1.}, {0., 0.}};
-    boid b4{{3., 0.}, {0., 0.}};
-    boid b5{{-4., 2.}, {0., 0.}};
-    boid b6{{5., -3.}, {0., 0.}};
+    Boid b1{{1., 3.}, {0., 0.}};
+    Boid b2{{4., 5.}, {0., 0.}};
+    Boid b3{{0., 1.}, {0., 0.}};
+    Boid b4{{3., 0.}, {0., 0.}};
+    Boid b5{{-4., 2.}, {0., 0.}};
+    Boid b6{{5., -3.}, {0., 0.}};
 
     flock.push_back(b1);
     flock.push_back(b2);
@@ -88,11 +88,11 @@ TEST_CASE("Testing c_m relative to b_i") {
 }
 
 TEST_CASE("Testing mean distance and std_dev") {
-  std::vector<boid> flock;
-  boid b1{{1., 1.}, {0., 0.}};
-  boid b2{{2., 3.}, {0., 0.}};
-  boid b3{{4., 2.}, {0., 0.}};
-  boid b4{{1., 1.}, {1., 1.}};
+  std::vector<Boid> flock;
+  Boid b1{{1., 1.}, {0., 0.}};
+  Boid b2{{2., 3.}, {0., 0.}};
+  Boid b3{{4., 2.}, {0., 0.}};
+  Boid b4{{1., 1.}, {1., 1.}};
 
   flock.push_back(b1);
   flock.push_back(b2);
@@ -104,7 +104,7 @@ TEST_CASE("Testing mean distance and std_dev") {
     CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
   }
 
-  SUBCASE("Adding one equal boid") {
+  SUBCASE("Adding one equal Boid") {
     flock.push_back(b4);
 
     CHECK(mean_distance(flock) ==
@@ -114,11 +114,11 @@ TEST_CASE("Testing mean distance and std_dev") {
 }
 
 TEST_CASE("mean velocity and st dev") {
-  std::vector<boid> flock;
-  boid b1{{1., 3.}, {-4., 0.}};
-  boid b2{{4., 5.}, {0., 0.}};
-  boid b3{{0., 1.}, {2., -3.}};
-  boid b4{{3., 0.}, {0., 6.}};
+  std::vector<Boid> flock;
+  Boid b1{{1., 3.}, {-4., 0.}};
+  Boid b2{{4., 5.}, {0., 0.}};
+  Boid b3{{0., 1.}, {2., -3.}};
+  Boid b4{{3., 0.}, {0., 6.}};
 
   flock.push_back(b1);
   flock.push_back(b2);
@@ -128,7 +128,7 @@ TEST_CASE("mean velocity and st dev") {
   CHECK(mean_velocity(flock) == doctest::Approx((10. + sqrt(13.)) / 4.));
   CHECK(std_dev_velocity(flock) == doctest::Approx(2.4981488895));
 
-  boid b5{{9., 2.},
+  Boid b5{{9., 2.},
           {
               2.,
               -3,
@@ -140,11 +140,11 @@ TEST_CASE("mean velocity and st dev") {
 }
 
 TEST_CASE("v sep") {
-  std::vector<boid> flock;
-  boid b1{{2., 1.}, {3., 2.}};
-  boid b2{{2., 3.}, {4., 3.}};
-  boid b3{{3., 4.}, {0., 3.}};
-  boid b4{{2.5, 3}, {1., 2.}};
+  std::vector<Boid> flock;
+  Boid b1{{2., 1.}, {3., 2.}};
+  Boid b2{{2., 3.}, {4., 3.}};
+  Boid b3{{3., 4.}, {0., 3.}};
+  Boid b4{{2.5, 3}, {1., 2.}};
 
   SUBCASE("4 boids") {
     flock.push_back(b1);
@@ -168,11 +168,11 @@ TEST_CASE("v sep") {
 }
 
 TEST_CASE("v all") {
-  std::vector<boid> flock;
-  boid b1{{2., 2.}, {1., 1.}};
-  boid b2{{4., 3.}, {4., 1.}};
-  boid b3{{7., 6.}, {2., 3.}};
-  boid b4{{1., 1.}, {-1., -2.}};
+  std::vector<Boid> flock;
+  Boid b1{{2., 2.}, {1., 1.}};
+  Boid b2{{4., 3.}, {4., 1.}};
+  Boid b3{{7., 6.}, {2., 3.}};
+  Boid b4{{1., 1.}, {-1., -2.}};
 
   SUBCASE("4 boids") {
     flock.push_back(b1);
@@ -196,11 +196,11 @@ TEST_CASE("v all") {
 }
 
 TEST_CASE("v coe") {
-  std::vector<boid> flock;
-  boid b1{{2., 2.}, {1., 1.}};
-  boid b2{{4., 3.}, {4., 1.}};
-  boid b3{{7., 6.}, {2., 3.}};
-  boid b4{{1., 1.}, {-1., -2.}};
+  std::vector<Boid> flock;
+  Boid b1{{2., 2.}, {1., 1.}};
+  Boid b2{{4., 3.}, {4., 1.}};
+  Boid b3{{7., 6.}, {2., 3.}};
+  Boid b4{{1., 1.}, {-1., -2.}};
 
   SUBCASE("4 boids") {
     flock.push_back(b1);
@@ -228,27 +228,27 @@ TEST_CASE("v coe") {
 TEST_CASE("pacman") {
   stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
 
-  boid b1{{-1., 2.}, {0., 0.}};
-  boid b2{{3., -5.}, {0., 0.}};
-  boid b3{{4., 13.}, {0., 0.}};
-  boid b4{{17., 6.}, {0., 0.}};
-  boid b5{{13., -2.}, {0., 0.}};
-  boid b6{{-3., 11.}, {0., 0.}};
-  boid b7{{6., 7.}, {0., 0.}};
-  boid b8{{0., 10.},
+  Boid b1{{-1., 2.}, {0., 0.}};
+  Boid b2{{3., -5.}, {0., 0.}};
+  Boid b3{{4., 13.}, {0., 0.}};
+  Boid b4{{17., 6.}, {0., 0.}};
+  Boid b5{{13., -2.}, {0., 0.}};
+  Boid b6{{-3., 11.}, {0., 0.}};
+  Boid b7{{6., 7.}, {0., 0.}};
+  Boid b8{{0., 10.},
           {0., 0.}};  // In questo caso e in quello successivo i boids si
                       // trovano sui bordi, ma la lorio posizione non varia.
-  boid b9{{10., 0.}, {0., 0.}};
+  Boid b9{{10., 0.}, {0., 0.}};
 
-  vector_2d v1 = pacman(b1.pos, s);
-  vector_2d v2 = pacman(b2.pos, s);
-  vector_2d v3 = pacman(b3.pos, s);
-  vector_2d v4 = pacman(b4.pos, s);
-  vector_2d v5 = pacman(b5.pos, s);
-  vector_2d v6 = pacman(b6.pos, s);
-  vector_2d v7 = pacman(b7.pos, s);
-  vector_2d v8 = pacman(b8.pos, s);
-  vector_2d v9 = pacman(b9.pos, s);
+  Vector_2d v1 = pacman(b1.pos, s);
+  Vector_2d v2 = pacman(b2.pos, s);
+  Vector_2d v3 = pacman(b3.pos, s);
+  Vector_2d v4 = pacman(b4.pos, s);
+  Vector_2d v5 = pacman(b5.pos, s);
+  Vector_2d v6 = pacman(b6.pos, s);
+  Vector_2d v7 = pacman(b7.pos, s);
+  Vector_2d v8 = pacman(b8.pos, s);
+  Vector_2d v9 = pacman(b9.pos, s);
 
   CHECK(v1.xcomp() == doctest::Approx(9.));
   CHECK(v1.ycomp() == doctest::Approx(2.));
@@ -271,11 +271,11 @@ TEST_CASE("pacman") {
 }
 
 TEST_CASE("influence") {
-  std::vector<boid> flock;
-  boid b1{{2., 2.}, {1., 1.}};
-  boid b2{{4., 3.}, {1., 1.}};
-  boid b3{{7., 6.}, {1., 1.}};
-  boid b4{{1., 1.}, {-1., -1.}};
+  std::vector<Boid> flock;
+  Boid b1{{2., 2.}, {1., 1.}};
+  Boid b2{{4., 3.}, {1., 1.}};
+  Boid b3{{7., 6.}, {1., 1.}};
+  Boid b4{{1., 1.}, {-1., -1.}};
 
   flock.push_back(b1);
   flock.push_back(b2);
@@ -287,15 +287,15 @@ TEST_CASE("influence") {
 }
 
 TEST_CASE("evolve test") {
-  std::vector<boid> flock;
+  std::vector<Boid> flock;
   stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
   double delta_t = 0.2;
-  predator p{{0., 0.}, {0., 0.}};
-  boid b1{{2., 2.}, {-1., -1.}};
-  boid b2{{3., 2.}, {0., 1.}};
-  boid b3{{2., 5.}, {1., -1.}};
-  boid b4{{8., 8.}, {-4., -4.}};
-  boid b5{{8., 0.}, {0., 0.}};
+  Predator p{{0., 0.}, {0., 0.}};
+  Boid b1{{2., 2.}, {-1., -1.}};
+  Boid b2{{3., 2.}, {0., 1.}};
+  Boid b3{{2., 5.}, {1., -1.}};
+  Boid b4{{8., 8.}, {-4., -4.}};
+  Boid b5{{8., 0.}, {0., 0.}};
 
   flock.push_back(b1);
   flock.push_back(b2);
@@ -344,14 +344,14 @@ TEST_CASE("evolve test") {
 
 TEST_CASE("evolve predator") {
   stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
-  predator p1{{3., 4.}, {-2., 5.}};
-  predator p2{{-3., 17.}, {0., 0.}};
-  predator p3{{13., 0.}, {5., 2.}};
+  Predator p1{{3., 4.}, {-2., 5.}};
+  Predator p2{{-3., 17.}, {0., 0.}};
+  Predator p3{{13., 0.}, {5., 2.}};
   double delta_t = 0.2;
 
-  predator v1 = evolve_predator(p1, delta_t, s);
-  predator v2 = evolve_predator(p2, delta_t, s);
-  predator v3 = evolve_predator(p3, delta_t, s);
+  Predator v1 = evolve_predator(p1, delta_t, s);
+  Predator v2 = evolve_predator(p2, delta_t, s);
+  Predator v3 = evolve_predator(p3, delta_t, s);
 
   CHECK(v1.pos.xcomp() == doctest::Approx(2.6));
   CHECK(v1.pos.ycomp() == doctest::Approx(5.));
@@ -362,13 +362,13 @@ TEST_CASE("evolve predator") {
 }
 
 TEST_CASE("eat boids") {
-  std::vector<boid> flock;
-  predator p{{3., 5.}, {2., 2.}};
-  boid b1{{2.5, 5.4}, {-3., 4.}};
-  boid b2{{3., 5.}, {1., -2}};
-  boid b3{{6., 9.}, {0., 2.}};
-  boid b4{{5., 6.}, {2., 3.}};
-  boid b5{{3., 7.}, {1., -3.}};
+  std::vector<Boid> flock;
+  Predator p{{3., 5.}, {2., 2.}};
+  Boid b1{{2.5, 5.4}, {-3., 4.}};
+  Boid b2{{3., 5.}, {1., -2}};
+  Boid b3{{6., 9.}, {0., 2.}};
+  Boid b4{{5., 6.}, {2., 3.}};
+  Boid b5{{3., 7.}, {1., -3.}};
   double d_pred = 2.4;
 
   flock.push_back(b1);

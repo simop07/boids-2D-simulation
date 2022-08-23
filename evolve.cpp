@@ -1,12 +1,12 @@
 #include "evolve.hpp"
 
-boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
-                 stats s, predator p) {
+Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
+                 stats s, Predator p) {
   // Definizione degli oggetti utili
 
-  vector_2d v_sep;
-  vector_2d v_all;
-  vector_2d v_coe;
+  Vector_2d v_sep;
+  Vector_2d v_all;
+  Vector_2d v_coe;
   int n = flock.size();
 
   // If a boid got not even one boid in its range of influence, its velocity
@@ -42,20 +42,20 @@ boid evolve_boid(std::vector<boid> const &flock, boid b_i, double delta_t,
   return b_i;
 }
 
-predator evolve_predator(predator p, double delta_t, stats s) {
-  predator res{{p.pos + p.vel * delta_t}, {p.vel}};
+Predator evolve_predator(Predator p, double delta_t, stats s) {
+  Predator res{{p.pos + p.vel * delta_t}, {p.vel}};
   res.pos = pacman(res.pos, s);
   return res;
 }
 
-void evolve_flock(std::vector<boid> &flock, double delta_t, stats s,
-                  predator p) {
+void evolve_flock(std::vector<Boid> &flock, double delta_t, stats s,
+                  Predator p) {
   // A vector f_state is created to mantain the initial state of the flock from
   // which every boid is evolved
-  std::vector<boid> f_state;
+  std::vector<Boid> f_state;
   int n = flock.size();
   for (int i = 0; i < n; ++i) {
-    boid b_i = flock[i];
+    Boid b_i = flock[i];
     f_state.push_back(
         evolve_boid(influence(flock, b_i, s.d), b_i, delta_t, s, p));
   };
@@ -63,7 +63,7 @@ void evolve_flock(std::vector<boid> &flock, double delta_t, stats s,
   return;
 }
 
-void eat_boid(std::vector<boid> &flock, predator p, double d_eat) {
+void eat_boid(std::vector<Boid> &flock, Predator p, double d_eat) {
   auto b_i = flock.begin();
   auto b_l = flock.end();
   int n = flock.size();
@@ -73,7 +73,7 @@ void eat_boid(std::vector<boid> &flock, predator p, double d_eat) {
   // reduced by one. By not doing that there would be pointers to element of the
   // vector that doesn't exist anymore resulting in a segmentation fault error
   while (b_i != b_l) {
-    boid b_it = *b_i;
+    Boid b_it = *b_i;
     if ((b_it.pos - p.pos).norm() < d_eat && n >= 3) {
       b_i = flock.erase(b_i);
       b_l = std::prev(b_l);
@@ -84,7 +84,7 @@ void eat_boid(std::vector<boid> &flock, predator p, double d_eat) {
   }
   // This part checks if the predator gets close to a boid when the flock has a
   // size smaller than 3
-  for (boid b_i : flock) {
+  for (Boid b_i : flock) {
     if ((b_i.pos - p.pos).norm() < d_eat && n < 3) {
       std::cout << "Predator isn't hungry anymore..." << '\n';
     }
