@@ -32,41 +32,51 @@ vector_2d calc_c_m_b_i(std::vector<boid> const &flock, boid const &b_i) {
 double mean_distance(std::vector<boid> const &flock) {
   double n = flock.size();
   double sum_tot{};
-  double sum_par{};
+
+  /* double sum_par{}; */
   /* if (n <= 1.) {
    throw std::runtime_error{"Flock must contain at least 2 boid"};
  } */
-  for (boid const &b_i : flock) {
-    sum_par = std::accumulate(flock.begin(), flock.end(), 0.,
-                              [&](double sum_p, boid const &b_j) {
-                                sum_p += distance(b_i, b_j);
-                                return sum_p;
-                              });
-    sum_tot += sum_par;
+
+  auto it = flock.begin();
+
+  for (; it != flock.end(); ++it) {
+    auto it_2 = std::next(it);
+    for (; it_2 != flock.end(); ++it_2) {
+      sum_tot += distance(*it, *it_2);
+    }
+    /*     sum_par = std::accumulate(it_2, flock.end(), 0.,
+                                  [&](double sum_p, boid const& b_i) {
+                                    sum_p += distance(*it, *it_2);
+                                    return sum_p;
+                                  }); */
   }
-  double res = sum_tot / (n * (n - 1.));
+  /* inserire cosa è il calcolo in fondo*/
+  double res = sum_tot / (((n * (n - 3)) / 2) + n);
   /* Vedi se devi togliere degli zeri */
   sum_tot = 0.;
-  sum_par = 0.;
-  return res;
+/*   sum_par = 0.;
+ */  return res;
 }
 
 double std_dev_distance(std::vector<boid> const &flock) {
   double n = flock.size();
-  double sum2 = 0.;
+  double sum2{0.};
   double mean_d = mean_distance(flock);
-  if (n <= 1.) {
+  /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
-  for (boid b_i : flock) {
+  } */
+  for (boid const &b_i : flock) {
     double d_i = 0.;
-    for (boid b_j : flock) {
-      d_i += distance(b_i, b_j);
+
+    for (boid const &b_j : flock) {
+      d_i = distance(b_i, b_j);
+
+      sum2 += ((d_i)-mean_d) * ((d_i)-mean_d);
     }
-    sum2 += ((d_i / (n - 1.)) - mean_d) * ((d_i / (n - 1.)) - mean_d);
     d_i = 0.;
   }
-  double res = sqrt(sum2 / (n - 1.));
+  double res = sqrt(sum2 / ((n - 1.) * (n - 2)));
   sum2 = 0.;
   return res;
 }

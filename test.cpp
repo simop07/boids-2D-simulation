@@ -42,10 +42,10 @@ TEST_CASE("Testing distance") {
   CHECK(distance(b1, b3) == doctest::Approx(sqrt(34.)));
   CHECK(distance(b1, b4) == doctest::Approx(7 * sqrt(2.)));
 }
-TEST_CASE("Testing cdm") {
+TEST_CASE("Testing c_m relative to b_i") {
   std::vector<boid> flock;
 
-  SUBCASE("Two points cdm") {
+  SUBCASE("Two points c_m") {
     boid b1{{-2., 1.}, {0., 0.}};
     boid b2{{0., 0.}, {5., 5.}};
     flock.push_back(b1);
@@ -57,7 +57,7 @@ TEST_CASE("Testing cdm") {
     CHECK(calc_c_m_b_i(flock, b2).ycomp() == doctest::Approx(1.));
   }
 
-  SUBCASE("Six points cdm") {
+  SUBCASE("Six points c_m") {
     boid b1{{1., 3.}, {0., 0.}};
     boid b2{{4., 5.}, {0., 0.}};
     boid b3{{0., 1.}, {0., 0.}};
@@ -100,7 +100,7 @@ TEST_CASE("Testing mean distance and std_dev") {
 
   SUBCASE("Three boids") {
     CHECK(mean_distance(flock) ==
-          doctest::Approx((sqrt(5.) + sqrt(10.) + sqrt(5.)) / 3.));
+          doctest::Approx((sqrt(10.) + 2 * sqrt(5.)) / 3.));
     CHECK(std_dev_distance(flock) == doctest::Approx(0.26737));
   }
 
@@ -109,7 +109,7 @@ TEST_CASE("Testing mean distance and std_dev") {
 
     CHECK(mean_distance(flock) ==
           doctest::Approx((6. * sqrt(5.) + 4. * sqrt(10.)) / 12.));
-    CHECK(std_dev_distance(flock) == doctest::Approx(0.49873));
+    CHECK(std_dev_distance(flock) == doctest::Approx(1.056));
   }
 }
 
