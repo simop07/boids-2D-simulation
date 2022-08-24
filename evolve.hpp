@@ -19,8 +19,8 @@ Predator evolve_predator(Predator &p, double delta_t, Stats const &s);
 // Evolve_flock uses evolve_boid to evolve every single boid of the flock only
 // considering the boids that are in a certain range of the boid that's
 // currently evolving using the function influence
-void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats s,
-                  Predator p);
+void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
+                  Predator const& p);
 
 // Eat_boid checks if a boid is at a smaller distance than d_pred from the
 // predator, in that case if the flock contains more than two boids it erases

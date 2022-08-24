@@ -398,7 +398,7 @@ TEST_CASE("Testing evolve_predator") {
   CHECK(v5.pos.ycomp() == doctest::Approx(2.6));
 }
 
-TEST_CASE("eat boids") {
+TEST_CASE("Testing eat_boid") {
   std::vector<Boid> flock;
   Predator p{{3., 5.}, {2., 2.}};
   Boid b1{{2.5, 5.4}, {-3., 4.}};

@@ -47,8 +47,8 @@ Predator evolve_predator(Predator &p, double delta_t, Stats const &s) {
   return res;
 }
 
-void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats s,
-                  Predator p) {
+void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
+                  Predator const &p) {
   // A vector f_state is created to mantain the initial state of the flock from
   // which every boid is evolved
   std::vector<Boid> f_state;
