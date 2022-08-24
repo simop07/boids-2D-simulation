@@ -33,7 +33,7 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const& b_i, double s, double 
 Vector_2d all(std::vector<Boid> const &flock, Boid const& b_i, double a);
 
 // Rule of cohesion
-Vector_2d coe(Boid b_i, Vector_2d c_m, double c);
+Vector_2d coe(Boid const& b_i, Vector_2d const& c_m, double c);
 
 // This function takes care of the border of the simulation by teleporting every
 // boid or predator that exceedes a certain border (specified in the stats) to

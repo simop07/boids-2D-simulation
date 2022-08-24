@@ -4,7 +4,7 @@
 #include <numeric>
 
 double distance(Boid const &b1, Boid const &b2) {
-  Vector_2d pos_diff{b1.pos - b2.pos};
+  auto pos_diff{b1.pos - b2.pos};
   return pos_diff.norm();
 };
 
@@ -123,7 +123,6 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
 
 Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
               double d_s) {
-  Vector_2d v_sep;
   Vector_2d sum_v;
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_j) {
@@ -132,11 +131,10 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
     }
     return sum_v;
   });
-  return v_sep = -sum_v * s;
+  return -sum_v * s;
 }
 
 Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
-  Vector_2d v_all;
   Vector_2d sum_v;
   double n = flock.size();
   // This exception checks if there is less than one boid in flock (the case
@@ -148,12 +146,11 @@ Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
                 [&](Boid const &b_j) { sum_v += b_j.vel; });
 
   Vector_2d mean_v = (sum_v - b_i.vel) * (1. / (n - 1.));
-  return v_all = (mean_v - b_i.vel) * a;
+  return (mean_v - b_i.vel) * a;
 }
 
-Vector_2d coe(Boid b_i, Vector_2d c_m, double c) {
-  Vector_2d v_coe = (c_m - b_i.pos) * c;
-  return v_coe;
+Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double c) {
+  return (c_m - b_i.pos) * c;
 }
 
 Vector_2d pacman(Vector_2d pos, stats s) {

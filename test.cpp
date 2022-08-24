@@ -214,27 +214,22 @@ TEST_CASE("Testing v_all") {
 /*   SUBCASE("No boids") { CHECK_THROWS(all(flock, b1, 3)); }
  */}
 
-TEST_CASE("v coe") {
+TEST_CASE("Testing v_coe") {
   std::vector<Boid> flock;
   Boid b1{{2., 2.}, {1., 1.}};
   Boid b2{{4., 3.}, {4., 1.}};
   Boid b3{{7., 6.}, {2., 3.}};
   Boid b4{{1., 1.}, {-1., -2.}};
 
-  SUBCASE("4 boids") {
-    flock.push_back(b1);
-    flock.push_back(b2);
-    flock.push_back(b3);
-    flock.push_back(b4);
+  flock.push_back(b1);
+  flock.push_back(b2);
+  flock.push_back(b3);
+  flock.push_back(b4);
 
-    CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).xcomp() ==
-          doctest::Approx(0.6));
-    CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).ycomp() ==
-          doctest::Approx(0.4));
-    CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).xcomp() ==
-          doctest::Approx(-0.2));
-    CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).ycomp() == doctest::Approx(0.));
-  }
+  CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).xcomp() == doctest::Approx(0.6));
+  CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).ycomp() == doctest::Approx(0.4));
+  CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).xcomp() == doctest::Approx(-0.2));
+  CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).ycomp() == doctest::Approx(0.));
 
   /* SUBCASE(" Not enough boids") {
     flock.push_back(b1);
