@@ -376,11 +376,15 @@ TEST_CASE("Testing evolve_predator") {
   Predator p1{{3., 4.}, {-2., 5.}};
   Predator p2{{-3., 17.}, {0., 0.}};
   Predator p3{{13., 0.}, {5., 2.}};
+  Predator p4{{5., -3.}, {5., -2.}};
+  Predator p5{{9.5, 2.}, {13., 3.}};
   double delta_t = 0.2;
 
   Predator v1 = evolve_predator(p1, delta_t, s);
   Predator v2 = evolve_predator(p2, delta_t, s);
   Predator v3 = evolve_predator(p3, delta_t, s);
+  Predator v4 = evolve_predator(p4, delta_t, s);
+  Predator v5 = evolve_predator(p5, delta_t, s);
 
   CHECK(v1.pos.xcomp() == doctest::Approx(2.6));
   CHECK(v1.pos.ycomp() == doctest::Approx(5.));
@@ -388,6 +392,10 @@ TEST_CASE("Testing evolve_predator") {
   CHECK(v2.pos.ycomp() == doctest::Approx(7.));
   CHECK(v3.pos.xcomp() == doctest::Approx(4.0));
   CHECK(v3.pos.ycomp() == doctest::Approx(0.4));
+  CHECK(v4.pos.xcomp() == doctest::Approx(6.));
+  CHECK(v4.pos.ycomp() == doctest::Approx(7.));
+  CHECK(v5.pos.xcomp() == doctest::Approx(2.));
+  CHECK(v5.pos.ycomp() == doctest::Approx(2.6));
 }
 
 TEST_CASE("eat boids") {

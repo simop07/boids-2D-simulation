@@ -12,9 +12,9 @@
 Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double delta_t,
                  Stats const &s, Predator const &p);
 
-// Evolve predator simply updates the position of the predator after a time
+// Evolve_predator updates the position of the predator after a time
 // delta_t and applies the function pacman
-Predator evolve_predator(Predator p, double delta_t, Stats s);
+Predator evolve_predator(Predator &p, double delta_t, Stats const &s);
 
 // Evolve_flock uses evolve_boid to evolve every single boid of the flock only
 // considering the boids that are in a certain range of the boid that's

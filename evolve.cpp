@@ -1,7 +1,7 @@
 #include "evolve.hpp"
 
-Boid evolve_boid(std::vector<Boid> const &flock, Boid & b_i, double delta_t,
-                 Stats const& s, Predator const& p) {
+Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double delta_t,
+                 Stats const &s, Predator const &p) {
   // Definition of useful objects
   Vector_2d v_sep;
   Vector_2d v_all;
@@ -29,10 +29,10 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid & b_i, double delta_t,
     b_i.vel.sety(b_i.vel.ycomp() * 0.5);
   }
 
-  // If the boid is closer to the predator than the parametre d_pred, a velocity
+  // If the boid is closer to the predator than the parameter d_pred, a velocity
   // "v_sep" is added to its current velocity to get it away from the predator
-  if ((b_i.pos - p.pos).norm() < s.d_pred) {
-    b_i.vel += (p.pos - b_i.pos) * (-s.s);
+  if (distance(b_i, p) < s.d_pred) {
+    b_i.vel += (-(p.pos - b_i.pos) * s.s);
   }
 
   // The functions that takes care of the border of the simulation is applied
@@ -41,7 +41,7 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid & b_i, double delta_t,
   return b_i;
 }
 
-Predator evolve_predator(Predator p, double delta_t, Stats s) {
+Predator evolve_predator(Predator &p, double delta_t, Stats const &s) {
   Predator res{{p.pos + p.vel * delta_t}, {p.vel}};
   res.pos = pacman(res.pos, s);
   return res;
