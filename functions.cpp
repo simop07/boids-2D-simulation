@@ -153,7 +153,7 @@ Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double c) {
   return (c_m - b_i.pos) * c;
 }
 
-Vector_2d pacman(Vector_2d pos, stats s) {
+Vector_2d pacman(Vector_2d &pos, Stats const &s) {
   if (pos.xcomp() < s.l_b) {
     pos.setx(s.r_b - abs(s.l_b - pos.xcomp()));
   };
