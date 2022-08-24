@@ -13,6 +13,9 @@
 // Distance between two boids
 double distance(Boid const &b1, Boid const &b2);
 
+// Distance between a boid and a predator
+double distance(Boid const &b, Predator const &p);
+
 // Center of mass relative to a boid b_i
 Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i);
 

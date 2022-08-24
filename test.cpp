@@ -9,7 +9,7 @@ TEST_CASE("Testing vector_2d") {
   Vector_2d v3{1., 0.};
   Vector_2d v4{0., -7.};
 
-  SUBCASE("Testing operations") {
+  SUBCASE("Testing vector operations") {
     CHECK(v1.xcomp() == (2.));
     CHECK(v2.ycomp() == (0.));
     CHECK(v1 != v2);
@@ -37,10 +37,24 @@ TEST_CASE("Testing distance") {
   Boid b3{{0., 0.}, {0., 0.}};
   Boid b4{{-4., -2.}, {0., 0.}};
 
-  CHECK(distance(b1, b2) == doctest::Approx(sqrt(5.)));
-  CHECK(distance(b1, b1) == doctest::Approx(0.));
-  CHECK(distance(b1, b3) == doctest::Approx(sqrt(34.)));
-  CHECK(distance(b1, b4) == doctest::Approx(7 * sqrt(2.)));
+  SUBCASE("Boid-boid distance") {
+    CHECK(distance(b1, b2) == doctest::Approx(sqrt(5.)));
+    CHECK(distance(b1, b1) == doctest::Approx(0.));
+    CHECK(distance(b1, b3) == doctest::Approx(sqrt(34.)));
+    CHECK(distance(b1, b4) == doctest::Approx(7 * sqrt(2.)));
+  }
+
+  SUBCASE("Boid-predator distance") {
+    Predator p1{{3., 5.}, {0., 0.}};
+    Predator p2{{2., 3.}, {0., 0.}};
+    Predator p3{{0., 0.}, {0., 0.}};
+    Predator p4{{-4., -2.}, {0., 0.}};
+
+    CHECK(distance(b1, p2) == doctest::Approx(sqrt(5.)));
+    CHECK(distance(b1, p1) == doctest::Approx(0.));
+    CHECK(distance(b1, p3) == doctest::Approx(sqrt(34.)));
+    CHECK(distance(b1, p4) == doctest::Approx(7 * sqrt(2.)));
+  }
 }
 TEST_CASE("Testing c_m relative to b_i") {
   std::vector<Boid> flock;
@@ -174,8 +188,7 @@ TEST_CASE("Testing v_sep") {
     CHECK(sep(flock, b2, 0.5, 4.).ycomp() == doctest::Approx(0.5));
   }
 
-  SUBCASE("Null components if distance < d_s") {  // compoenenti  uguali tra due
-                                                  // boids
+  SUBCASE("Null components if distance < d_s") {
     Boid b1{{2., 1.}, {3., 2.}};
     Boid b2{{2., 3.}, {4., 3.}};
     flock.push_back(b1);
@@ -302,7 +315,7 @@ TEST_CASE("Testing influence") {
   CHECK(influence(flock, b4, 0.1).size() == 1);
 }
 
-TEST_CASE("evolve test") {
+TEST_CASE("Testing evolve_boid") {
   std::vector<Boid> flock;
   Stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
   double delta_t = 0.2;
@@ -358,7 +371,7 @@ TEST_CASE("evolve test") {
   CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
 }
 
-TEST_CASE("evolve predator") {
+TEST_CASE("Testing evolve_predator") {
   Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
   Predator p1{{3., 4.}, {-2., 5.}};
   Predator p2{{-3., 17.}, {0., 0.}};

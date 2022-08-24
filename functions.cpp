@@ -5,6 +5,11 @@ double distance(Boid const &b1, Boid const &b2) {
   return pos_diff.norm();
 };
 
+double distance(Boid const &b, Predator const &p) {
+  auto pos_diff{b.pos - p.pos};
+  return pos_diff.norm();
+};
+
 Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   double n = flock.size();
 

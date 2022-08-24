@@ -1,16 +1,15 @@
 #include "evolve.hpp"
 
-Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
-                 Stats s, Predator p) {
-  // Definizione degli oggetti utili
-
+Boid evolve_boid(std::vector<Boid> const &flock, Boid & b_i, double delta_t,
+                 Stats const& s, Predator const& p) {
+  // Definition of useful objects
   Vector_2d v_sep;
   Vector_2d v_all;
   Vector_2d v_coe;
   int n = flock.size();
 
   // If a boid got not even one boid in its range of influence, its velocity
-  // remains unchanged beacuse the 3 velocity v_sep, v_all, v_coe are
+  // remains unchanged, beacuse the 3 velocity v_sep, v_all, v_coe are
   // initialized at {0.,0.}
   if (n > 1) {
     v_sep = sep(flock, b_i, s.s, s.d_s);
@@ -24,7 +23,7 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
 
   // If the boid exceedes the maximum velocity, the component of its current
   // velocity get rescaled so that the norm gets under the one imposed by v_max
-  // but the direction of the boids remains unchanged
+  // - obviously boid's direction remains unchanged
   if (b_i.vel.norm() > s.v_max) {
     b_i.vel.setx(b_i.vel.xcomp() * 0.5);
     b_i.vel.sety(b_i.vel.ycomp() * 0.5);
@@ -58,7 +57,7 @@ void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats s,
     Boid b_i = flock[i];
     f_state.push_back(
         evolve_boid(influence(flock, b_i, s.d), b_i, delta_t, s, p));
-  };
+  }
   flock = f_state;
   return;
 }

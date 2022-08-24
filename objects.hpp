@@ -59,11 +59,11 @@ struct Predator {
 // function needed both a parameter s and d_s it's possible two use a single
 // variable stats instead of two different ones
 struct Stats {
-  double d_s{};  // Distance at which sep gets activated
-  double d{};    // Distance of influence between boids
-  double s{};    // Three arameters of flight's rules
-  double a{};
-  double c{};
+  double d_s{};     // Distance at which sep gets activated
+  double d{};       // Distance of influence between boids
+  double s{};       // Separation parameter
+  double a{};       // Allignment parameter
+  double c{};       // Cohesion parameter
   double l_b{};     // Left bound
   double r_b{};     // Right bound
   double u_b{};     // Upper bound

@@ -4,13 +4,13 @@
 #include "functions.hpp"
 
 // Evolve_boid takes in input a vector of boids, a specific boid (not necessarly
-// of that vector), e double for the time of evolution, a Stats and a predator.
-// It evolves a single boid according to the 3 rules, then it reduces the
-// velocity of the boid keeping it lower than max velocity and applies the
+// of that vector), a double for the time of evolution, a struct Stats and a
+// predator. It evolves a single boid according to the 3 rules, then it reduces
+// its velocity keeping it lower than a fixed max velocity, applies the
 // separation rule for the predator and the function pacman taking care of the
 // borders
-Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
-                 Stats s, Predator p);
+Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double delta_t,
+                 Stats const &s, Predator const &p);
 
 // Evolve predator simply updates the position of the predator after a time
 // delta_t and applies the function pacman
