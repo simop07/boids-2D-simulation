@@ -174,7 +174,8 @@ TEST_CASE("Testing v_sep") {
     CHECK(sep(flock, b2, 0.5, 4.).ycomp() == doctest::Approx(0.5));
   }
 
-  SUBCASE("Null components if distance < d_s") {  // compoenenti  uguali tra due boids
+  SUBCASE("Null components if distance < d_s") {  // compoenenti  uguali tra due
+                                                  // boids
     Boid b1{{2., 1.}, {3., 2.}};
     Boid b2{{2., 3.}, {4., 3.}};
     flock.push_back(b1);
@@ -185,7 +186,7 @@ TEST_CASE("Testing v_sep") {
   }
 }
 
-TEST_CASE("v all") {
+TEST_CASE("Testing v_all") {
   std::vector<Boid> flock;
   Boid b1{{2., 2.}, {1., 1.}};
   Boid b2{{4., 3.}, {4., 1.}};
@@ -198,20 +199,20 @@ TEST_CASE("v all") {
     flock.push_back(b3);
     flock.push_back(b4);
 
-    CHECK(all(flock, b1, 3).xcomp() == doctest::Approx(2.0));
-    CHECK(all(flock, b1, 3).ycomp() == doctest::Approx(-1.));
-    CHECK(all(flock, b2, 3).xcomp() == doctest::Approx(-10.));
-    CHECK(all(flock, b2, 3).ycomp() == doctest::Approx(-1.));
+    CHECK(all(flock, b1, 0.3).xcomp() == doctest::Approx(0.2));
+    CHECK(all(flock, b1, 0.3).ycomp() == doctest::Approx(-0.1));
+    CHECK(all(flock, b2, 0.3).xcomp() == doctest::Approx(-1.));
+    CHECK(all(flock, b2, 0.3).ycomp() == doctest::Approx(-0.1));
   }
 
-  SUBCASE("Not enough boids") {
+  /* SUBCASE("Not enough boids") {
     flock.push_back(b1);
 
     CHECK_THROWS(all(flock, b1, 3));
-  }
+  } */
 
-  SUBCASE("No boids") { CHECK_THROWS(all(flock, b1, 3)); }
-}
+/*   SUBCASE("No boids") { CHECK_THROWS(all(flock, b1, 3)); }
+ */}
 
 TEST_CASE("v coe") {
   std::vector<Boid> flock;

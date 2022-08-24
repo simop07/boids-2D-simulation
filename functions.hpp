@@ -30,7 +30,7 @@ double std_dev_velocity(std::vector<Boid> const &flock);
 Vector_2d sep(std::vector<Boid> const &flock, Boid const& b_i, double s, double d_s);
 
 // Rule of allignment
-Vector_2d all(std::vector<Boid> const &flock, Boid b_i, double a);
+Vector_2d all(std::vector<Boid> const &flock, Boid const& b_i, double a);
 
 // Rule of cohesion
 Vector_2d coe(Boid b_i, Vector_2d c_m, double c);

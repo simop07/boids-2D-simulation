@@ -132,22 +132,21 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
     }
     return sum_v;
   });
-
   return v_sep = -sum_v * s;
 }
 
-Vector_2d all(std::vector<Boid> const &flock, Boid b_i, double a) {
+Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
   Vector_2d v_all;
   Vector_2d sum_v;
   double n = flock.size();
   // This exception checks if there is less than one boid in flock (the case
   // n=1. is managed in evolve)
-  if (n <= 1.) {
+  /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
-  }
-  for (Boid b_j : flock) {
-    sum_v += b_j.vel;
-  }
+  } */
+  std::for_each(flock.begin(), flock.end(),
+                [&](Boid const &b_j) { sum_v += b_j.vel; });
+
   Vector_2d mean_v = (sum_v - b_i.vel) * (1. / (n - 1.));
   return v_all = (mean_v - b_i.vel) * a;
 }
