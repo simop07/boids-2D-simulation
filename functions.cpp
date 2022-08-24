@@ -172,7 +172,7 @@ std::vector<Boid> influence(std::vector<Boid> const &flock, Boid const &b_i,
                             double d) {
   std::vector<Boid> range;
   for (Boid const &b_j : flock) {
-    if (distance(b_i, b_j)) {
+    if (distance(b_i, b_j) < d) {
       range.push_back(b_j);
     }
   }

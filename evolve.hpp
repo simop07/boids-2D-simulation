@@ -2,7 +2,6 @@
 #define evolve_hpp
 
 #include "functions.hpp"
-#include "objects.hpp"
 
 // Evolve_boid takes in input a vector of boids, a specific boid (not necessarly
 // of that vector), e double for the time of evolution, a Stats and a predator.
