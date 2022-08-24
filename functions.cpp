@@ -1,8 +1,5 @@
 #include "functions.hpp"
 
-#include <algorithm>
-#include <numeric>
-
 double distance(Boid const &b1, Boid const &b2) {
   auto pos_diff{b1.pos - b2.pos};
   return pos_diff.norm();
@@ -14,7 +11,7 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   // This assert checks if there is less than one boid in flock (the case
   // n=1. is managed in evolve)
 
-  /* assert(flock.size() > 1); */
+  assert(flock.size() > 1);
 
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
@@ -39,6 +36,7 @@ double mean_distance(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
    throw std::runtime_error{"Flock must contain at least 2 boid"};
  } */
+  assert(flock.size() > 1);
 
   for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
     auto nx = std::next(pr);
@@ -65,6 +63,7 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
+  assert(flock.size() > 1);
 
   for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
     auto nx = std::next(pr);
@@ -88,6 +87,7 @@ double mean_velocity(std::vector<Boid> const &flock) {
   /*  if (n <= 1.) {
      throw std::runtime_error{"Flock must contain at least 2 boid"};
    } */
+  assert(flock.size() > 1);
 
   sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
                           [](double sum_v, Boid const &b_j) {
@@ -108,6 +108,7 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
+  assert(flock.size() > 1);
 
   sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
                              [](double sum_v, Boid const &b_j) {
@@ -141,6 +142,8 @@ Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
+  assert(flock.size() > 1);
+
   std::for_each(flock.begin(), flock.end(),
                 [&](Boid const &b_j) { sum_v += b_j.vel; });
 

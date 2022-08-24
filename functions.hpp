@@ -1,8 +1,10 @@
 #ifndef functions_hpp
 #define functions_hpp
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <numeric>
 #include <stdexcept>
 #include <vector>
 
