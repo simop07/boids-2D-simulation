@@ -121,15 +121,16 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
   return res;
 }
 
-Vector_2d sep(std::vector<Boid> const &flock, Boid b_i, double s, double d_s) {
+Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
+              double d_s) {
   Vector_2d v_sep;
   Vector_2d sum_v;
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_j) {
     if (distance(b_i, b_j) < d_s) {
       sum_v += (b_j.pos - b_i.pos);
-      return sum_v;
     }
+    return sum_v;
   });
 
   return v_sep = -sum_v * s;

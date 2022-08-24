@@ -27,7 +27,7 @@ double mean_velocity(std::vector<Boid> const &flock);
 double std_dev_velocity(std::vector<Boid> const &flock);
 
 // Rule of separation
-Vector_2d sep(std::vector<Boid> const &flock, Boid b_i, double s, double d_s);
+Vector_2d sep(std::vector<Boid> const &flock, Boid const& b_i, double s, double d_s);
 
 // Rule of allignment
 Vector_2d all(std::vector<Boid> const &flock, Boid b_i, double a);

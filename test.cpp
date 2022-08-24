@@ -154,31 +154,34 @@ TEST_CASE("Testing mean velocity and std_dev") {
   }
 }
 
-TEST_CASE("v sep") {
+TEST_CASE("Testing v_sep") {
   std::vector<Boid> flock;
-  Boid b1{{2., 1.}, {3., 2.}};
-  Boid b2{{2., 3.}, {4., 3.}};
-  Boid b3{{3., 4.}, {0., 3.}};
-  Boid b4{{2.5, 3}, {1., 2.}};
 
-  SUBCASE("4 boids") {
+  SUBCASE("Four boids") {
+    Boid b1{{2., 1.}, {3., 2.}};
+    Boid b2{{2., 3.}, {4., 3.}};
+    Boid b3{{3., 4.}, {0., 3.}};
+    Boid b4{{2.5, 3}, {1., 2.}};
+
     flock.push_back(b1);
     flock.push_back(b2);
     flock.push_back(b3);
     flock.push_back(b4);
 
-    CHECK(sep(flock, b1, 1., 4.).xcomp() == doctest::Approx(-1.5));
-    CHECK(sep(flock, b1, 1., 4.).ycomp() == doctest::Approx(-7.));
-    CHECK(sep(flock, b2, 1., 4.).xcomp() == doctest::Approx(-1.5));
-    CHECK(sep(flock, b2, 1., 4.).ycomp() == doctest::Approx(1.));
+    CHECK(sep(flock, b1, 0.5, 4.).xcomp() == doctest::Approx(-0.75));
+    CHECK(sep(flock, b1, 0.5, 4.).ycomp() == doctest::Approx(-3.5));
+    CHECK(sep(flock, b2, 0.5, 4.).xcomp() == doctest::Approx(-0.75));
+    CHECK(sep(flock, b2, 0.5, 4.).ycomp() == doctest::Approx(0.5));
   }
 
-  SUBCASE("same components") {  // compoenenti  uguali tra due boids
+  SUBCASE("Null components if distance < d_s") {  // compoenenti  uguali tra due boids
+    Boid b1{{2., 1.}, {3., 2.}};
+    Boid b2{{2., 3.}, {4., 3.}};
     flock.push_back(b1);
     flock.push_back(b2);
 
-    CHECK(sep(flock, b2, 1., 3.).xcomp() == doctest::Approx(0.));
-    CHECK(sep(flock, b2, 1., 3.).ycomp() == doctest::Approx(2.));
+    CHECK(sep(flock, b2, 0.4, 1.5).xcomp() == doctest::Approx(0.));
+    CHECK(sep(flock, b2, 0.4, 1.5).ycomp() == doctest::Approx(0.));
   }
 }
 
