@@ -58,10 +58,10 @@ struct Predator {
 // Stats is a struct that allow to define functions taking less input, e.g. if a
 // function needed both a parameter s and d_s it's possible two use a single
 // variable stats instead of two different ones
-struct stats {
+struct Stats {
   double d_s{};  // Distance at which sep gets activated
   double d{};    // Distance of influence between boids
-  double s{};
+  double s{};    // Three arameters of flight's rules
   double a{};
   double c{};
   double l_b{};     // Left bound

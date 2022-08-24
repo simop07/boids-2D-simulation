@@ -129,7 +129,6 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
     if (distance(b_i, b_j) < d_s) {
       sum_v += (b_j.pos - b_i.pos);
     }
-    return sum_v;
   });
   return -sum_v * s;
 }
@@ -155,27 +154,27 @@ Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double c) {
 
 Vector_2d pacman(Vector_2d &pos, Stats const &s) {
   if (pos.xcomp() < s.l_b) {
-    pos.setx(s.r_b - abs(s.l_b - pos.xcomp()));
-  };
+    pos.setx(s.r_b - abs(pos.xcomp() - s.l_b));
+  }
   if (pos.xcomp() > s.r_b) {
     pos.setx(s.l_b + abs(pos.xcomp() - s.r_b));
-  };
+  }
   if (pos.ycomp() > s.u_b) {
-    pos.sety(s.b_b + abs(pos.ycomp() - s.u_b));
-  };
+    pos.sety(s.b_b + abs(pos.ycomp()) - s.u_b);
+  }
   if (pos.ycomp() < s.b_b) {
-    pos.sety(s.u_b - abs(s.b_b - pos.ycomp()));
-  };
+    pos.sety(s.u_b - abs(pos.ycomp() - s.b_b));
+  }
   return pos;
 }
 
-std::vector<Boid> influence(std::vector<Boid> const &flock, Boid b_i,
+std::vector<Boid> influence(std::vector<Boid> const &flock, Boid const &b_i,
                             double d) {
   std::vector<Boid> range;
-  for (Boid b_j : flock) {
-    if (distance(b_i, b_j) < d) {
+  for (Boid const &b_j : flock) {
+    if (distance(b_i, b_j)) {
       range.push_back(b_j);
     }
-  };
+  }
   return range;
 }

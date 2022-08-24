@@ -6,7 +6,7 @@
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
 
-void run_simulation(std::vector<Boid> flock, Predator p, stats s) {
+void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;

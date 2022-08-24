@@ -5,22 +5,22 @@
 #include "objects.hpp"
 
 // Evolve_boid takes in input a vector of boids, a specific boid (not necessarly
-// of that vector), e double for the time of evolution, a stats and a predator.
+// of that vector), e double for the time of evolution, a Stats and a predator.
 // It evolves a single boid according to the 3 rules, then it reduces the
 // velocity of the boid keeping it lower than max velocity and applies the
 // separation rule for the predator and the function pacman taking care of the
 // borders
 Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
-                 stats s, Predator p);
+                 Stats s, Predator p);
 
 // Evolve predator simply updates the position of the predator after a time
 // delta_t and applies the function pacman
-Predator evolve_predator(Predator p, double delta_t, stats s);
+Predator evolve_predator(Predator p, double delta_t, Stats s);
 
 // Evolve_flock uses evolve_boid to evolve every single boid of the flock only
 // considering the boids that are in a certain range of the boid that's
 // currently evolving using the function influence
-void evolve_flock(std::vector<Boid> &flock, double delta_t, stats s,
+void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats s,
                   Predator p);
 
 // Eat_boid checks if a boid is at a smaller distance than d_pred from the

@@ -25,7 +25,7 @@ int main() {
     throw std::runtime_error{"The chosen values must be real numbers!"};
   }
   std::cout << "The simulation is starting, press 'H' for help..." << '\n';
-  stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50.};
+  Stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50.};
 
   // Gaussian generator for the boids
   std::default_random_engine generator;

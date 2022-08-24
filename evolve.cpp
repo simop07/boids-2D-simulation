@@ -1,7 +1,7 @@
 #include "evolve.hpp"
 
 Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
-                 stats s, Predator p) {
+                 Stats s, Predator p) {
   // Definizione degli oggetti utili
 
   Vector_2d v_sep;
@@ -42,13 +42,13 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid b_i, double delta_t,
   return b_i;
 }
 
-Predator evolve_predator(Predator p, double delta_t, stats s) {
+Predator evolve_predator(Predator p, double delta_t, Stats s) {
   Predator res{{p.pos + p.vel * delta_t}, {p.vel}};
   res.pos = pacman(res.pos, s);
   return res;
 }
 
-void evolve_flock(std::vector<Boid> &flock, double delta_t, stats s,
+void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats s,
                   Predator p) {
   // A vector f_state is created to mantain the initial state of the flock from
   // which every boid is evolved

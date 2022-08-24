@@ -239,8 +239,8 @@ TEST_CASE("Testing v_coe") {
 /*   SUBCASE(" No Boids") { CHECK_THROWS(coe(b1, calc_c_m_b_i(flock, b1), 0.3)); }
  */}
 
-TEST_CASE("pacman") {
-  stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
+TEST_CASE("Testing pacman") {
+  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
 
   Boid b1{{-1., 2.}, {0., 0.}};
   Boid b2{{3., -5.}, {0., 0.}};
@@ -249,9 +249,9 @@ TEST_CASE("pacman") {
   Boid b5{{13., -2.}, {0., 0.}};
   Boid b6{{-3., 11.}, {0., 0.}};
   Boid b7{{6., 7.}, {0., 0.}};
-  Boid b8{{0., 10.},
-          {0., 0.}};  // In questo caso e in quello successivo i boids si
-                      // trovano sui bordi, ma la lorio posizione non varia.
+
+  // Boids b8 and b9 are located on the edges, but their position doesn't change
+  Boid b8{{0., 10.}, {0., 0.}};
   Boid b9{{10., 0.}, {0., 0.}};
 
   Vector_2d v1 = pacman(b1.pos, s);
@@ -284,7 +284,7 @@ TEST_CASE("pacman") {
   CHECK(v9.ycomp() == doctest::Approx(0.));
 }
 
-TEST_CASE("influence") {
+TEST_CASE("Testing influence") {
   std::vector<Boid> flock;
   Boid b1{{2., 2.}, {1., 1.}};
   Boid b2{{4., 3.}, {1., 1.}};
@@ -297,12 +297,14 @@ TEST_CASE("influence") {
   flock.push_back(b4);
 
   CHECK(influence(flock, b1, 3.5).size() == 3);
+  CHECK(influence(flock, b2, 4.).size() == 3);
   CHECK(influence(flock, b3, 0.1).size() == 1);
+  CHECK(influence(flock, b4, 0.1).size() == 1);
 }
 
 TEST_CASE("evolve test") {
   std::vector<Boid> flock;
-  stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
+  Stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
   double delta_t = 0.2;
   Predator p{{0., 0.}, {0., 0.}};
   Boid b1{{2., 2.}, {-1., -1.}};
@@ -357,7 +359,7 @@ TEST_CASE("evolve test") {
 }
 
 TEST_CASE("evolve predator") {
-  stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
+  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
   Predator p1{{3., 4.}, {-2., 5.}};
   Predator p2{{-3., 17.}, {0., 0.}};
   Predator p3{{13., 0.}, {5., 2.}};
