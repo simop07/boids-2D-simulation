@@ -430,11 +430,14 @@ TEST_CASE("Testing eat_boid") {
   flock.push_back(b4);
   flock.push_back(b5);
 
+  // Theoretically, four boids should have been eaten...
   eat_boid(flock, p, d_pred);
 
+  // ... but only three are, because of the conditions imposed; so flock size is
+  // two
   int n = flock.size();
 
-  // Three boids are eaten, so flock size is two. When executing tests, message
-  // "Predator isn't hungry anymore..." will be shown
+  // When executing tests, message "Predator isn't hungry anymore..." will be
+  // shown
   CHECK(n == 2);
 }

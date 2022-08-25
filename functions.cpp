@@ -16,7 +16,7 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   // This assert checks if there is less than one boid in flock (the case
   // n=1. is managed in evolve)
 
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
@@ -43,7 +43,7 @@ double mean_distance(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
    throw std::runtime_error{"Flock must contain at least 2 boid"};
  } */
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
@@ -77,7 +77,7 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
    throw std::runtime_error{"Flock must contain at least 2 boid"};
  } */
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
@@ -102,7 +102,7 @@ double mean_velocity(std::vector<Boid> const &flock) {
   /*  if (n <= 1.) {
      throw std::runtime_error{"Flock must contain at least 2 boid"};
    } */
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
                           [](double sum_v, Boid const &b_j) {
@@ -123,7 +123,7 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
                              [](double sum_v, Boid const &b_j) {
@@ -157,7 +157,7 @@ Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double const a) {
   /* if (n <= 1.) {
     throw std::runtime_error{"Flock must contain at least 2 boid"};
   } */
-  assert(flock.size() > 1);
+  assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(),
                 [&](Boid const &b_j) { sum_v += b_j.vel; });
