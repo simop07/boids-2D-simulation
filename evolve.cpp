@@ -69,7 +69,7 @@ void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_eat) {
   auto b_it = flock.begin();
 
   // This cycle check if a boid should be eliminated; in case of positive
-  // answer, the iterators b_i and flock.end() are continuously reassigned
+  // answer, the iterators b_it and flock.end() are continuously reassigned
   // respectively to the one returned by erase method and to the updated last
   // iterator of the flock.
   while (b_it != flock.end()) {
@@ -82,7 +82,7 @@ void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_eat) {
       ++b_it;
     }
   }
-  
+
   assert(n > 1);
 
   // This part checks if the predator gets close to a boid when the flock has
