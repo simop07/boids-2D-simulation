@@ -35,7 +35,9 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
 // with only one boid present
 double mean_distance(std::vector<Boid> const &flock) {
   double n = flock.size();
+  int i{};
   double sum_tot{};
+  double sum_par{};
 
   /* double sum_par{}; */
   /* if (n <= 1.) {
@@ -43,19 +45,22 @@ double mean_distance(std::vector<Boid> const &flock) {
  } */
   assert(flock.size() > 1);
 
-  for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
-    auto nx = std::next(pr);
+  std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
+    auto nx = std::next((flock.begin() + i));
     for (; nx != flock.end(); ++nx) {
-      sum_tot += distance(*pr, *nx);
+      sum_par += distance(b_i, *nx);
     }
-  }
+
+    sum_tot += sum_par;
+    sum_par = 0.;
+    ++i;
+  });
 
   // Number of distances equals the combinations of n boid, taken at groups of
   // two
   double c_n_2{(n * (n - 1.) / 2.)};
   double res = sum_tot / c_n_2;
   /* Vedi se devi togliere degli zeri */
-  sum_tot = 0.;
   /*   sum_par = 0.;
    */
   return res;
@@ -63,22 +68,27 @@ double mean_distance(std::vector<Boid> const &flock) {
 
 double std_dev_distance(std::vector<Boid> const &flock) {
   double n = flock.size();
-  double sum_tot{};
   double mean_d = mean_distance(flock);
+  int i{};
+  double sum_tot{};
+  double sum_d_i2{};
+
+  /* double sum_d_i2{}; */
   /* if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  } */
+   throw std::runtime_error{"Flock must contain at least 2 boid"};
+ } */
   assert(flock.size() > 1);
 
-  for (auto pr = flock.begin(); pr != flock.end(); ++pr) {
-    auto nx = std::next(pr);
-    double sum_d_i2{};
+  std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
+    auto nx = std::next((flock.begin() + i));
     for (; nx != flock.end(); ++nx) {
-      sum_d_i2 += ((distance(*pr, *nx)) * (distance(*pr, *nx)));
+      sum_d_i2 += ((distance(b_i, *nx)) * (distance(b_i, *nx)));
     }
+
     sum_tot += sum_d_i2;
-    sum_d_i2 = 0;
-  }
+    sum_d_i2 = 0.;
+    ++i;
+  });
 
   double c_n_2{(n * (n - 1.) / 2.)};
   double res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);

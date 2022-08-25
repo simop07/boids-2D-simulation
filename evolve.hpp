@@ -25,5 +25,6 @@ void evolve_flock(std::vector<Boid> &flock, double const delta_t,
 // Eat_boid checks if a boid is at a smaller distance than d_pred from the
 // predator; in that case, if the flock contains more than two boids, it erases
 // that specific boid that got to close to the predator
-void eat_boid(std::vector<Boid> &flock, Predator p, double const d_pred);
+void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_pred);
+
 #endif
