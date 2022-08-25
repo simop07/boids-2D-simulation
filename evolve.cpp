@@ -49,15 +49,18 @@ Predator evolve_predator(Predator &p, double delta_t, Stats const &s) {
 
 void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
                   Predator const &p) {
-  // A vector f_state is created to mantain the initial state of the flock from
-  // which every boid is evolved
+  // A vector f_state is created in order to mantain the initial state of the
+  // flock from which every boid is evolved
   std::vector<Boid> f_state;
-  int n = flock.size();
-  for (int i = 0; i < n; ++i) {
-    Boid b_i = flock[i];
-    f_state.push_back(
-        evolve_boid(influence(flock, b_i, s.d), b_i, delta_t, s, p));
-  }
+
+  // Request that f_state contains at least flock's elements
+  f_state.reserve(flock.size());
+
+  std::transform(
+      flock.begin(), flock.end(), std::back_inserter(f_state), [&](Boid &b_i) {
+        return evolve_boid(influence(flock, b_i, s.d), b_i, delta_t, s, p);
+      });
+
   flock = f_state;
   return;
 }
