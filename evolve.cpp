@@ -1,7 +1,7 @@
 #include "evolve.hpp"
 
-Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double const delta_t,
-                 Stats const &s, Predator const &p) {
+Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i,
+                 double const delta_t, Stats const &s, Predator const &p) {
   // Definition of useful objects
   Vector_2d v_sep;
   Vector_2d v_all;
@@ -47,8 +47,8 @@ Predator evolve_predator(Predator &p, double const delta_t, Stats const &s) {
   return res;
 }
 
-void evolve_flock(std::vector<Boid> &flock, double const delta_t, Stats const &s,
-                  Predator const &p) {
+void evolve_flock(std::vector<Boid> &flock, double const delta_t,
+                  Stats const &s, Predator const &p) {
   // A vector f_state is created in order to mantain the initial state of the
   // flock from which every boid is evolved
   std::vector<Boid> f_state;
