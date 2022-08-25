@@ -62,7 +62,6 @@ void evolve_flock(std::vector<Boid> &flock, double const delta_t,
   assert(flock.size() == f_state.size());
 
   flock = f_state;
-  return;
 }
 
 void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_eat) {
@@ -71,10 +70,11 @@ void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_eat) {
   int n = flock.size();
 
   // This cycle check if a boid should be eliminated; in case of positive
-  // answer, the iterator to the it element must be replaced by the current one
-  // (returned by the method erase) and the iterator to the last element must be
-  // reduced by one. By not doing that there would be pointers to element of the
-  // vector that doesn't exist anymore resulting in a segmentation fault error
+  // answer, the iterator to b_it element must be replaced by the current one
+  // (returned by the method erase) and the iterator b_l must be reassigned to
+  // the updated last iterator. By not reassigning, there would be pointers to
+  // element of the vector that doesn't exist anymore, resulting in segmentation
+  // fault errors
   while (b_i != b_l) {
     Boid b_it = *b_i;
     if (distance(b_it, p) < d_eat && n >= 3) {
@@ -85,13 +85,12 @@ void eat_boid(std::vector<Boid> &flock, Predator const &p, double const d_eat) {
       ++b_i;
     }
   }
-  
+
   // This part checks if the predator gets close to a boid when the flock has a
   // size smaller than 3
-  for (Boid b_i : flock) {
+  std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     if (distance(b_i, p) < d_eat && n < 3) {
       std::cout << "Predator isn't hungry anymore..." << '\n';
     }
-  }
-  return;
+  });
 }

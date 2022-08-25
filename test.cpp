@@ -422,7 +422,7 @@ TEST_CASE("Testing eat_boid") {
   Boid b3{{6., 9.}, {0., 2.}};
   Boid b4{{5., 6.}, {2., 3.}};
   Boid b5{{3., 7.}, {1., -3.}};
-  double d_pred = 2.4;
+  auto d_pred = 2.4;
 
   flock.push_back(b1);
   flock.push_back(b2);
@@ -434,6 +434,7 @@ TEST_CASE("Testing eat_boid") {
 
   int n = flock.size();
 
-  CHECK(n ==
-        2);  // tre boids vengono mangiati, quindi la dimensione del flock è 2.
+  // Three boids are eaten, so flock size is two. When executing tests, message
+  // "Predator isn't hungry anymore..." will be shown
+  CHECK(n == 2);
 }
