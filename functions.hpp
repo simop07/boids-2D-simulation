@@ -32,14 +32,14 @@ double mean_velocity(std::vector<Boid> const &flock);
 double std_dev_velocity(std::vector<Boid> const &flock);
 
 // Rule of separation
-Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
-              double d_s);
+Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double const s,
+              double const d_s);
 
 // Rule of allignment
-Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a);
+Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double const a);
 
 // Rule of cohesion
-Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double c);
+Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double const c);
 
 // This function takes care of the border of the simulation by teleporting every
 // boid or predator that exceedes a certain border (specified in the stats) to
@@ -50,6 +50,6 @@ Vector_2d pacman(Vector_2d &pos, Stats const &s);
 // boid b_i, smaller than the one needed to apply the 3 rules and returns a new
 // vector "range" containing only those boids
 std::vector<Boid> influence(std::vector<Boid> const &flock, Boid const &b_i,
-                            double d);
+                            double const d);
 
 #endif

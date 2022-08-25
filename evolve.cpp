@@ -1,6 +1,6 @@
 #include "evolve.hpp"
 
-Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double delta_t,
+Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double const delta_t,
                  Stats const &s, Predator const &p) {
   // Definition of useful objects
   Vector_2d v_sep;
@@ -41,13 +41,13 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i, double delta_t,
   return b_i;
 }
 
-Predator evolve_predator(Predator &p, double delta_t, Stats const &s) {
+Predator evolve_predator(Predator &p, double const delta_t, Stats const &s) {
   Predator res{{p.pos + p.vel * delta_t}, {p.vel}};
   res.pos = pacman(res.pos, s);
   return res;
 }
 
-void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
+void evolve_flock(std::vector<Boid> &flock, double const delta_t, Stats const &s,
                   Predator const &p) {
   // A vector f_state is created in order to mantain the initial state of the
   // flock from which every boid is evolved
@@ -57,7 +57,7 @@ void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
   f_state.reserve(flock.size());
 
   std::transform(
-      flock.begin(), flock.end(), std::back_inserter(f_state), [&](Boid &b_i) {
+      flock.begin(), flock.end(), std::back_inserter(f_state), [&](Boid b_i) {
         return evolve_boid(influence(flock, b_i, s.d), b_i, delta_t, s, p);
       });
 
@@ -65,7 +65,7 @@ void evolve_flock(std::vector<Boid> &flock, double delta_t, Stats const &s,
   return;
 }
 
-void eat_boid(std::vector<Boid> &flock, Predator p, double d_eat) {
+void eat_boid(std::vector<Boid> &flock, Predator p, double const d_eat) {
   auto b_i = flock.begin();
   auto b_l = flock.end();
   int n = flock.size();

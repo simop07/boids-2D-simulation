@@ -127,8 +127,8 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
   return res;
 }
 
-Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
-              double d_s) {
+Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double const s,
+              double const d_s) {
   Vector_2d sum_v;
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_j) {
@@ -139,7 +139,7 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double s,
   return -sum_v * s;
 }
 
-Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
+Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double const a) {
   Vector_2d sum_v;
   double n = flock.size();
   // This exception checks if there is less than one boid in flock (the case
@@ -156,7 +156,7 @@ Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double a) {
   return (mean_v - b_i.vel) * a;
 }
 
-Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double c) {
+Vector_2d coe(Boid const &b_i, Vector_2d const &c_m, double const c) {
   return (c_m - b_i.pos) * c;
 }
 
@@ -177,7 +177,7 @@ Vector_2d pacman(Vector_2d &pos, Stats const &s) {
 }
 
 std::vector<Boid> influence(std::vector<Boid> const &flock, Boid const &b_i,
-                            double d) {
+                            double const d) {
   std::vector<Boid> range;
   for (Boid const &b_j : flock) {
     if (distance(b_i, b_j) < d) {
