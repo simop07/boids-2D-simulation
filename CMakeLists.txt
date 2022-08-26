@@ -25,7 +25,7 @@ find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 add_executable(simulation main.cpp objects.hpp objects.cpp functions.hpp functions.cpp evolve.hpp evolve.cpp sfml sfml_objects.hpp sfml_objects.cpp sfml.hpp)
 # l'eseguibile dipende dalla libreria sfml-graphics e sue dipendenze
 target_link_libraries(simulation PRIVATE sfml-graphics)
-# l'output di simulation.t viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
+# l'output di simulation viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
 set_target_properties( simulation PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../ )
 
 # se il testing e' abilitato...
@@ -35,7 +35,7 @@ if(BUILD_TESTING)
     add_executable(simulation.t test.cpp objects.cpp functions.cpp evolve.cpp)
     target_link_libraries(simulation.t PRIVATE sfml-graphics)
 
-    # aggiungi l'eseguibile chain.t alla lista dei test, con nome chain.t
+    # aggiungi l'eseguibile simulation.t alla lista dei test, con nome simulation.t
     add_test(NAME simulation.t COMMAND simulation.t)
     # l'output di simulation.t viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
     set_target_properties( simulation.t PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../ )
