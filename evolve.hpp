@@ -2,6 +2,7 @@
 #define evolve_hpp
 
 #include "functions.hpp"
+#include <iostream>
 
 // Evolve_boid takes in input a vector of boids, a specific boid (not necessarly
 // of that vector), a double for the time of evolution, a struct Stats and a

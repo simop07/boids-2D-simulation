@@ -104,6 +104,26 @@ TEST_CASE("Testing c_m relative to b_i") {
 TEST_CASE("Testing mean distance and std_dev") {
   std::vector<Boid> flock;
 
+  SUBCASE("Two boids return NaN std_dev") {
+    std::vector<Boid> flock2;
+    Boid b1{{0., 0.}, {0., 0.}};
+    Boid b2{{3., 4.}, {0., 0.}};
+
+    flock2.push_back(b1);
+    flock2.push_back(b2);
+
+    CHECK(mean_distance(flock2) == doctest::Approx(5.));
+
+    // This CHECK determines if std_dev_distance is NaN ("Not a number").
+    // Theoretically, if flock size is equal to two, std_dev is "something / 0",
+    // so the real result is infinity. The fact that the result equals infinity
+    // is mathematically correct, but given that physically it makes no sense to
+    // calculate a std_dev with only one value (i.e. having infinity as a
+    // result), the choice has been to display "nan" in the graphic interface,
+    // and not "inf"
+    CHECK(std::isnan(std_dev_distance(flock2)));
+  }
+
   SUBCASE("Three boids") {
     Boid b1{{1., 1.}, {0., 0.}};
     Boid b2{{2., 3.}, {0., 0.}};
@@ -331,6 +351,8 @@ TEST_CASE("Testing evolve_boid") {
 
   evolve_boid(flock, b1, delta_t, s, p);
 
+  // b1's velocity is normalized, than there is the effect of v_sep, because of
+  // the interaction betwwn b1 and b4
   CHECK(b1.pos.xcomp() == doctest::Approx(12.));
   CHECK(b1.pos.ycomp() == doctest::Approx(7.));
   CHECK(b1.vel.xcomp() == doctest::Approx(-240.3));

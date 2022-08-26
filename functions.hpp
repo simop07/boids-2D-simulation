@@ -3,9 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <numeric>
-#include <stdexcept>
 #include <vector>
 
 #include "objects.hpp"

@@ -91,7 +91,12 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   });
 
   double c_n_2{(n * (n - 1.) / 2.)};
-  double res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
+  double res;
+  if (n != 2) {
+    res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
+  } else {
+    res = NAN;
+  }
   sum_tot = 0.;
   return res;
 }
