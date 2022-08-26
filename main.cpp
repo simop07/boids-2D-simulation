@@ -1,7 +1,7 @@
 #include "sfml.hpp"
 
 int main() {
-  std::vector<boid> flock;
+  std::vector<Boid> flock;
   int n;
   double s;
   double a;
@@ -25,17 +25,17 @@ int main() {
     throw std::runtime_error{"The chosen values must be real numbers!"};
   }
   std::cout << "The simulation is starting, press 'H' for help..." << '\n';
-  stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50.};
+  Stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50.};
 
   // Gaussian generator for the boids
   std::default_random_engine generator;
   std::normal_distribution<double> pos_d(st.u_b / 2., st.u_b * 2.);
   std::normal_distribution<double> vel_d(0., st.v_max / 2.);
 
-  predator p{{st.r_b / 4., st.u_b / 4.}, {0., 0.}};
+  Predator p{{st.r_b / 4., st.u_b / 4.}, {0., 0.}};
 
   for (int i = 0; i < n; ++i) {
-    boid b_i{{pos_d(generator), pos_d(generator)},
+    Boid b_i{{pos_d(generator), pos_d(generator)},
              {vel_d(generator), vel_d(generator)}};
     flock.push_back(b_i);
   }

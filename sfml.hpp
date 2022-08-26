@@ -6,7 +6,7 @@
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
 
-void run_simulation(std::vector<boid> flock, predator p, stats s) {
+void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;
@@ -43,7 +43,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   double std_dev_d = 0.;
   double std_dev_v = 0.;
 
-  data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
+  Data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
 
   result.setSize(18);
   result.setColor(sf::Color::Black);
@@ -58,7 +58,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Text text1;
   std::string str1{"Add boid"};
 
-  button b1(buttonPos1, buttonSize, rect1, text1, font);
+  Button b1(buttonPos1, buttonSize, rect1, text1, font);
 
   b1.setButtonColor(sf::Color::Yellow);
   b1.setTextColor(sf::Color::Black);
@@ -74,7 +74,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Text text2;
   std::string str2{"  Remove \n      boid"};
 
-  button b2(buttonPos2, buttonSize, rect2, text2, font);
+  Button b2(buttonPos2, buttonSize, rect2, text2, font);
 
   b2.setButtonColor(sf::Color::Yellow);
   b2.setTextColor(sf::Color::Black);
@@ -90,7 +90,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Text text3;
   std::string str3{"    Pause\n evolution"};
 
-  button b3(buttonPos3, buttonSize, rect3, text3, font);
+  Button b3(buttonPos3, buttonSize, rect3, text3, font);
 
   b3.setButtonColor(sf::Color::Yellow);
   b3.setTextColor(sf::Color::Black);
@@ -257,7 +257,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         case sf::Event::MouseButtonPressed:
           if (b1.hovering(
                   window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            boid b_n{{pos_d(generator), pos_d(generator)},
+            Boid b_n{{pos_d(generator), pos_d(generator)},
                      {vel_d(generator), vel_d(generator)}};
             flock.push_back(b_n);
           }

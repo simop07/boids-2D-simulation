@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(chain VERSION 0.1.0)
+project(boids VERSION 0.1.0)
 
 # abilita il supporto per i test, tra cui l'opzione BUILD_TESTING usata sotto
 include(CTest)
@@ -20,22 +20,22 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-
 # le dipendenze vengono identificate automaticamente
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
-# aggiungi l'eseguibile chain-sfml, da produrre a partire dai sorgenti indicati
+# aggiungi l'eseguibile simulation, da produrre a partire dai sorgenti indicati
 # notare l'assenza degli header file, che pero' possono essere indicati
 add_executable(simulation main.cpp objects.hpp objects.cpp functions.hpp functions.cpp evolve.hpp evolve.cpp sfml sfml_objects.hpp sfml_objects.cpp sfml.hpp)
 # l'eseguibile dipende dalla libreria sfml-graphics e sue dipendenze
 target_link_libraries(simulation PRIVATE sfml-graphics)
-# l'output di simulation.t viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
+# l'output di simulation viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
 set_target_properties( simulation PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../ )
 
 # se il testing e' abilitato...
 # per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
 if(BUILD_TESTING)
-    # aggiungi l'eseguibile chain.t, da produrre a partire dai sorgenti indicati
+    # aggiungi l'eseguibile simulation.t, da produrre a partire dai sorgenti indicati
     add_executable(simulation.t test.cpp objects.cpp functions.cpp evolve.cpp)
     target_link_libraries(simulation.t PRIVATE sfml-graphics)
 
-    # aggiungi l'eseguibile chain.t alla lista dei test, con nome chain.t
+    # aggiungi l'eseguibile simulation.t alla lista dei test, con nome simulation.t
     add_test(NAME simulation.t COMMAND simulation.t)
     # l'output di simulation.t viene cambiato togliendolo da build per metterlo nella directory da cui si fa partire il cmake
     set_target_properties( simulation.t PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../ )
