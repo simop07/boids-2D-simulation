@@ -334,14 +334,7 @@ TEST_CASE("Testing evolve_boid") {
   CHECK(b1.pos.xcomp() == doctest::Approx(12.));
   CHECK(b1.pos.ycomp() == doctest::Approx(7.));
   CHECK(b1.vel.xcomp() == doctest::Approx(-240.3));
-  CHECK(b1.vel.ycomp() == doctest::Approx(-241.5));
-
-  evolve_boid(flock, b2, delta_t, s, p);
-
-  CHECK(b1.pos.xcomp() == doctest::Approx(12.));
-  CHECK(b1.pos.ycomp() == doctest::Approx(7.));
-  CHECK(b1.vel.xcomp() == doctest::Approx(-241.5));
-  CHECK(b1.vel.ycomp() == doctest::Approx(-241.5));
+  CHECK(b1.vel.ycomp() == doctest::Approx(-240.6));
 }
 
 TEST_CASE("Testing evolve_flock") {
