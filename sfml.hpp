@@ -12,8 +12,10 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
-                          "Flock evolution");
+                          "Flock Boids Evolution");
 
+  // This method limits the number of frames displayed to the refresh rate of
+  // the monitor
   window.setVerticalSyncEnabled(true);
 
   auto const min_x{s.l_b};
@@ -72,7 +74,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
                           buttonPos1.y + b1.getBox().getGlobalBounds().height);
   sf::RectangleShape rect2;
   sf::Text text2;
-  std::string str2{"  Remove \n      boid"};
+  std::string str2{"  Remove \n  \tboid"};
 
   Button b2(buttonPos2, buttonSize, rect2, text2, font);
 
@@ -80,8 +82,8 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   b2.setTextColor(sf::Color::Black);
   b2.setTextContent(str2);
   b2.setTextSize(16);
-  b2.createButton();
   b2.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
+  b2.createButton();
 
   // Defining objects needed for the object button b3
   sf::Vector2f buttonPos3(
@@ -154,11 +156,11 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
             p.vel.setx(0.);
           }
           if (event.key.code == sf::Keyboard::Left) {
-            p.vel.setx(p.vel.norm() * (-1.));
+            p.vel.setx(-p.vel.norm());
             p.vel.sety(0.);
           }
           if (event.key.code == sf::Keyboard::Up) {
-            p.vel.sety(p.vel.norm() * (-1));
+            p.vel.sety(-p.vel.norm());
             p.vel.setx(0.);
           }
           if (event.key.code == sf::Keyboard::Right) {
@@ -174,10 +176,10 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
             }
           }
           if (event.key.code == sf::Keyboard::LShift) {
-            p.vel = p.vel * 0.5;
+            p.vel *= 0.5;
           }
           if (event.key.code == sf::Keyboard::LControl) {
-            p.vel = p.vel * 2.;
+            p.vel *= 2.;
           }
           if (event.key.code == sf::Keyboard::H) {
             std::cout
@@ -265,8 +267,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
                   window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
             if (flock.size() > 2) {
               flock.erase(flock.end() - 1);
-            }
-            if (flock.size() <= 2) {
+            } else {
               std::cout << "Cannot remove more boids" << '\n';
             }
           }
@@ -275,13 +276,12 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
             b3.buttonPressed();
             if (b3.buttonState()) {
               b3.setButtonColor(sf::Color(8, 123, 3, 255));
-            }
-            if (!b3.buttonState()) {
+            } else {
               b3.setButtonColor(sf::Color::Yellow);
             }
           }
           break;
-      };
+      }
     }
 
     // The window with the objects of the previous frame is cleared
