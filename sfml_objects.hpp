@@ -78,7 +78,7 @@ class Data {
 
   void createData();
 
-  sf::Text getData();
+  sf::Text getData() const;
 };
 
 #endif

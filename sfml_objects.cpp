@@ -84,4 +84,4 @@ void Data::createData() {
   m_text.setString(tot);
 }
 
-sf::Text Data::getData() { return m_text; }
+sf::Text Data::getData() const { return m_text; }
