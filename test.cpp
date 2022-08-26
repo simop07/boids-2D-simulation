@@ -314,6 +314,36 @@ TEST_CASE("Testing influence") {
   CHECK(influence(flock, b3, 0.1).size() == 1);
   CHECK(influence(flock, b4, 0.1).size() == 1);
 }
+
+TEST_CASE("Testing evolve_boid") {
+  std::vector<Boid> flock;
+  Stats s{4, 4, 4, 4, 4, 0., 10., 10., 0., 0., 10.};
+  Predator p{{1, 2}, {-1, 2}};
+  Boid b1{{2.5, -2.5}, {100., 100.}};
+  Boid b2{{3., -2.}, {0., -1.}};
+  Boid b3{{4., -6.}, {1., -1.}};
+  Boid b4{{12.2, 6.9}, {1., -1.}};
+  auto delta_t = 0.2;
+
+  flock.push_back(b2);
+  flock.push_back(b3);
+  flock.push_back(b4);
+
+  evolve_boid(flock, b1, delta_t, s, p);
+
+  CHECK(b1.pos.xcomp() == doctest::Approx(12.));
+  CHECK(b1.pos.ycomp() == doctest::Approx(7.));
+  CHECK(b1.vel.xcomp() == doctest::Approx(-240.3));
+  CHECK(b1.vel.ycomp() == doctest::Approx(-241.5));
+
+  evolve_boid(flock, b2, delta_t, s, p);
+
+  CHECK(b1.pos.xcomp() == doctest::Approx(12.));
+  CHECK(b1.pos.ycomp() == doctest::Approx(7.));
+  CHECK(b1.vel.xcomp() == doctest::Approx(-241.5));
+  CHECK(b1.vel.ycomp() == doctest::Approx(-241.5));
+}
+
 TEST_CASE("Testing evolve_flock") {
   std::vector<Boid> flock;
   Stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
