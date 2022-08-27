@@ -48,12 +48,7 @@ bool Button::hovering(sf::Vector2f const& mousePos) {
 bool Button::buttonState() const { return isOn; }
 
 bool Button::buttonPressed() {
-  if (isOn == true) {
-    isOn = false;
-  } else {
-    isOn = true;
-  }
-  return isOn;
+  return (isOn == true) ? (isOn = false) : (isOn = true);
 }
 
 // Data class
@@ -72,7 +67,7 @@ void Data::setNewData(double a, double b, double c, double d) {
 void Data::createData() {
   m_text.setPosition(m_pos);
   m_text.setFont(m_font);
-  std::string first{"Data \t\tMean\t\t\t Std. Dev. \nDistance:  "};
+  std::string first{"Data \t\tMean\t\t\t\tStd. Dev. \nDistance:  "};
   std::string Mean_d{std::to_string(m_mean_d)};
   std::string p_m{"  +/-  "};
   std::string std_devD{std::to_string(m_std_dev_d)};

@@ -14,6 +14,8 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Flock Boids Evolution");
 
+  window.setPosition({20, 50});
+
   // This method limits the number of frames displayed to the refresh rate of
   // the monitor
   window.setVerticalSyncEnabled(true);
@@ -38,7 +40,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   std::normal_distribution<double> vel_d(0., s.v_max);
 
   // Defining objects needed for the object data "result"
-  sf::Vector2f dataPos(display_width * 0.74, display_height * 0.02);
+  sf::Vector2f dataPos(display_width * 0.70, display_height * 0.02);
   sf::Text Tdata;
   double mean_d = 0.;
   double mean_v = 0.;
@@ -343,7 +345,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
 
     // Data gets updated every 2 seconds, this time the clock is not
     // restarded otherwise it would always get a time shorter than 2
-    // seconds(since a frame last less than 2 seconds)
+    // seconds (since a frame last less than 2 seconds)
     sf::Time el_time2 = clock2.getElapsedTime();
     int i_el_time2 = static_cast<int>(el_time2.asSeconds());
 
@@ -356,10 +358,10 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
 
     // Every boid inside flock gets assigned a boids sf::CircleShape that are
     // drawn at the same position of the boid
-    for (auto &b_i : flock) {
+    std::for_each(flock.begin(), flock.end(), [&](auto &b_i) {
       boids.setPosition(b_i.pos.xcomp() * scale_x, b_i.pos.ycomp() * scale_y);
       window.draw(boids);
-    }
+    });
 
     // Same as boids
     predator.setPosition(p.pos.xcomp() * scale_x, p.pos.ycomp() * scale_y);
