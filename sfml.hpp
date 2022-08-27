@@ -2,6 +2,7 @@
 #define sfml_hpp
 
 #include <random>
+#include <stdexcept>
 
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
