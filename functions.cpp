@@ -33,6 +33,8 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
 // The exceptions in the data functions are there to make sure that there are at
 // least two boids in the flock since it wouldn't make sense to calculate them
 // with only one boid present
+
+/* vedi sopra, modifica*/
 double mean_distance(std::vector<Boid> const &flock) {
   double n = flock.size();
   int i{};
