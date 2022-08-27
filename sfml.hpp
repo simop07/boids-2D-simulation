@@ -43,10 +43,10 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Defining objects needed for the object data "result"
   sf::Vector2f dataPos(display_width * 0.70, display_height * 0.02);
   sf::Text Tdata;
-  double mean_d = 0.;
-  double mean_v = 0.;
-  double std_dev_d = 0.;
-  double std_dev_v = 0.;
+  double mean_d{};
+  double mean_v{};
+  double std_dev_d{};
+  double std_dev_v{};
 
   Data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
 
@@ -136,7 +136,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   sf::Clock clock2;
 
   // Parameter used to change stats
-  int changing_stats = 0;
+  int changing_stats{};
 
   // Game loop
   while (window.isOpen()) {
