@@ -208,7 +208,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
                    "simulation\npress 'Pause evolution' to pause the "
                    "simulation\n\nSTATS:\n\npress 's/a/c' to select the stats "
                    "you want to change, then press 'Enter/Backspace' to "
-                   "increse/reduce it by 0.001\n";
+                   "increse/reduce it by 0.005\n";
           }
           if (event.key.code == sf::Keyboard::S) {
             changing_stats = 1;
@@ -221,24 +221,24 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
           }
           if (event.key.code == sf::Keyboard::Enter) {
             if (changing_stats == 1) {
-              s.s += 0.001;
+              s.s += 0.005;
             }
             if (changing_stats == 2) {
-              s.a += 0.001;
+              s.a += 0.005;
             }
             if (changing_stats == 3) {
-              s.c += 0.001;
+              s.c += 0.005;
             }
           }
           if (event.key.code == sf::Keyboard::Backspace) {
-            if (changing_stats == 1 && s.s > 0.001) {
-              s.s -= 0.001;
+            if (changing_stats == 1 && s.s > 0.005) {
+              s.s -= 0.005;
             }
-            if (changing_stats == 2 && s.a > 0.001) {
-              s.a -= 0.001;
+            if (changing_stats == 2 && s.a > 0.005) {
+              s.a -= 0.005;
             }
-            if (changing_stats == 3 && s.c > 0.001) {
-              s.c -= 0.001;
+            if (changing_stats == 3 && s.c > 0.005) {
+              s.c -= 0.005;
             }
           }
           break;
