@@ -15,6 +15,13 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Flock Boids Evolution");
 
+  // Declare and load a texture
+  sf::Texture texture;
+  texture.loadFromFile("clouds.png");
+  // Create a sprite
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+
   window.setPosition({20, 50});
 
   // This method limits the number of frames displayed to the refresh rate of
@@ -284,6 +291,9 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
 
     // The window with the objects of the previous frame is cleared
     window.clear(sf::Color(202, 227, 244, 255));
+
+    // The texture is drawn
+    window.draw(sprite);
 
     // The clock is restarded registering how much time has passed during a
     // frame, then converted to a double usable in the evolve functions
