@@ -80,7 +80,6 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   } else {
     res = NAN;
   }
-  sum_tot = 0.;
   return res;
 }
 
@@ -97,7 +96,6 @@ double mean_velocity(std::vector<Boid> const &flock) {
                           });
 
   double res = sum_v * (1. / n);
-  sum_v = 0.;
   return res;
 }
 
@@ -117,7 +115,6 @@ double std_dev_velocity(std::vector<Boid> const &flock) {
 
   sum_tot += sum_v_i2;
   double res = sqrt((sum_v_i2 / (n - 1.)) - mean_v * mean_v);
-  sum_v_i2 = 0.;
   return res;
 }
 
