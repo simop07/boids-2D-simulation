@@ -198,8 +198,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
           }
           if (event.key.code == sf::Keyboard::H) {
             std::cout
-                << '\n'
-                << "PREDATOR:\n\n'SpaceBar' to start/stop the "
+                << "\nPREDATOR:\n\n'SpaceBar' to start/stop the "
                    "predator\n'Lshift' to slow down the predator\n'LCtrl' to "
                    "increase the speed of the predator\n'Up/Down/Left/Right' "
                    "to change the predator's direction\n(the predator can only "
@@ -308,7 +307,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
     // Every frame the flock and predator are evolved by the time elapsed during
     // a frame (if 60 fps then 1/60 seconds) times 5, that means every second of
     // real time has passed, the simulation has evolved by 5 seconds. The
-    // relation between the parameters s and d_eat (d_eat = s * (1.5/0.07) are
+    // relation between the parameters s and d_eat (d_eat = s * (1.5 / 0.07) are
     // the result of a series of tests done during developement
     if (!b3.buttonState()) {
       evolve_flock(flock, d_el_time * 5., s, p);
