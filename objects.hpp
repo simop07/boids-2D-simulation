@@ -28,8 +28,8 @@ class Vector_2d {
   void sety(double y);
 };
 
-// Symmetric operators (e.g. operator+) are implemented in terms of member
-// operator (e.g. operator+=)
+// Symmetric operators operator@ are implemented in terms of member
+// operator@= (e.g. operator+ implemented in terms of operator+=)
 Vector_2d operator-(Vector_2d const& v);
 
 Vector_2d operator+(Vector_2d const& l, Vector_2d const& r);
