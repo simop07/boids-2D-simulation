@@ -15,17 +15,17 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
                           "Flock Boids Evolution");
 
-  // Declare and load a texture
-  sf::Texture texture;
-  texture.loadFromFile("clouds.png");
-  // Create a sprite
-  sf::Sprite sprite;
-  sprite.setTexture(texture);
-
   window.setPosition({20, 50});
 
-  // This method limits the number of frames displayed to the refresh rate of
-  // the monitor
+  // Declaring and loading a texture
+  sf::Texture texture;
+  texture.loadFromFile("clouds.png");
+  if (!texture.loadFromFile("clouds.png")) {
+    throw std::runtime_error{"Cannot load texture from file"};
+  }
+
+  // This method limits the number of frames displayed to the refresh rate
+  // of the monitor
   window.setVerticalSyncEnabled(true);
 
   auto const min_x{s.l_b};
@@ -34,6 +34,10 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   auto const max_y{s.u_b};
   auto const scale_x = display_width / (max_x - min_x);
   auto const scale_y = display_height / (max_y - min_y);
+
+  // Creating a sprite
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
 
   // Font loading
   sf::Font font;
