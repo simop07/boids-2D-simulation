@@ -135,10 +135,11 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   stats.setCharacterSize(18);
   stats.setFillColor(sf::Color::Black);
 
-  // Poligons representing the boids and the predator
+  // Poligons representing boids
   sf::CircleShape boids{3.0f, 6};
   boids.setFillColor(sf::Color(234, 72, 18, 255));
 
+  // Poligons representing predator
   sf::CircleShape predator{7.0, 4};
   predator.setFillColor(sf::Color::Black);
 
