@@ -6,7 +6,7 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i,
   Vector_2d v_sep;
   Vector_2d v_all;
   Vector_2d v_coe;
-  int n = flock.size();
+  int const n = flock.size();
 
   // If a boid got not even one boid in its range of influence, its velocity
   // remains unchanged, beacuse the 3 velocity v_sep, v_all, v_coe are

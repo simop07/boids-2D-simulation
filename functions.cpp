@@ -1,28 +1,25 @@
 #include "functions.hpp"
 
 double distance(Boid const &b1, Boid const &b2) {
-  auto pos_diff{b1.pos - b2.pos};
+  auto const pos_diff{b1.pos - b2.pos};
   return pos_diff.norm();
 };
 
 double distance(Boid const &b, Predator const &p) {
-  auto pos_diff{b.pos - p.pos};
+  auto const pos_diff{b.pos - p.pos};
   return pos_diff.norm();
 };
 
 Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
-  double n = flock.size();
+  double const n = flock.size();
 
-  // This assert checks if there is less than one boid in flock (the case
-  // n=1. is managed in evolve)
-
+  // Asserts check if there are at least two boids in the flock, since it
+  // wouldn't make sense to calculate following functions with only one boid
+  // present
   assert(n > 1);
 
-  /* if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  } */
   auto c_m_j = std::accumulate(flock.begin(), flock.end(), Vector_2d{},
-                               [&](Vector_2d c_m, Boid const &b_j) {
+                               [&](Vector_2d &c_m, Boid const &b_j) {
                                  c_m += (b_j.pos * (1 / (n - 1)));
                                  return c_m;
                                });
@@ -30,21 +27,12 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   return c_m_j - (b_i.pos * (1. / (n - 1.)));
 }
 
-// The exceptions in the data functions are there to make sure that there are at
-// least two boids in the flock since it wouldn't make sense to calculate them
-// with only one boid present
-
-/* vedi sopra, modifica*/
 double mean_distance(std::vector<Boid> const &flock) {
-  double n = flock.size();
+  double const n = flock.size();
   int i{};
   double sum_tot{};
   double sum_par{};
 
-  /* double sum_par{}; */
-  /* if (n <= 1.) {
-   throw std::runtime_error{"Flock must contain at least 2 boid"};
- } */
   assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
@@ -60,25 +48,18 @@ double mean_distance(std::vector<Boid> const &flock) {
 
   // Number of distances equals the combinations of n boid, taken at groups of
   // two
-  double c_n_2{(n * (n - 1.) / 2.)};
+  double const c_n_2{(n * (n - 1.) / 2.)};
   double res = sum_tot / c_n_2;
-  /* Vedi se devi togliere degli zeri */
-  /*   sum_par = 0.;
-   */
   return res;
 }
 
 double std_dev_distance(std::vector<Boid> const &flock) {
-  double n = flock.size();
-  double mean_d = mean_distance(flock);
+  double const n = flock.size();
+  double const mean_d = mean_distance(flock);
   int i{};
   double sum_tot{};
   double sum_d_i2{};
 
-  /* double sum_d_i2{}; */
-  /* if (n <= 1.) {
-   throw std::runtime_error{"Flock must contain at least 2 boid"};
- } */
   assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
@@ -92,7 +73,7 @@ double std_dev_distance(std::vector<Boid> const &flock) {
     ++i;
   });
 
-  double c_n_2{(n * (n - 1.) / 2.)};
+  double const c_n_2{(n * (n - 1.) / 2.)};
   double res;
   if (n != 2) {
     res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
@@ -104,11 +85,9 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 }
 
 double mean_velocity(std::vector<Boid> const &flock) {
-  double n = flock.size();
+  double const n = flock.size();
   double sum_v{};
-  /*  if (n <= 1.) {
-     throw std::runtime_error{"Flock must contain at least 2 boid"};
-   } */
+
   assert(n > 1);
 
   sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
@@ -123,13 +102,11 @@ double mean_velocity(std::vector<Boid> const &flock) {
 }
 
 double std_dev_velocity(std::vector<Boid> const &flock) {
-  double n = flock.size();
+  double const n = flock.size();
   double sum_v_i2{};
   double sum_tot{};
   double mean_v = mean_velocity(flock);
-  /* if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  } */
+
   assert(n > 1);
 
   sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
@@ -158,12 +135,8 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double const s,
 
 Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double const a) {
   Vector_2d sum_v;
-  double n = flock.size();
-  // This exception checks if there is less than one boid in flock (the case
-  // n=1. is managed in evolve)
-  /* if (n <= 1.) {
-    throw std::runtime_error{"Flock must contain at least 2 boid"};
-  } */
+  double const n = flock.size();
+
   assert(n > 1);
 
   std::for_each(flock.begin(), flock.end(),
