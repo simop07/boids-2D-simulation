@@ -172,7 +172,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
           }
           if (event.key.code == sf::Keyboard::Space) {
             if (p.vel.norm() == 0.) {
-              p.vel.setx(5.);
+              p.vel.setx(3.);
             } else {
               p.vel.setx(0.);
               p.vel.sety(0.);
@@ -196,7 +196,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
                    "simulation\npress 'Pause evolution' to pause the "
                    "simulation\n\nSTATS:\n\npress 's/a/c' to select the stats "
                    "you want to change, then press 'Enter/Backspace' to "
-                   "increse/reduce it by 0.05\n";
+                   "increse/reduce it by 0.001\n";
           }
           if (event.key.code == sf::Keyboard::S) {
             changing_stats = 1;
@@ -209,24 +209,24 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
           }
           if (event.key.code == sf::Keyboard::Enter) {
             if (changing_stats == 1) {
-              s.s += 0.05;
+              s.s += 0.001;
             }
             if (changing_stats == 2) {
-              s.a += 0.05;
+              s.a += 0.001;
             }
             if (changing_stats == 3) {
-              s.c += 0.05;
+              s.c += 0.001;
             }
           }
           if (event.key.code == sf::Keyboard::Backspace) {
-            if (changing_stats == 1 && s.s > 0.05) {
-              s.s -= 0.05;
+            if (changing_stats == 1 && s.s > 0.001) {
+              s.s -= 0.001;
             }
-            if (changing_stats == 2 && s.a > 0.05) {
-              s.a -= 0.05;
+            if (changing_stats == 2 && s.a > 0.001) {
+              s.a -= 0.001;
             }
-            if (changing_stats == 3 && s.c > 0.05) {
-              s.c -= 0.05;
+            if (changing_stats == 3 && s.c > 0.001) {
+              s.c -= 0.001;
             }
           }
           break;
@@ -293,13 +293,13 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
     // Every frame the flock and predator are evolved by the time elapsed during
     // a frame (if 60 fps then 1/60 seconds) times 5, that means every second of
     // real time has passed, the simulation has evolved by 5 seconds. The
-    // relation between the parameters s and d_eat (d_eat = s * (1.5/0.7) are
+    // relation between the parameters s and d_eat (d_eat = s * (1.5/0.07) are
     // the result of a series of tests done during developement
     if (!b3.buttonState()) {
       evolve_flock(flock, d_el_time * 5., s, p);
       p = evolve_predator(p, d_el_time * 5., s);
       if (static_cast<int>(generalClock.getElapsedTime().asSeconds()) > 2) {
-        eat_boid(flock, p, (s.s * (1.5 / 0.7)));
+        eat_boid(flock, p, (s.s * (1.5 / 0.07)));
         predator.setFillColor(sf::Color::Blue);
       }
     }

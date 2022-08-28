@@ -33,8 +33,8 @@ int main() {
 
   std::cout
       << "Please, insert parameters of separation, alignment and cohesion - "
-         "respectevly.\nSuggested values are s = 0.7, a = 0.02, c = 0.01 (they "
-         "must be positive real numbers,\nand can be changed during the "
+         "respectevly.\nSuggested values are s = 0.07, a = 0.06, c = 0.015 "
+         "(they must be positive real numbers,\nand can be changed during the "
          "simulation):\n";
 
   // Input control: parameter s
@@ -82,11 +82,12 @@ int main() {
   // Progam is terminated if parameters are negative (otherwise it would be
   // senseless to refer to flight rules when building the simulation)
   if (std::cin.fail() || s < 0 || a < 0 || c < 0) {
-    throw std::runtime_error{"The parameters must be positive real numbers!"};
+    throw std::runtime_error{
+        "The parameters must be non-negative real numbers!"};
   }
 
   std::cout << "\nThe simulation is starting, press \"H\" for help...\n\n";
-  Stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50., 0.};
+  Stats st{1., 20., s, a, c, 0., 100., 100., 0., 12.5, 5., 0.5};
 
   // Gaussian generator for boids
   std::default_random_engine generator;
