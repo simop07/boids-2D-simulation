@@ -237,15 +237,7 @@ TEST_CASE("Testing v_all") {
     CHECK(all(flock, b2, 0.3).xcomp() == doctest::Approx(-1.));
     CHECK(all(flock, b2, 0.3).ycomp() == doctest::Approx(-0.1));
   }
-
-  /* SUBCASE("Not enough boids") {
-    flock.push_back(b1);
-
-    CHECK_THROWS(all(flock, b1, 3));
-  } */
-
-/*   SUBCASE("No boids") { CHECK_THROWS(all(flock, b1, 3)); }
- */}
+}
 
 TEST_CASE("Testing v_coe") {
   std::vector<Boid> flock;
@@ -263,14 +255,7 @@ TEST_CASE("Testing v_coe") {
   CHECK(coe(b1, calc_c_m_b_i(flock, b1), 0.3).ycomp() == doctest::Approx(0.4));
   CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).xcomp() == doctest::Approx(-0.2));
   CHECK(coe(b2, calc_c_m_b_i(flock, b2), 0.3).ycomp() == doctest::Approx(0.));
-
-  /* SUBCASE(" Not enough boids") {
-    flock.push_back(b1);
-    CHECK_THROWS(coe(b1, calc_c_m_b_i(flock, b1), 0.3));
-  } */
-
-/*   SUBCASE(" No Boids") { CHECK_THROWS(coe(b1, calc_c_m_b_i(flock, b1), 0.3)); }
- */}
+}
 
 TEST_CASE("Testing pacman") {
   Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
