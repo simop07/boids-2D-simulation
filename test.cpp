@@ -258,7 +258,7 @@ TEST_CASE("Testing v_coe") {
 }
 
 TEST_CASE("Testing pacman") {
-  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
+  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000., 0.};
 
   Boid b1{{-1., 2.}, {0., 0.}};
   Boid b2{{3., -5.}, {0., 0.}};
@@ -322,7 +322,7 @@ TEST_CASE("Testing influence") {
 
 TEST_CASE("Testing evolve_boid") {
   std::vector<Boid> flock;
-  Stats s{4, 4, 4, 4, 4, 0., 10., 10., 0., 0., 10.};
+  Stats s{4, 4, 4, 4, 4, 0., 10., 10., 0., 0., 10., 3.};
   Predator p{{1, 2}, {-1, 2}};
   Boid b1{{2.5, -2.5}, {100., 100.}};
   Boid b2{{3., -2.}, {0., -1.}};
@@ -346,7 +346,7 @@ TEST_CASE("Testing evolve_boid") {
 
 TEST_CASE("Testing evolve_flock") {
   std::vector<Boid> flock;
-  Stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000.};
+  Stats s{1.5, 3.5, 0.5, 0.4, 0.4, 0., 10., 10., 0., 0., 1000., 5.};
   auto delta_t = 0.2;
   Predator p{{0., 0.}, {0., 0.}};
 
@@ -387,38 +387,38 @@ TEST_CASE("Testing evolve_flock") {
     CHECK(flock[2].pos.ycomp() == doctest::Approx(4.8));
     CHECK(flock[3].pos.xcomp() == doctest::Approx(7.2));
     CHECK(flock[3].pos.ycomp() == doctest::Approx(7.2));
-    CHECK(flock[0].vel.xcomp() == doctest::Approx(-0.7));
+    CHECK(flock[0].vel.xcomp() == doctest::Approx(-1.4));
     CHECK(flock[0].vel.ycomp() == doctest::Approx(0.));
-    CHECK(flock[1].vel.xcomp() == doctest::Approx(0.1));
-    CHECK(flock[1].vel.ycomp() == doctest::Approx(0.8));
-    CHECK(flock[2].vel.xcomp() == doctest::Approx(0.6));
-    CHECK(flock[2].vel.ycomp() == doctest::Approx(-1.8));
+    CHECK(flock[1].vel.xcomp() == doctest::Approx(0.2));
+    CHECK(flock[1].vel.ycomp() == doctest::Approx(1.6));
+    CHECK(flock[2].vel.xcomp() == doctest::Approx(1.2));
+    CHECK(flock[2].vel.ycomp() == doctest::Approx(-3.6));
     CHECK(flock[3].vel.xcomp() == doctest::Approx(-4.));
     CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
 
     evolve_flock(flock, delta_t, s, p);
 
-    CHECK(flock[0].pos.xcomp() == doctest::Approx(1.66));
+    CHECK(flock[0].pos.xcomp() == doctest::Approx(1.52));
     CHECK(flock[0].pos.ycomp() == doctest::Approx(1.8));
-    CHECK(flock[1].pos.xcomp() == doctest::Approx(3.02));
-    CHECK(flock[1].pos.ycomp() == doctest::Approx(2.36));
-    CHECK(flock[2].pos.xcomp() == doctest::Approx(2.32));
-    CHECK(flock[2].pos.ycomp() == doctest::Approx(4.44));
+    CHECK(flock[1].pos.xcomp() == doctest::Approx(3.04));
+    CHECK(flock[1].pos.ycomp() == doctest::Approx(2.52));
+    CHECK(flock[2].pos.xcomp() == doctest::Approx(2.44));
+    CHECK(flock[2].pos.ycomp() == doctest::Approx(4.08));
     CHECK(flock[3].pos.xcomp() == doctest::Approx(6.4));
     CHECK(flock[3].pos.ycomp() == doctest::Approx(6.4));
-    CHECK(flock[0].vel.xcomp() == doctest::Approx(-0.56));
-    CHECK(flock[0].vel.ycomp() == doctest::Approx(0.28));
-    CHECK(flock[1].vel.xcomp() == doctest::Approx(0.24));
-    CHECK(flock[1].vel.ycomp() == doctest::Approx(0.76));
-    CHECK(flock[2].vel.xcomp() == doctest::Approx(0.32));
-    CHECK(flock[2].vel.ycomp() == doctest::Approx(-2.04));
+    CHECK(flock[0].vel.xcomp() == doctest::Approx(-1.68));
+    CHECK(flock[0].vel.ycomp() == doctest::Approx(0.16));
+    CHECK(flock[1].vel.xcomp() == doctest::Approx(0.56));
+    CHECK(flock[1].vel.ycomp() == doctest::Approx(1.76));
+    CHECK(flock[2].vel.xcomp() == doctest::Approx(1.12));
+    CHECK(flock[2].vel.ycomp() == doctest::Approx(-5.92));
     CHECK(flock[3].vel.xcomp() == doctest::Approx(-4.));
     CHECK(flock[3].vel.ycomp() == doctest::Approx(-4.));
   }
 }
 
 TEST_CASE("Testing evolve_predator") {
-  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000.};
+  Stats s{0., 0., 0., 0., 0., 0., 10., 10., 0., 0., 1000., 5.};
   Predator p1{{3., 4.}, {-2., 5.}};
   Predator p2{{-3., 17.}, {0., 0.}};
   Predator p3{{13., 0.}, {5., 2.}};

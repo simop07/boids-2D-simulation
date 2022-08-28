@@ -188,20 +188,15 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
             std::cout
                 << '\n'
                 << "PREDATOR:\n\n'SpaceBar' to start/stop the "
-                   "predator\n'Lshift' to slow down the predator\n'LCtrl' "
-                   "to increase the speed of the "
-                   "predator\n'Up/Down/Left/Right' "
-                   "to change the predator's "
-                   "direction\n(the predator can only eat after its color "
-                   "turns "
-                   "blue)\n\nBUTTONS:\n\npress 'Add/Remove boid' to "
-                   "generate "
-                   "or "
-                   "remove a boid from the simulation\npress 'Pause evolution' "
-                   "to pause the simulation\n\nSTATS:\n\npress 's/a/c' to "
-                   "select the stats you want to change, then press "
-                   "'Enter/Backspace' to increse/reduce it by 0.05"
-                << '\n';
+                   "predator\n'Lshift' to slow down the predator\n'LCtrl' to "
+                   "increase the speed of the predator\n'Up/Down/Left/Right' "
+                   "to change the predator's direction\n(the predator can only "
+                   "eat after its color turns blue)\n\nBUTTONS:\n\npress "
+                   "'Add/Remove boid' to generate or remove a boid from the "
+                   "simulation\npress 'Pause evolution' to pause the "
+                   "simulation\n\nSTATS:\n\npress 's/a/c' to select the stats "
+                   "you want to change, then press 'Enter/Backspace' to "
+                   "increse/reduce it by 0.05\n";
           }
           if (event.key.code == sf::Keyboard::S) {
             changing_stats = 1;

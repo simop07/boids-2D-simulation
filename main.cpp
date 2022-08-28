@@ -86,7 +86,7 @@ int main() {
   }
 
   std::cout << "\nThe simulation is starting, press \"H\" for help...\n\n";
-  Stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50.};
+  Stats st{1., 10., s, a, c, 0., 100., 100., 0., 5., 50., 0.};
 
   // Gaussian generator for boids
   std::default_random_engine generator;

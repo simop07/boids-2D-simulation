@@ -62,7 +62,7 @@ struct Stats {
   double d_s{};     // Distance at which sep gets activated
   double d{};       // Distance of influence between boids
   double s{};       // Separation parameter
-  double a{};       // Allignment parameter
+  double a{};       // Alignment parameter
   double c{};       // Cohesion parameter
   double l_b{};     // Left bound
   double r_b{};     // Right bound
@@ -70,6 +70,7 @@ struct Stats {
   double b_b{};     // Bottom bound
   double d_pred{};  // Distance at which the effect of the predator is activated
   double v_max{};   // Maximum velocity of the boids
+  double v_min{};   // Minimum velocity of the boids
 };
 
 #endif

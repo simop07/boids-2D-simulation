@@ -29,6 +29,14 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i,
     b_i.vel.sety(b_i.vel.ycomp() * 0.5);
   }
 
+  // If the boid subceed the minimum velocity, the component of its current
+  // velocity get rescaled so that the norm gets upper the one imposed by v_min
+  // - obviously boid's direction remains unchanged
+  if (b_i.vel.norm() < s.v_min) {
+    b_i.vel.setx(b_i.vel.xcomp() * 2.);
+    b_i.vel.sety(b_i.vel.ycomp() * 2.);
+  }
+
   // If the boid is closer to the predator than the parameter d_pred, a velocity
   // "v_sep" is added to its current velocity to get it away from the predator
   if (distance(b_i, p) < s.d_pred) {
