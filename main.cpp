@@ -16,7 +16,7 @@ int main() {
     std::cin.clear();
     std::string input;
     std::getline(std::cin, input);
-    std::cerr << "Input \"" << input << "\" is not valid.\n";
+    std::cerr << "Input \"" << input << "\" is invalid.\n";
 
     // Ctrl+D control
     if (std::cin.eof()) {
@@ -42,7 +42,7 @@ int main() {
     std::cin.clear();
     std::string input;
     std::getline(std::cin, input);
-    std::cerr << "Input \"" << input << "\" is not valid.\n";
+    std::cerr << "Input \"" << input << "\" is invalid.\n";
 
     // Ctrl+D control
     if (std::cin.eof()) {
@@ -56,7 +56,7 @@ int main() {
     std::cin.clear();
     std::string input;
     std::getline(std::cin, input);
-    std::cerr << "Input \"" << input << "\" is not valid.\n";
+    std::cerr << "Input \"" << input << "\" is invalid.\n";
 
     // Ctrl+D control
     if (std::cin.eof()) {
@@ -70,7 +70,7 @@ int main() {
     std::cin.clear();
     std::string input;
     std::getline(std::cin, input);
-    std::cerr << "Input \"" << input << "\" is not valid.\n";
+    std::cerr << "Input \"" << input << "\" is invalid.\n";
 
     // Ctrl+D control
     if (std::cin.eof()) {
