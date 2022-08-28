@@ -38,6 +38,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Creating a sprite
   sf::Sprite sprite;
   sprite.setTexture(texture);
+  sprite.setScale(1.2f, 1.2f);
 
   // Font loading
   sf::Font font;
