@@ -80,7 +80,8 @@ int main() {
   }
 
   // Progam is terminated if parameters are negative (otherwise it would be
-  // senseless to refer to flight rules when building the simulation)
+  // senseless to refer to flight rules when building the simulation) or if cin
+  // has failed
   if (std::cin.fail() || s < 0 || a < 0 || c < 0) {
     throw std::runtime_error{
         "The parameters must be non-negative real numbers!"};
