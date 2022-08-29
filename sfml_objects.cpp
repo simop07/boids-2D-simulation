@@ -48,12 +48,7 @@ bool Button::hovering(sf::Vector2f const& mousePos) {
 bool Button::buttonState() const { return isOn; }
 
 bool Button::buttonPressed() {
-  if (isOn == true) {
-    isOn = false;
-  } else {
-    isOn = true;
-  }
-  return isOn;
+  return (isOn == true) ? (isOn = false) : (isOn = true);
 }
 
 // Data class

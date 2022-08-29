@@ -6,7 +6,7 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i,
   Vector_2d v_sep;
   Vector_2d v_all;
   Vector_2d v_coe;
-  int n = flock.size();
+  int const n = flock.size();
 
   // If a boid got not even one boid in its range of influence, its velocity
   // remains unchanged, beacuse the 3 velocity v_sep, v_all, v_coe are
@@ -27,6 +27,14 @@ Boid evolve_boid(std::vector<Boid> const &flock, Boid &b_i,
   if (b_i.vel.norm() > s.v_max) {
     b_i.vel.setx(b_i.vel.xcomp() * 0.5);
     b_i.vel.sety(b_i.vel.ycomp() * 0.5);
+  }
+
+  // If the boid subceed the minimum velocity, the component of its current
+  // velocity get rescaled so that the norm gets upper the one imposed by v_min
+  // - obviously boid's direction remains unchanged
+  if (b_i.vel.norm() < s.v_min) {
+    b_i.vel.setx(b_i.vel.xcomp() * 2.);
+    b_i.vel.sety(b_i.vel.ycomp() * 2.);
   }
 
   // If the boid is closer to the predator than the parameter d_pred, a velocity

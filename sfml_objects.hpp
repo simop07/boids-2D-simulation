@@ -9,7 +9,7 @@
 // well as a bool to check wether the button is pressed or not. The numerous
 // methods allow a simple management of the visualitazion of the button itself
 // and to get back the necessary information to draw it. The method
-// createButton() is used to assign every parametre to the right sfml object in
+// createButton() is used to assign every parameter to the right sfml object in
 // order to create a drawable object
 class Button {
   sf::Vector2f m_pos;
