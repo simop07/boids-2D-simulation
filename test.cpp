@@ -116,10 +116,10 @@ TEST_CASE("Testing mean distance and std_dev") {
 
     // This CHECK determines if std_dev_distance is NaN ("Not a number").
     // Theoretically, if flock size is equal to two, std_dev is "something / 0",
-    // so the real result is infinity. The fact that the result equals infinity
-    // is mathematically correct, but given that physically it makes no sense to
-    // calculate a std_dev with only one value (i.e. having infinity as a
-    // result), the choice has been to display "nan" in the graphic interface,
+    // so the real result "is" infinity. The fact that the result equals
+    // infinity is mathematically correct, but given that physically it makes no
+    // sense to calculate a std_dev with only one value (i.e. having infinity as
+    // a result), the choice has been to display "nan" in the graphic interface,
     // and not "inf"
     CHECK(std::isnan(std_dev_distance(flock2)));
   }
