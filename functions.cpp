@@ -14,7 +14,7 @@ Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   double const n = flock.size();
 
   // Asserts check if there are at least two boids in the flock, since it
-  // wouldn't make sense to calculate following functions with only one boid
+  // wouldn't make sense to calculate the following functions with only one boid
   // present
   assert(n > 1);
 
