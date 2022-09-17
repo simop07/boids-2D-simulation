@@ -1,34 +1,25 @@
 #include "sfml_objects.hpp"
 
-// Class button
+// Button class
 
-void button::setButtonColor(sf::Color color) {
+void Button::setButtonColor(sf::Color const& color) {
   m_rect.setFillColor(color);
-  return;
 }
 
-void button::setButtonOutline(sf::Color color, float thickness) {
+void Button::setButtonOutline(sf::Color const& color, float thickness) {
   m_rect.setOutlineColor(color);
   m_rect.setOutlineThickness(thickness);
-  return;
 }
 
-void button::setTextColor(sf::Color color) {
+void Button::setTextColor(sf::Color const& color) {
   m_text.setFillColor(color);
-  return;
 }
 
-void button::setTextContent(std::string s) {
-  m_text.setString(s);
-  return;
-}
+void Button::setTextContent(std::string const& s) { m_text.setString(s); }
 
-void button::setTextSize(int size) {
-  m_text.setCharacterSize(size);
-  return;
-}
+void Button::setTextSize(int size) { m_text.setCharacterSize(size); }
 
-void button::createButton() {
+void Button::createButton() {
   m_rect.setOrigin(
       m_rect.getGlobalBounds().left + m_rect.getGlobalBounds().width / 2.f,
       m_rect.getGlobalBounds().top + m_rect.getGlobalBounds().height / 2.f);
@@ -39,16 +30,14 @@ void button::createButton() {
       m_text.getGlobalBounds().top + m_text.getGlobalBounds().height / 2.f);
   m_text.setPosition(m_pos);
   m_text.setFont(m_font);
-  return;
 }
 
-sf::RectangleShape button::getBox() { return m_rect; }
+sf::RectangleShape Button::getBox() const { return m_rect; }
 
-sf::Text button::getText() { return m_text; }
+sf::Text Button::getText() const { return m_text; }
 
-bool button::hovering(sf::Vector2f mousePos) {
-  sf::Vector2f mousePosF{static_cast<float>(mousePos.x),
-                         static_cast<float>(mousePos.y)};
+bool Button::hovering(sf::Vector2f const& mousePos) {
+  sf::Vector2f mousePosF{(mousePos.x), (mousePos.y)};
   if (m_rect.getGlobalBounds().contains(mousePosF)) {
     return true;
   } else {
@@ -56,41 +45,29 @@ bool button::hovering(sf::Vector2f mousePos) {
   }
 }
 
-bool button::buttonState() { return isOn; }
+bool Button::buttonState() const { return isOn; }
 
-bool button::buttonPressed() {
-  if (isOn == true) {
-    isOn = false;
-  } else {
-    isOn = true;
-  }
-  return isOn;
+bool Button::buttonPressed() {
+  return (isOn == true) ? (isOn = false) : (isOn = true);
 }
 
-// Class data
+// Data class
 
-void data::setSize(int size) {
-  m_text.setCharacterSize(size);
-  return;
-}
+void Data::setSize(int size) { m_text.setCharacterSize(size); }
 
-void data::setColor(sf::Color color) {
-  m_text.setFillColor(color);
-  return;
-}
+void Data::setColor(sf::Color const& color) { m_text.setFillColor(color); }
 
-void data::setNewData(double a, double b, double c, double d) {
+void Data::setNewData(double a, double b, double c, double d) {
   m_mean_d = a;
   m_std_dev_d = b;
   m_mean_v = c;
   m_std_dev_v = d;
-  return;
 }
 
-void data::createData() {
+void Data::createData() {
   m_text.setPosition(m_pos);
   m_text.setFont(m_font);
-  std::string first{"Data         Mean              Std. Dev. \nDistance:  "};
+  std::string first{"Data \t\tMean\t\t\t\tStd. Dev. \nDistance:  "};
   std::string Mean_d{std::to_string(m_mean_d)};
   std::string p_m{"  +/-  "};
   std::string std_devD{std::to_string(m_std_dev_d)};
@@ -100,7 +77,6 @@ void data::createData() {
   std::string tot =
       first + Mean_d + p_m + std_devD + second + Mean_v + p_m + std_devV;
   m_text.setString(tot);
-  return;
 }
 
-sf::Text data::getData() { return m_text; }
+sf::Text Data::getData() const { return m_text; }

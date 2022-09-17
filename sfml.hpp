@@ -2,18 +2,33 @@
 #define sfml_hpp
 
 #include <random>
+#include <stdexcept>
 
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
 
-void run_simulation(std::vector<boid> flock, predator p, stats s) {
+// Enumeration used to change stats
+enum class Parameter { Sep, Coe, All };
+
+void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
   unsigned const display_height = .8 * sf::VideoMode::getDesktopMode().height;
 
   sf::RenderWindow window(sf::VideoMode(display_width, display_height),
-                          "Flock evolution");
+                          "Flock Boids Evolution");
 
+  window.setPosition({20, 50});
+
+  // Declaring and loading a texture
+  sf::Texture texture;
+  texture.loadFromFile("clouds.png");
+  if (!texture.loadFromFile("clouds.png")) {
+    throw std::runtime_error{"Cannot load texture from file"};
+  }
+
+  // This method limits the number of frames displayed to the refresh rate
+  // of the monitor
   window.setVerticalSyncEnabled(true);
 
   auto const min_x{s.l_b};
@@ -22,6 +37,11 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   auto const max_y{s.u_b};
   auto const scale_x = display_width / (max_x - min_x);
   auto const scale_y = display_height / (max_y - min_y);
+
+  // Creating a sprite
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+  sprite.setScale(1.2f, 1.2f);
 
   // Font loading
   sf::Font font;
@@ -36,14 +56,14 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   std::normal_distribution<double> vel_d(0., s.v_max);
 
   // Defining objects needed for the object data "result"
-  sf::Vector2f dataPos(display_width * 0.74, display_height * 0.02);
+  sf::Vector2f dataPos(display_width * 0.70, display_height * 0.02);
   sf::Text Tdata;
-  double mean_d = 0.;
-  double mean_v = 0.;
-  double std_dev_d = 0.;
-  double std_dev_v = 0.;
+  double mean_d{};
+  double mean_v{};
+  double std_dev_d{};
+  double std_dev_v{};
 
-  data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
+  Data result(mean_d, mean_v, std_dev_d, std_dev_v, dataPos, font, Tdata);
 
   result.setSize(18);
   result.setColor(sf::Color::Black);
@@ -58,7 +78,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Text text1;
   std::string str1{"Add boid"};
 
-  button b1(buttonPos1, buttonSize, rect1, text1, font);
+  Button b1(buttonPos1, buttonSize, rect1, text1, font);
 
   b1.setButtonColor(sf::Color::Yellow);
   b1.setTextColor(sf::Color::Black);
@@ -72,16 +92,16 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
                           buttonPos1.y + b1.getBox().getGlobalBounds().height);
   sf::RectangleShape rect2;
   sf::Text text2;
-  std::string str2{"  Remove \n      boid"};
+  std::string str2{"  Remove \n  \tboid"};
 
-  button b2(buttonPos2, buttonSize, rect2, text2, font);
+  Button b2(buttonPos2, buttonSize, rect2, text2, font);
 
   b2.setButtonColor(sf::Color::Yellow);
   b2.setTextColor(sf::Color::Black);
   b2.setTextContent(str2);
   b2.setTextSize(16);
-  b2.createButton();
   b2.setButtonOutline(sf::Color(8, 123, 3, 255), 2.f);
+  b2.createButton();
 
   // Defining objects needed for the object button b3
   sf::Vector2f buttonPos3(
@@ -90,7 +110,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Text text3;
   std::string str3{"    Pause\n evolution"};
 
-  button b3(buttonPos3, buttonSize, rect3, text3, font);
+  Button b3(buttonPos3, buttonSize, rect3, text3, font);
 
   b3.setButtonColor(sf::Color::Yellow);
   b3.setTextColor(sf::Color::Black);
@@ -118,10 +138,11 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   stats.setCharacterSize(18);
   stats.setFillColor(sf::Color::Black);
 
-  // Poligons representing the boids and the predator
+  // Poligons representing boids
   sf::CircleShape boids{3.0f, 6};
   boids.setFillColor(sf::Color(234, 72, 18, 255));
 
+  // Poligons representing predator
   sf::CircleShape predator{7.0, 4};
   predator.setFillColor(sf::Color::Black);
 
@@ -130,8 +151,8 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
   sf::Clock clock;
   sf::Clock clock2;
 
-  // Parameter used to change stats
-  int changing_stats = 0;
+  // Enum object used to change parameters
+  Parameter par;
 
   // Game loop
   while (window.isOpen()) {
@@ -154,11 +175,11 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
             p.vel.setx(0.);
           }
           if (event.key.code == sf::Keyboard::Left) {
-            p.vel.setx(p.vel.norm() * (-1.));
+            p.vel.setx(-p.vel.norm());
             p.vel.sety(0.);
           }
           if (event.key.code == sf::Keyboard::Up) {
-            p.vel.sety(p.vel.norm() * (-1));
+            p.vel.sety(-p.vel.norm());
             p.vel.setx(0.);
           }
           if (event.key.code == sf::Keyboard::Right) {
@@ -167,66 +188,60 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
           }
           if (event.key.code == sf::Keyboard::Space) {
             if (p.vel.norm() == 0.) {
-              p.vel.setx(5.);
+              p.vel.setx(3.);
             } else {
               p.vel.setx(0.);
               p.vel.sety(0.);
             }
           }
           if (event.key.code == sf::Keyboard::LShift) {
-            p.vel = p.vel * 0.5;
+            p.vel *= 0.5;
           }
           if (event.key.code == sf::Keyboard::LControl) {
-            p.vel = p.vel * 2.;
+            p.vel *= 2.;
           }
           if (event.key.code == sf::Keyboard::H) {
             std::cout
-                << '\n'
-                << "PREDATOR:\n\n'SpaceBar' to start/stop the "
-                   "predator\n'Lshift' to slow down the predator\n'LCtrl' "
-                   "to increase the speed of the "
-                   "predator\n'Up/Down/Left/Right' "
-                   "to change the predator's "
-                   "direction\n(the predator can only eat after its color "
-                   "turns "
-                   "blue)\n\nBUTTONS:\n\npress 'Add/Remove boid' to "
-                   "generate "
-                   "or "
-                   "remove a boid from the simulation\npress 'Pause evolution' "
-                   "to pause the simulation\n\nSTATS:\n\npress 's/a/c' to "
-                   "select the stats you want to change, then press "
-                   "'Enter/Backspace' to increse/reduce it by 0.05"
-                << '\n';
+                << "\nPREDATOR:\n\n'SpaceBar' to start/stop the "
+                   "predator\n'Lshift' to slow down the predator\n'LCtrl' to "
+                   "increase the speed of the predator\n'Up/Down/Left/Right' "
+                   "to change the predator's direction\n(the predator can only "
+                   "eat after its color turns blue)\n\nBUTTONS:\n\npress "
+                   "'Add/Remove boid' to generate or remove a boid from the "
+                   "simulation\npress 'Pause evolution' to pause the "
+                   "simulation\n\nSTATS:\n\npress 's/a/c' to select the stats "
+                   "you want to change, then press 'Enter/Backspace' to "
+                   "increse/reduce it by 0.005\n";
           }
           if (event.key.code == sf::Keyboard::S) {
-            changing_stats = 1;
+            par = Parameter::Sep;
           }
           if (event.key.code == sf::Keyboard::A) {
-            changing_stats = 2;
+            par = Parameter::All;
           }
           if (event.key.code == sf::Keyboard::C) {
-            changing_stats = 3;
+            par = Parameter::Coe;
           }
           if (event.key.code == sf::Keyboard::Enter) {
-            if (changing_stats == 1) {
-              s.s += 0.05;
+            if (par == Parameter::Sep) {
+              s.s += 0.005;
             }
-            if (changing_stats == 2) {
-              s.a += 0.05;
+            if (par == Parameter::All) {
+              s.a += 0.005;
             }
-            if (changing_stats == 3) {
-              s.c += 0.05;
+            if (par == Parameter::Coe) {
+              s.c += 0.005;
             }
           }
           if (event.key.code == sf::Keyboard::Backspace) {
-            if (changing_stats == 1 && s.s > 0.05) {
-              s.s -= 0.05;
+            if (par == Parameter::Sep && s.s > 0.005) {
+              s.s -= 0.005;
             }
-            if (changing_stats == 2 && s.a > 0.05) {
-              s.a -= 0.05;
+            if (par == Parameter::All && s.a > 0.005) {
+              s.a -= 0.005;
             }
-            if (changing_stats == 3 && s.c > 0.05) {
-              s.c -= 0.05;
+            if (par == Parameter::Coe && s.c > 0.005) {
+              s.c -= 0.005;
             }
           }
           break;
@@ -257,7 +272,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
         case sf::Event::MouseButtonPressed:
           if (b1.hovering(
                   window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            boid b_n{{pos_d(generator), pos_d(generator)},
+            Boid b_n{{pos_d(generator), pos_d(generator)},
                      {vel_d(generator), vel_d(generator)}};
             flock.push_back(b_n);
           }
@@ -265,8 +280,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
                   window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
             if (flock.size() > 2) {
               flock.erase(flock.end() - 1);
-            }
-            if (flock.size() <= 2) {
+            } else {
               std::cout << "Cannot remove more boids" << '\n';
             }
           }
@@ -275,17 +289,19 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
             b3.buttonPressed();
             if (b3.buttonState()) {
               b3.setButtonColor(sf::Color(8, 123, 3, 255));
-            }
-            if (!b3.buttonState()) {
+            } else {
               b3.setButtonColor(sf::Color::Yellow);
             }
           }
           break;
-      };
+      }
     }
 
     // The window with the objects of the previous frame is cleared
     window.clear(sf::Color(202, 227, 244, 255));
+
+    // The texture is drawn
+    window.draw(sprite);
 
     // The clock is restarded registering how much time has passed during a
     // frame, then converted to a double usable in the evolve functions
@@ -295,13 +311,13 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     // Every frame the flock and predator are evolved by the time elapsed during
     // a frame (if 60 fps then 1/60 seconds) times 5, that means every second of
     // real time has passed, the simulation has evolved by 5 seconds. The
-    // relation between the parameters s and d_eat (d_eat = s * (1.5/0.7) are
+    // relation between the parameters s and d_eat (d_eat = s * (1.5 / 0.07) are
     // the result of a series of tests done during developement
     if (!b3.buttonState()) {
       evolve_flock(flock, d_el_time * 5., s, p);
       p = evolve_predator(p, d_el_time * 5., s);
       if (static_cast<int>(generalClock.getElapsedTime().asSeconds()) > 2) {
-        eat_boid(flock, p, (s.s * (1.5 / 0.7)));
+        eat_boid(flock, p, (s.s * (1.5 / 0.07)));
         predator.setFillColor(sf::Color::Blue);
       }
     }
@@ -314,18 +330,18 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
     std::string a;
     std::string c;
     std::string e;
-    switch (changing_stats) {
-      case 1:
+    switch (par) {
+      case Parameter::Sep:
         a = {"Stats:\n->s = "};
         c = {"\na = "};
         e = {"\nc = "};
         break;
-      case 2:
+      case Parameter::All:
         a = {"Stats:\ns = "};
         c = {"\n->a = "};
         e = {"\nc = "};
         break;
-      case 3:
+      case Parameter::Coe:
         a = {"Stats:\ns = "};
         c = {"\na = "};
         e = {"\n->c = "};
@@ -343,7 +359,7 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
     // Data gets updated every 2 seconds, this time the clock is not
     // restarded otherwise it would always get a time shorter than 2
-    // seconds(since a frame last less than 2 seconds)
+    // seconds (since a frame last less than 2 seconds)
     sf::Time el_time2 = clock2.getElapsedTime();
     int i_el_time2 = static_cast<int>(el_time2.asSeconds());
 
@@ -356,10 +372,10 @@ void run_simulation(std::vector<boid> flock, predator p, stats s) {
 
     // Every boid inside flock gets assigned a boids sf::CircleShape that are
     // drawn at the same position of the boid
-    for (auto &b_i : flock) {
+    std::for_each(flock.begin(), flock.end(), [&](auto &b_i) {
       boids.setPosition(b_i.pos.xcomp() * scale_x, b_i.pos.ycomp() * scale_y);
       window.draw(boids);
-    }
+    });
 
     // Same as boids
     predator.setPosition(p.pos.xcomp() * scale_x, p.pos.ycomp() * scale_y);
