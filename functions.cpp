@@ -3,12 +3,12 @@
 double distance(Boid const &b1, Boid const &b2) {
   auto const pos_diff{b1.pos - b2.pos};
   return pos_diff.norm();
-};
+}
 
 double distance(Boid const &b, Predator const &p) {
   auto const pos_diff{b.pos - p.pos};
   return pos_diff.norm();
-};
+}
 
 Vector_2d calc_c_m_b_i(std::vector<Boid> const &flock, Boid const &b_i) {
   double const n = flock.size();
@@ -37,9 +37,10 @@ double mean_distance(std::vector<Boid> const &flock) {
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
-    for (; nx != flock.end(); ++nx) {
-      sum_par += distance(b_i, *nx);
-    }
+    std::accumulate(nx, flock.end(), 0., [&]() {
+      sum_par += (distance(b_i, *nx));
+      return sum_par;
+    });
 
     sum_tot += sum_par;
     sum_par = 0.;
@@ -64,9 +65,10 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
-    for (; nx != flock.end(); ++nx) {
+    std::accumulate(nx, flock.end(), 0., [&]() {
       sum_d_i2 += ((distance(b_i, *nx)) * (distance(b_i, *nx)));
-    }
+      return sum_d_i2;
+    });
 
     sum_tot += sum_d_i2;
     sum_d_i2 = 0.;
@@ -76,7 +78,7 @@ double std_dev_distance(std::vector<Boid> const &flock) {
   double const c_n_2{(n * (n - 1.) / 2.)};
   double res;
   if (n != 2) {
-    res = sqrt((sum_tot / (c_n_2 - 1.)) - mean_d * mean_d);
+    res = sqrt((sum_tot / (c_n_2 - 1.)) - n * mean_d * mean_d / (n - 1));
   } else {
     res = NAN;
   }
@@ -85,15 +87,14 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 
 double mean_velocity(std::vector<Boid> const &flock) {
   double const n = flock.size();
-  double sum_v{};
 
   assert(n > 1);
 
-  sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
-                          [](double sum_v, Boid const &b_j) {
-                            sum_v += (b_j.vel.norm());
-                            return sum_v;
-                          });
+  auto sum_v = std::accumulate(flock.begin(), flock.end(), 0.,
+                               [](double sum_v, Boid const &b_j) {
+                                 sum_v += (b_j.vel.norm());
+                                 return sum_v;
+                               });
 
   double res = sum_v * (1. / n);
   return res;
@@ -101,20 +102,19 @@ double mean_velocity(std::vector<Boid> const &flock) {
 
 double std_dev_velocity(std::vector<Boid> const &flock) {
   double const n = flock.size();
-  double sum_v_i2{};
   double sum_tot{};
   double mean_v = mean_velocity(flock);
 
   assert(n > 1);
 
-  sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
-                             [](double sum_v, Boid const &b_j) {
-                               sum_v += (b_j.vel.norm() * b_j.vel.norm());
-                               return sum_v;
-                             });
+  auto sum_v_i2 = std::accumulate(flock.begin(), flock.end(), 0.,
+                                  [](double sum_v, Boid const &b_j) {
+                                    sum_v += (b_j.vel.norm() * b_j.vel.norm());
+                                    return sum_v;
+                                  });
 
   sum_tot += sum_v_i2;
-  double res = sqrt((sum_v_i2 / (n - 1.)) - mean_v * mean_v);
+  double res = sqrt((sum_v_i2 / (n - 1.)) - n * mean_v * mean_v / (n - 1));
   return res;
 }
 
@@ -131,13 +131,15 @@ Vector_2d sep(std::vector<Boid> const &flock, Boid const &b_i, double const s,
 }
 
 Vector_2d all(std::vector<Boid> const &flock, Boid const &b_i, double const a) {
-  Vector_2d sum_v;
   double const n = flock.size();
 
   assert(n > 1);
 
-  std::for_each(flock.begin(), flock.end(),
-                [&](Boid const &b_j) { sum_v += b_j.vel; });
+  auto sum_v = std::accumulate(flock.begin(), flock.end(), Vector_2d{},
+                               [](Vector_2d sum_v, Boid const &b_j) {
+                                 sum_v += b_j.vel;
+                                 return sum_v;
+                               });
 
   Vector_2d mean_v = (sum_v - b_i.vel) * (1. / (n - 1.));
   return (mean_v - b_i.vel) * a;
@@ -166,10 +168,11 @@ Vector_2d pacman(Vector_2d &pos, Stats const &s) {
 std::vector<Boid> influence(std::vector<Boid> const &flock, Boid const &b_i,
                             double const d) {
   std::vector<Boid> range;
-  for (Boid const &b_j : flock) {
+
+  std::for_each(flock.begin(), flock.end(), [&](Boid const &b_j) {
     if (distance(b_i, b_j) < d) {
       range.push_back(b_j);
     }
-  }
+  });
   return range;
 }
