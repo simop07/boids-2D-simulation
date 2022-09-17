@@ -7,6 +7,9 @@
 #include "evolve.hpp"
 #include "sfml_objects.hpp"
 
+// Enumeration used to change stats
+enum class Parameter { Sep, Coe, All };
+
 void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Parameters needed to correctly create a window
   unsigned const display_width = .8 * sf::VideoMode::getDesktopMode().width;
@@ -148,8 +151,8 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   sf::Clock clock;
   sf::Clock clock2;
 
-  // Parameter used to change stats
-  int changing_stats{};
+  // Enum object used to change parameters
+  Parameter par;
 
   // Game loop
   while (window.isOpen()) {
@@ -211,33 +214,33 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
                    "increse/reduce it by 0.005\n";
           }
           if (event.key.code == sf::Keyboard::S) {
-            changing_stats = 1;
+            par = Parameter::Sep;
           }
           if (event.key.code == sf::Keyboard::A) {
-            changing_stats = 2;
+            par = Parameter::All;
           }
           if (event.key.code == sf::Keyboard::C) {
-            changing_stats = 3;
+            par = Parameter::Coe;
           }
           if (event.key.code == sf::Keyboard::Enter) {
-            if (changing_stats == 1) {
+            if (par == Parameter::Sep) {
               s.s += 0.005;
             }
-            if (changing_stats == 2) {
+            if (par == Parameter::All) {
               s.a += 0.005;
             }
-            if (changing_stats == 3) {
+            if (par == Parameter::Coe) {
               s.c += 0.005;
             }
           }
           if (event.key.code == sf::Keyboard::Backspace) {
-            if (changing_stats == 1 && s.s > 0.005) {
+            if (par == Parameter::Sep && s.s > 0.005) {
               s.s -= 0.005;
             }
-            if (changing_stats == 2 && s.a > 0.005) {
+            if (par == Parameter::All && s.a > 0.005) {
               s.a -= 0.005;
             }
-            if (changing_stats == 3 && s.c > 0.005) {
+            if (par == Parameter::Coe && s.c > 0.005) {
               s.c -= 0.005;
             }
           }
@@ -327,18 +330,18 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
     std::string a;
     std::string c;
     std::string e;
-    switch (changing_stats) {
-      case 1:
+    switch (par) {
+      case Parameter::Sep:
         a = {"Stats:\n->s = "};
         c = {"\na = "};
         e = {"\nc = "};
         break;
-      case 2:
+      case Parameter::All:
         a = {"Stats:\ns = "};
         c = {"\n->a = "};
         e = {"\nc = "};
         break;
-      case 3:
+      case Parameter::Coe:
         a = {"Stats:\ns = "};
         c = {"\na = "};
         e = {"\n->c = "};
