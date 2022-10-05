@@ -1,9 +1,10 @@
-cff-version: 1.1.0
+cff-version: 1.0.0
 message: "If you use this software, please cite it as below."
 authors:
-  - family-names: Joe
-    given-names: Johnson
-    orcid: https://orcid.org/0000-0000-0000-0000
-title: simop07/boids-2D-simulation: Boids_1.0.0
+- family-names: Pasquini
+  given-names: Simone
+title: "Boids 2D simulation"
 version: 1.0.0
+doi: https://zenodo.org/badge/latestdoi/490634037
 date-released: 2022-10-05
+url: "https://github.com/simop07/boids-2D-simulation"
