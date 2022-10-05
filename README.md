@@ -1,5 +1,6 @@
 # Boids
 [![DOI](https://zenodo.org/badge/490634037.svg)](https://zenodo.org/badge/latestdoi/490634037)
+[![GitHub license](https://img.shields.io/github/license/simop07/boids-2D-simulation)](https://github.com/simop07/boids-2D-simulation/blob/main/LICENSE)
 
 
 ## Simulation of the behavior of flighting birds in two-dimensional space
