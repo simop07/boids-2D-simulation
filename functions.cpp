@@ -37,10 +37,9 @@ double mean_distance(std::vector<Boid> const &flock) {
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
-    std::accumulate(nx, flock.end(), 0., [&]() {
-      sum_par += (distance(b_i, *nx));
-      return sum_par;
-    });
+    for (; nx != flock.end(); ++nx) {
+      sum_par += distance(b_i, *nx);
+    }
 
     sum_tot += sum_par;
     sum_par = 0.;
@@ -65,10 +64,9 @@ double std_dev_distance(std::vector<Boid> const &flock) {
 
   std::for_each(flock.begin(), flock.end(), [&](Boid const &b_i) {
     auto nx = std::next((flock.begin() + i));
-    std::accumulate(nx, flock.end(), 0., [&]() {
+    for (; nx != flock.end(); ++nx) {
       sum_d_i2 += ((distance(b_i, *nx)) * (distance(b_i, *nx)));
-      return sum_d_i2;
-    });
+    }
 
     sum_tot += sum_d_i2;
     sum_d_i2 = 0.;
