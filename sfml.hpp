@@ -22,8 +22,8 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
 
   // Declaring and loading a texture
   sf::Texture texture;
-  texture.loadFromFile("clouds.png");
-  if (!texture.loadFromFile("clouds.png")) {
+  texture.loadFromFile("./images/clouds.png");
+  if (!texture.loadFromFile("./images/clouds.png")) {
     throw std::runtime_error{"Cannot load texture from file"};
   }
 
@@ -45,8 +45,8 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
 
   // Font loading
   sf::Font font;
-  font.loadFromFile("OpenSans-Semibold.ttf");
-  if (!font.loadFromFile("OpenSans-Semibold.ttf")) {
+  font.loadFromFile("./font/OpenSans-Semibold.ttf");
+  if (!font.loadFromFile("./font/OpenSans-Semibold.ttf")) {
     throw std::runtime_error{"Cannot load font from file"};
   }
 
