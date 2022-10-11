@@ -8,7 +8,7 @@
 #include "sfml_objects.hpp"
 
 // Enumeration used to change stats
-enum class Parameter { Sep, Coe, All };
+enum class Parameter { Null, Sep, Coe, All };
 
 void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
   // Parameters needed to correctly create a window
