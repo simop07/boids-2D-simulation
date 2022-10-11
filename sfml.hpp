@@ -317,7 +317,7 @@ void run_simulation(std::vector<Boid> flock, Predator p, Stats s) {
       evolve_flock(flock, d_el_time * 5., s, p);
       p = evolve_predator(p, d_el_time * 5., s);
       if (static_cast<int>(generalClock.getElapsedTime().asSeconds()) > 2) {
-        eat_boid(flock, p, (s.s * (1.5 / 0.07)));
+        eat_boid(flock, p, (s.s * (1.5 / s.a)));
         predator.setFillColor(sf::Color::Blue);
       }
     }
