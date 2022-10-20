@@ -1,5 +1,6 @@
-<img src="./images/boids.png" 
-        style="display: block; margin: 0 auto" />
+<p align="center">
+<img src="./images/boids.png">
+</p>
 
 # Boids
 
