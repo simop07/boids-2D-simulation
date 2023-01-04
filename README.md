@@ -18,6 +18,8 @@ Reynolds** in 1986. The program simulates the flocking behaviour of birds.\ This
 
 ## Download and use
 
-1) Download the last repository release. 2) Follow the instruction in _Relazione.pdf_ to build, compile and 
-execute the project (through [CMake](https://cmake.org/)). 3) Please, check _Relazione.pdf_ for a thorough 
+1. Download the last repository release.
+2. Follow the instruction in [Relazione.pdf](https://github.com/simop07/boids-2D-simulation/blob/main/Relazione.pdf) to build, compile and 
+execute the project (through [CMake](https://cmake.org/)).
+3. Please, check [Relazione.pdf](https://github.com/simop07/boids-2D-simulation/blob/main/Relazione.pdf) for a thorough 
 explaination on how the simulation works.
